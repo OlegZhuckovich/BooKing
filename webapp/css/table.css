@@ -1,0 +1,169 @@
+html{
+    height: 100%;
+    padding: 0;
+    position: relative;
+    min-height: 100%;
+}
+
+body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+}
+
+header{
+    height: 85px;
+    width: 100%;
+    background-color: #B3D600;
+    text-shadow: 1px 1px 0px black, 0 0 1em black;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+}
+
+#headerMenu{
+    display: flex;
+    cursor: pointer;
+    width:100%;
+}
+
+#headerMenu div:hover{
+    background-color: #F06060;
+}
+
+#headerMenu div{
+    width: 15%;
+    height: 85px;
+}
+
+.container-fluid {
+    height: 100%;
+    padding: 0;
+}
+
+#menuImages > div > div {
+    -webkit-filter: brightness(100%);
+}
+
+#menuImages > div > div:hover {
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+    cursor: pointer;
+}
+
+#menuImages > div > div:not( :hover ){
+    -webkit-filter: brightness(100%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*font-family: "Apple SD Gothic Neo";*/
+
+#loginBlock{
+    background-color: #F06060;
+}
+
+#content{
+    margin-top: 85px;
+    background: url("Library.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+label{
+    color:white;
+}
+
+#page h1,p{
+    color:white;
+}
+
+p{
+    /*font-family: -apple-system,BlinkMacSystemFont,Roboto,Open Sans,Helvetica Neue,sans-serif;*/
+    font: 14px "Trebuchet MS", "Lucida Sans";
+    text-shadow: 1px 1px 2px black, 0 0 1em black;
+    color: white;
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+    width:100%;
+}
+
+li{
+    list-style-type: none;
+    color:white;
+}
+
+
+div li{
+    position: relative;
+    top: 35%;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+footer{
+    height: 80px;
+    background-color: #F06060;
+}
+
+
+
+/* Стили для различных alertов*/
+
+.alert-group>.alert:first-child:not(:last-child){
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    margin-bottom:0
+}
+.alert-group>.alert:not(:first-child):not(:last-child){
+    -webkit-border-radius:0;
+    -moz-border-radius:0;
+    border-radius:0;
+    border-top:0;
+    margin-bottom:0
+}
+.alert-group>.alert:last-child:not(:first-child){
+    -webkit-border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    border-radius: 0 0 5px 5px;
+    border-top:0
+}

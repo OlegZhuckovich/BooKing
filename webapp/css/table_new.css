@@ -1,0 +1,267 @@
+
+/*Common styles */
+
+html{
+    padding: 0;
+    height: 100%;
+    min-height: 100%;
+    position: relative;
+}
+
+body{
+    padding: 0;
+    height: 100%;
+}
+
+header{
+    height: 85px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    background-color: #B3D600;
+    text-shadow: 1px 1px 0px black, 0 0 1em black;
+    z-index: 2;
+}
+
+footer{
+    height: 80px;
+    background-color: #F06060;
+}
+
+.container-fluid {
+    padding: 0;
+    height: 100%;
+    z-index: 1;
+}
+
+/*Styles for header menu*/
+
+#headerMenu{
+    display: flex;
+    cursor: pointer;
+    width:100%;
+}
+
+#headerMenu div:hover{
+    background-color: #F06060;
+}
+
+#headerMenu div{
+    width: 15%;
+    height: 85px;
+}
+
+/*Styles for input forms menu*/
+
+#firstRow{
+    height: 10%;
+}
+
+#secondRow{
+    height: 70%;
+}
+
+.sideColumn{
+    height: 100%;
+}
+
+.topImage{
+    width: 100%;
+    margin-top: 10%;
+}
+
+.bottomImage{
+    width: 100%;
+    margin-top: 100%;
+}
+
+/*Different color blocks for form input */
+
+#addLibrarianBlock{
+    background-color: #33c4ba;
+    min-height: 95%;
+    border-radius: 20px;
+}
+
+#addBookBlock{
+    background-color: #424c93;
+    height: 100%;
+    overflow:scroll;
+    border-radius: 20px
+}
+
+
+/*   */
+
+#bookingLogo{
+    float: left;
+    width: 35px;
+}
+
+#pageTitle{
+    margin-left: 8%;
+}
+
+.uploadButton{
+    background-color:white;
+    border-radius: 5px;
+}
+
+.submitButton{
+    margin: 0;
+    width:110%;
+}
+
+/*Styles for inputs and buttons*/
+
+.transition, form button, form .inputGroup label, form .inputGroup input {
+    -moz-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+    -o-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+    -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+    transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
+}
+
+form button {
+    margin-top: 35px;
+    background-color: white;
+    border: 1px solid #ff4a56;
+    line-height: 0;
+    font-size: 17px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 20px 15px;
+    border-radius: 60px;
+    color: #ff4a56;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+}
+
+form button:hover, form button:focus {
+    color: white;
+    background-color: #ff4a56;
+}
+
+form .inputGroup {
+    position: relative;
+    padding: 10px 0;
+    z-index: 1;
+}
+
+form .inputGroup:first-of-type {
+    padding-top: 0;
+}
+
+form .inputGroup:last-of-type {
+    padding-bottom: 0;
+}
+
+form .inputGroup label {
+    transform-origin: left center;
+    color: white;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    font-size: 17px;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    display: block;
+    position: absolute;
+    margin-top: -40px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+form .inputGroup input {
+    color: white;
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid white;
+    line-height: 0;
+    font-size: 17px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    border-radius: 60px;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+}
+
+form .inputGroup input:focus {
+    outline: none;
+    background: white;
+    color: #424c93;
+    margin-top: 30px;
+}
+
+form .inputGroup input:valid {
+    margin-top: 30px;
+}
+
+form .inputGroup input:focus ~ label{
+    -moz-transform: translate(0, -35px);
+    -ms-transform: translate(0, -35px);
+    -webkit-transform: translate(0, -35px);
+    transform: translate(0, -35px);
+}
+
+form .inputGroup input:valid ~ label {
+    text-transform: uppercase;
+    font-style: italic;
+    -moz-transform: translate(5px, -35px) scale(0.6);
+    -ms-transform: translate(5px, -35px) scale(0.6);
+    -webkit-transform: translate(5px, -35px) scale(0.6);
+    transform: translate(5px, -35px) scale(0.6);
+}
+
+/*Other styles*/
+
+#content{
+    margin-top: 85px;
+    background: url("Library.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+#addBookContent{
+    background: url("../images/addBookBackground.jpg") no-repeat;
+    background-size: 100% 100%;
+}
+
+.content{
+    margin-top: 85px;
+}
+
+
+
+
+label,#page h1 {
+    color:white;
+    text-shadow: 1px 1px 0 black, 0 0 1em black;
+}
+
+p{
+    font: 14px "Trebuchet MS", "Lucida Sans";
+    text-shadow: 1px 1px 2px black, 0 0 1em black;
+    color: white;
+}
+
+ul{
+    margin: 0;
+    padding: 0;
+    width:100%;
+}
+
+li{
+    list-style-type: none;
+    color:white;
+}
+
+div li{
+    position: relative;
+    top: 35%;
+    text-align: center;
+    vertical-align: bottom;
+}

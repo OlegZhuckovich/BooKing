@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="LibraryDatabase@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="LibraryDatabase">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="BooKingDatabase"/>
+    <schema id="4" parent="1" name="information_schema"/>
+    <schema id="5" parent="1" name="mysql"/>
+    <schema id="6" parent="1" name="performance_schema"/>
+    <schema id="7" parent="1" name="sys"/>
+    <schema id="8" parent="1" name="WeatherDatabase"/>
+    <table id="9" parent="2" name="adress"/>
+    <table id="10" parent="2" name="author">
+      <Comment>Таблица для хранения данных об авторах книг.</Comment>
+    </table>
+    <table id="11" parent="2" name="book">
+      <Comment>Таблица для хранения информации о книгах в библиотеке.</Comment>
+    </table>
+    <table id="12" parent="2" name="book_content">
+      <Comment>Таблица для хранения содержимого книг.</Comment>
+    </table>
+    <table id="13" parent="2" name="member"/>
+    <table id="14" parent="2" name="ordered_book"/>
+    <column id="15" parent="9" name="adressID">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="16" parent="9" name="city">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="17" parent="9" name="street">
+      <Position>3</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="18" parent="9" name="house">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="19" parent="9" name="housing">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="20" parent="9" name="apartment">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="21" parent="9" name="telephone_number">
+      <Position>7</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <key id="22" parent="9" name="PRIMARY">
+      <ColNames>adressID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="23" parent="10" name="authorID">
+      <Position>1</Position>
+      <Comment>Поле ID для идентификации автора.</Comment>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="24" parent="10" name="name">
+      <Position>2</Position>
+      <Comment>Поле для хранения имени автора.
+</Comment>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="25" parent="10" name="surname">
+      <Position>3</Position>
+      <Comment>Поле для хранения фамилии автора.</Comment>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="26" parent="10" name="biography">
+      <Position>4</Position>
+      <Comment>Поле для хранения биографии автора. Тип Text выбран для хранения относительно большого текста в базе данных.</Comment>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="27" parent="10" name="photo">
+      <Position>5</Position>
+      <Comment>Поле для хранения фотографии автора.</Comment>
+      <DataType>mediumblob|0</DataType>
+    </column>
+    <key id="28" parent="10" name="PRIMARY">
+      <ColNames>authorID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="29" parent="11" name="bookID">
+      <Position>1</Position>
+      <Comment>Поле bookID для идентификации книги.</Comment>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="30" parent="11" name="title">
+      <Position>2</Position>
+      <Comment>Поле title задаёт название книги.</Comment>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="31" parent="11" name="genre">
+      <Position>3</Position>
+      <Comment>Поле genre задаёт жанр книги.</Comment>
+      <DataType>varchar(40)|0</DataType>
+    </column>
+    <column id="32" parent="11" name="publishing_house">
+      <Position>4</Position>
+      <Comment>Поле publishing_house задаёт название издательства книги.</Comment>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="33" parent="11" name="year">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="34" parent="11" name="pages">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="35" parent="11" name="quantity">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="36" parent="11" name="authorID">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="37" parent="11" name="fk_book_author1_idx">
+      <ColNames>authorID</ColNames>
+    </index>
+    <key id="38" parent="11" name="PRIMARY">
+      <ColNames>bookID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="39" parent="11" name="fk_book_author1">
+      <ColNames>authorID</ColNames>
+      <RefSchemaName>librarydatabase</RefSchemaName>
+      <RefTableName>author</RefTableName>
+      <RefColNames>authorID</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+    <column id="40" parent="12" name="bookID">
+      <Position>1</Position>
+      <Comment>Внешний ключ bookID для идентификации книги.</Comment>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="41" parent="12" name="page">
+      <Position>2</Position>
+      <Comment>Поле для хранения номера страницы в книге, определённой полем bookID.</Comment>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="42" parent="12" name="page_content">
+      <Position>3</Position>
+      <Comment>Текст, который содержится на странице, определённой полем page, в книге, определённой полем bookID.</Comment>
+      <DataType>mediumtext|0</DataType>
+    </column>
+    <index id="43" parent="12" name="fk_book_content_book1_idx">
+      <ColNames>bookID</ColNames>
+    </index>
+    <key id="44" parent="12" name="PRIMARY">
+      <ColNames>bookID
+page</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="45" parent="12" name="fk_book_content_book1">
+      <ColNames>bookID</ColNames>
+      <RefSchemaName>librarydatabase</RefSchemaName>
+      <RefTableName>book</RefTableName>
+      <RefColNames>bookID</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+    <column id="46" parent="13" name="memberID">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="47" parent="13" name="name">
+      <Position>2</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="48" parent="13" name="surname">
+      <Position>3</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="49" parent="13" name="email">
+      <Position>4</Position>
+      <DataType>char(40)|0</DataType>
+    </column>
+    <column id="50" parent="13" name="password">
+      <Position>5</Position>
+      <DataType>char(40)|0</DataType>
+    </column>
+    <column id="51" parent="13" name="role">
+      <Position>6</Position>
+      <DataType>enum(&apos;administrator&apos;, &apos;librarian&apos;, &apos;member&apos;)|0</DataType>
+    </column>
+    <column id="52" parent="13" name="registration_date">
+      <Position>7</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="53" parent="13" name="avatar">
+      <Position>8</Position>
+      <DataType>mediumblob|0</DataType>
+    </column>
+    <column id="54" parent="13" name="books_ordered">
+      <Position>9</Position>
+      <DataType>int(11)|0</DataType>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="55" parent="13" name="adressID">
+      <Position>10</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="56" parent="13" name="fk_member_adress1_idx">
+      <ColNames>adressID</ColNames>
+    </index>
+    <key id="57" parent="13" name="PRIMARY">
+      <ColNames>memberID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="58" parent="13" name="fk_member_adress1">
+      <ColNames>adressID</ColNames>
+      <RefSchemaName>librarydatabase</RefSchemaName>
+      <RefTableName>adress</RefTableName>
+      <RefColNames>adressID</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+    <column id="59" parent="14" name="bookID">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="60" parent="14" name="memberID">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="61" parent="14" name="order_date">
+      <Position>3</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="62" parent="14" name="return_date">
+      <Position>4</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <index id="63" parent="14" name="fk_ordered_book_book_idx">
+      <ColNames>bookID</ColNames>
+    </index>
+    <index id="64" parent="14" name="fk_ordered_book_member1_idx">
+      <ColNames>memberID</ColNames>
+    </index>
+    <key id="65" parent="14" name="PRIMARY">
+      <ColNames>bookID
+memberID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="66" parent="14" name="fk_ordered_book_book">
+      <ColNames>bookID</ColNames>
+      <RefSchemaName>librarydatabase</RefSchemaName>
+      <RefTableName>book</RefTableName>
+      <RefColNames>bookID</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+    <foreign-key id="67" parent="14" name="fk_ordered_book_member1">
+      <ColNames>memberID</ColNames>
+      <RefSchemaName>librarydatabase</RefSchemaName>
+      <RefTableName>member</RefTableName>
+      <RefColNames>memberID</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
+  </database-model>
+</dataSource>
