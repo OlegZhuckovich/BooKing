@@ -12,6 +12,46 @@
             <taglib-location>/WEB-INF/tld/infotag.tld</taglib-location>
         </taglib>
     </jsp-config>
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.epam.zhuckovich.filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>PageSecurityFilter</filter-name>
+        <filter-class>com.epam.zhuckovich.filter.PageSecurityFilter</filter-class>
+        <init-param>
+            <param-name>loginPage</param-name>
+            <param-value>/jsp/login.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>administratorMenu</param-name>
+            <param-value>/jsp/administrator/administratorMenu.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>librarianMenu</param-name>
+            <param-value>/jsp/librarian/librarianMenu.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>memberMenu</param-name>
+            <param-value>/jsp/member/memberMenu.jsp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PageSecurityFilter</filter-name>
+        <url-pattern>/jsp/administrator/*</url-pattern>
+        <url-pattern>/jsp/common/*</url-pattern>
+        <url-pattern>/jsp/error/*</url-pattern>
+        <url-pattern>/jsp/librarian/*</url-pattern>
+        <url-pattern>/jsp/member/*</url-pattern>
+    </filter-mapping>
     <error-page>
         <error-code>404</error-code>
         <location>/jsp/error/error.jsp</location>

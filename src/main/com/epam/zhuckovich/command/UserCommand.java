@@ -5,6 +5,9 @@ import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.service.UserService;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,8 @@ import java.io.InputStream;
  */
 
 class UserCommand {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserCommand.class);
 
     private static final String USER_PARAMETER = "user";
     private static final String USER_ID_PARAMETER = "userID";
@@ -206,9 +211,9 @@ class UserCommand {
           //  System.out.println(user.toString());
             service.editAccount(photo,user.getId());
         } catch(IOException e){
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "IOException was occurred during getting the photo from the client while user editing account");
         } catch(ServletException e){
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "ServletException was occurred during getting the photo from the client while user editing account");
         }
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_ACCOUNT_PAGE));
     }

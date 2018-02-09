@@ -11,6 +11,7 @@
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style1.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
@@ -54,20 +55,14 @@
                 <div class="hidden-xs col-sm-1 col-md-2"></div>
             </div>
         </div>
-        <form id="orderBookForm" action="/jsp/member/orderBook.jsp" style="display: none"></form>
-        <form id="viewOrderedBooksForm" action="/controller" style="display: none"><input type="hidden" name="command" value="view_ordered_books"></form>
-        <form id="editAccountForm" action="/jsp/common/editAccount.jsp" style="display: none"></form>
-        <form id="authorGalleryForm" action="/controller" style="display: none"><input type="hidden" name="command" value="view_authors"></form>
-        <form id="trainingVideoForm" action="/jsp/member/trainingVideo.jsp" style="display: none"></form>
-        <form id="deleteAccountForm" action="/controller" method="get" style="display: none">
+        <form id="orderBookForm" action="/jsp/member/orderBook.jsp" class="hiddenForm"></form>
+        <form id="viewOrderedBooksForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_ordered_books"></form>
+        <form id="editAccountForm" action="/jsp/common/editAccount.jsp" class="hiddenForm"></form>
+        <form id="authorGalleryForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_authors"></form>
+        <form id="trainingVideoForm" action="/jsp/member/trainingVideo.jsp" class="hiddenForm"></form>
+        <form id="deleteAccountForm" action="/controller" method="get" class="hiddenForm">
             <input type="hidden" name="command" value="delete_account">
             <input type="hidden" name="deleteAccount" value="user">
-        </form>
-        <form action="/jsp/member/memberMenu.jsp" name="languageForm" method="post" style="display: none">
-            <select id="languageSelect" name="language"  onchange="document.languageForm.submit()">
-                <option value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}><fmt:message key="russian" bundle="${booking}"/></option>
-                <option value="en_EN" ${language == 'en_EN' ? 'selected' : ''}><fmt:message key="english" bundle="${booking}"/></option>
-            </select>
         </form>
     <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
 </body>

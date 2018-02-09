@@ -1,6 +1,9 @@
 package com.epam.zhuckovich.dao;
 
 import com.epam.zhuckovich.entity.Author;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,7 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuthorDAO extends AbstractDAO<Integer,Author>{
+public class AuthorDAO extends AbstractDAO<Author>{
+
+    private static final Logger LOGGER = LogManager.getLogger(AuthorDAO.class);
 
     private static AuthorDAO authorDAO;
 
@@ -46,7 +51,7 @@ public class AuthorDAO extends AbstractDAO<Integer,Author>{
             ResultSet authorResultSet = statement.executeQuery();
             isResultSetEmpty = !authorResultSet.isBeforeFirst();
         } catch (SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAuthorsByNameSurname operation");
         }
         return isResultSetEmpty ? null : new ArrayList<>();
     }
@@ -73,7 +78,7 @@ public class AuthorDAO extends AbstractDAO<Integer,Author>{
                 }
             }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAuthorsByBookID operation");
         }
         return authorList;
     }
@@ -95,7 +100,7 @@ public class AuthorDAO extends AbstractDAO<Integer,Author>{
                 }
             }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllAuthors operation");
         }
         return authorList;
     }

@@ -30,8 +30,10 @@ public class Book extends Entity {
 
     private Book(){}
 
-
-
+    /**
+     *
+     *
+     */
 
     public static class NumberInformation{
 

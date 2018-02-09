@@ -167,10 +167,10 @@ class BookCommand {
                 request.getSession().setAttribute(BOOK_TITLE,book.getTitle());
                 return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
             }
-        } catch (ServletException e){
-            LOGGER.log(Level.ERROR,"ServletException was occured");
         } catch (IOException e){
-            LOGGER.log(Level.ERROR,"IOException was occured");
+            LOGGER.log(Level.ERROR, "IOException was occurred during getting the book content from the client");
+        } catch (ServletException e){
+            LOGGER.log(Level.ERROR, "ServletException was occurred during getting the book content from the client");
         }
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
     }

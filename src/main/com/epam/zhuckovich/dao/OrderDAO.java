@@ -4,6 +4,9 @@ import com.epam.zhuckovich.entity.Address;
 import com.epam.zhuckovich.entity.Book;
 import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.User;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,16 +16,11 @@ import java.util.List;
 
 /**
  * This is class for user orders
- *
- *
- *
- *
- *
- *
- *
  */
 
-public class OrderDAO extends AbstractDAO<Integer,Order>{
+public class OrderDAO extends AbstractDAO<Order>{
+
+    private static final Logger LOGGER = LogManager.getLogger(OrderDAO.class);
 
     private static OrderDAO orderDAO;
     private static final String READING_ROOM_ORDER_QUERY = "SELECT member.memberID, member.name, member.surname,member.email, book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages " +
@@ -108,7 +106,7 @@ public class OrderDAO extends AbstractDAO<Integer,Order>{
                     }
                 }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllReadingRoomOrders operation");
         }
         return readingRoomOrderList;
     }
@@ -149,7 +147,7 @@ public class OrderDAO extends AbstractDAO<Integer,Order>{
                 }
             }
         } catch(SQLException e) {
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllSubscriptionOrders operation");
         }
         return subscriptionOrderList;
     }
@@ -182,7 +180,7 @@ public class OrderDAO extends AbstractDAO<Integer,Order>{
                 }
             }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllMemberOrders operation");
         }
         return memberOrderList;
     }

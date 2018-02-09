@@ -8,11 +8,11 @@ public class SQLTechnicalException extends Exception {
         super(message);
     }
 
-    public SQLTechnicalException(Throwable e){
+    public SQLTechnicalException(Exception e){
         super(e);
     }
 
-    public SQLTechnicalException(String message, Throwable e){
+    public SQLTechnicalException(String message, Exception e){
         super(message,e);
     }
 

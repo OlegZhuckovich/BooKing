@@ -4,6 +4,8 @@ import com.epam.zhuckovich.connection.ConnectionPool;
 import com.epam.zhuckovich.connection.ProxyConnection;
 import com.epam.zhuckovich.entity.Author;
 import com.epam.zhuckovich.entity.Book;
+import com.epam.zhuckovich.exception.SQLTechnicalException;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,10 +13,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookDAO extends AbstractDAO<Integer, Book>{
+public class BookDAO extends AbstractDAO<Book>{
+
+    private static final Logger LOGGER = LogManager.getLogger(BookDAO.class);
 
     private static BookDAO bookDAO;
-    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * This query is used for finding all books from
@@ -99,7 +102,7 @@ public class BookDAO extends AbstractDAO<Integer, Book>{
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllBooks operation");
         }
         return bookList;
     }
@@ -123,7 +126,11 @@ public class BookDAO extends AbstractDAO<Integer, Book>{
             if(bookIdResultSet.next()) {
                 bookID = bookIdResultSet.getInt(1);
             }
+        } catch(SQLTechnicalException e) {
+            LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during addBook operation");
+            connection.rollback();
         } catch(SQLException e) {
+            LOGGER.log(Level.ERROR,"SQLException was occurred during addBook operation");
             connection.rollback();
         } finally {
             close(preparedStatement,connection);
@@ -147,14 +154,17 @@ public class BookDAO extends AbstractDAO<Integer, Book>{
                 book = bookFile.getBytes(1, (int) bookFile.length());
             }
             connection.commit();
+        } catch(SQLTechnicalException e) {
+            LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during loadBook operation");
+            connection.rollback();
         } catch(SQLException e) {
+            LOGGER.log(Level.ERROR,"SQLException was occurred during loadBook operation");
             connection.rollback();
         } finally {
             close(preparedStatement,connection);
         }
         return book;
     }
-
 
 
     public static String getFindAllBooksQuery(){
@@ -186,3 +196,4 @@ public class BookDAO extends AbstractDAO<Integer, Book>{
     }
 
 }
+

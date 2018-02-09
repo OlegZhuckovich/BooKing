@@ -1,5 +1,10 @@
 package com.epam.zhuckovich.connection;
 
+import com.epam.zhuckovich.exception.SQLTechnicalException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +25,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public final class ConnectionPool {
+
+    private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
     private static ConnectionPool connectionPool;
     private static final int POOL_SIZE = 15;
@@ -48,11 +55,10 @@ public final class ConnectionPool {
                 connectionQueue.put(makeConnection(connectionProperties));
             }
         } catch (InterruptedException e) {
-                e.printStackTrace();
+            LOGGER.log(Level.ERROR,"InterruptedException was occurred during connection creation");
         } catch (SQLException e) {
-                e.printStackTrace();
+            LOGGER.log(Level.ERROR,"SQLException was occurred during connection creation");
         }
-        System.out.println("total size:" + connectionQueue.size());
     }
 
     /**
@@ -84,11 +90,9 @@ public final class ConnectionPool {
     public ProxyConnection getConnection() {
         ProxyConnection proxyConnection = null;
         try {
-            System.out.println("size before getting connection" + connectionQueue.size());
             proxyConnection = connectionQueue.take();
-            System.out.println("size after getting connection" + connectionQueue.size());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "InterruptedException was occurred during getting the connection");
         }
         return proxyConnection;
     }
@@ -101,30 +105,26 @@ public final class ConnectionPool {
 
     public void releaseConnection(ProxyConnection proxyConnection) {
         try {
-            System.out.println("size before releasing connection" + connectionQueue.size());
             connectionQueue.put(proxyConnection);
-            System.out.println("size after releasing connection" + connectionQueue.size());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "InterruptedException was occurred during releasing the connection");
         }
     }
 
     /**
      * <p>Method that makes connection to the database.</p>
      * @param connectionProperties contains properties for connecting to the database
-     * @retur                      the connection that was created in the method
+     * @return                     the connection that was created in the method
      */
 
     private ProxyConnection makeConnection(Properties connectionProperties) {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(databaseBundle.getString("url"), connectionProperties);
-            System.out.println("Connected to database");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR, "SQLException was occurred during making the connection");
         }
-        ProxyConnection proxyConnection = new ProxyConnection(connection);
-        return proxyConnection;
+        return new ProxyConnection(connection);
     }
 
     /**
@@ -137,11 +137,12 @@ public final class ConnectionPool {
             try {
                 connectionQueue.take().closeConnection();
                 DriverManager.deregisterDriver(new com.mysql.jdbc.Driver());
-                System.out.println("close connection");
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLTechnicalException e) {
+                LOGGER.log(Level.ERROR, "SQLTechnicalException was occurred during closing the pool");
+            } catch (SQLException e){
+                LOGGER.log(Level.ERROR, "SQLException was occurred during deregister the driver");
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.ERROR, "InterruptedException was occurred during closing the pool");
             }
         }
     }

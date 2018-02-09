@@ -8,21 +8,18 @@
 <html>
 <head>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
-    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/table.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/button.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/googleButton.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#example').DataTable( {"language": {
@@ -43,69 +40,28 @@
                     }
                 ]
             });
-            $("#textField").focusout(function(){ $(this).css("color", "white"); });
-            $("#bookTitle").focus(function () {
-                $("#submitButton").css("margin-top", "10px");
-            });
-            $("div.toolbar").html('');
-        } );
+        });
     </script>
-    <style>
-        #example_filter{
-            margin-bottom: 1%;
-            margin-right: 30px;
-        }
-        #example_filter label{
-            color:white;
-        }
-        .mdl-button{
-            color: white;
-        }
-        #example_info{
-            color:white;
-        }
-        .btn dropdown-toggle btn-default{
-            margin-top:0;
-        }
-        table.dataTable thead .sorting,
-        table.dataTable thead .sorting_asc,
-        table.dataTable thead .sorting_desc {
-            background : none;
-        }
-        form .question input:valid {
-            margin-top: 10px;
-        }
-        form .question input:focus {
-            outline: none;
-            background: white;
-            color: #33c4ba;
-            margin-top: 10px;
-        }
-        .mdl-button--raised.mdl-button--colored{
-        }
-        .mdl-button--raised.mdl-button--colored:hover{
-        }
-    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid" style="min-height: 110%;">
-    <div class="row" style="height: 3%"></div>
-    <div class="row" style="height: 97%">
-        <div class="hidden-xs hidden-sm col-md-1" style="height: 100%"></div>
-        <div class="col-xs-12 col-sm-12 col-md-10" style="height: 100%;">
+<div id="content" class="container-fluid tableRow content">
+    <div class="row firstTableRow"></div>
+    <div class="row secondTableRow">
+        <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
+        <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
             <!--Для поля поиска-->
-            <div class="row" style="min-height: 17%; border-radius: 20px; background-color: #424c93">
-                <img src="../../images/BooKingLogo.svg" style="float: left; width: 35px;margin-top: 20px; margin-left: 2%;">
-                <h1 style="margin-left: 70px;"><fmt:message key="deleteMember" bundle="${booking}"/></h1>
-                <div class="col-xs-12 col-sm-12 col-md-12" style="height: 100%">
-                    <span style="color: white"><fmt:message key="deleteLibrarianInfo" bundle="${booking}"/></span>
+            <div class="row deleteMemberHeader">
+                <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingTableLogo">
+                <h1 class="googleTableTitle"><fmt:message key="deleteMember" bundle="${booking}"/></h1>
+                <div class="col-xs-12 col-sm-12 col-md-12 sideColumn">
+                    <span><fmt:message key="deleteMemberInfo" bundle="${booking}"/></span>
                 </div>
             </div>
             <c:if test="${ not empty memberList}">
-                <div class="row" style="min-height: 80%; margin-top: 20px;" >
-                    <table id="example" class="mdl-data-table" style="border-top-left-radius: 20px; border-top-right-radius: 20px" cellspacing="0" width="100%">
+                <div class="row googleTableRow">
+                    <table id="example" class="mdl-data-table googleTable" cellspacing="0" width="100%">
                         <thead>
                         <tr>
                             <th><fmt:message key="nameUser" bundle="${booking}"/></th>
@@ -117,47 +73,46 @@
                         </thead>
                         <tbody>
                         <c:forEach var="member" items="${memberList}" varStatus="count">
-                                <tr>
-                                    <td><c:out value="${member.name}"/></td>
-                                    <td><c:out value="${member.surname}"/></td>
-                                    <td><c:out value="${member.email}"/></td>
-                                    <td><fmt:formatDate value="${member.registrationDate}"/></td>
-                                    <td>
-                                        <button type="button" class="googleButton" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
-                                        <div id="divIDNo${count.index}" class="modal fade" role="dialog">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                        <h4 class="modal-title"><fmt:message key="deleteBookConfirmHeader" bundle="${booking}"/></h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <p><fmt:message key="deleteBookConfirmBody" bundle="${booking}"/></p>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <form action="/controller" method="post" id="deleteMemberForm">
-                                                            <input type="hidden" name="userID" value="${member.id}">
-                                                            <input type="hidden" name="command" value="delete_user">
-                                                            <input type="hidden" name="page" value="deleteMember">
-                                                            <input type="submit" name="deleteBookYesConfirmButton" class="btn btn-default" value="<fmt:message key="deleteBookYesConfirmButton" bundle="${booking}"/>">
-                                                        </form>
-                                                        <button type="button"  class="btn btn-default" data-dismiss="modal"><fmt:message key="deleteBookNoConfirmButton" bundle="${booking}"/></button>
-                                                    </div>
+                            <tr>
+                                <td><c:out value="${member.name}"/></td>
+                                <td><c:out value="${member.surname}"/></td>
+                                <td><c:out value="${member.email}"/></td>
+                                <td><fmt:formatDate value="${member.registrationDate}"/></td>
+                                <td>
+                                    <button type="button" class="googleButton" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
+                                    <div id="divIDNo${count.index}" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title"><fmt:message key="confirmHeader" bundle="${booking}"/></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <fmt:message key="deleteMemberConfirmBody" bundle="${booking}"/>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form action="/controller" method="post" id="deleteMemberForm">
+                                                        <input type="hidden" name="userID" value="${member.id}">
+                                                        <input type="hidden" name="command" value="delete_user">
+                                                        <input type="hidden" name="page" value="deleteMember">
+                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
+                                                    </form>
+                                                    <button type="button"  class="googleButton" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
                                                 </div>
                                             </div>
                                         </div>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </td>
+                            </tr>
                         </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </c:if>
         </div>
-        <div class="hidden-xs hidden-sm col-md-1" style="height: 100%"></div>
+        <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
     </div>
 </div>
 <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
 </body>
 </html>
-

@@ -6,6 +6,10 @@ $(document).ready(function(){
         $('#addBookLabel').toggle();
     });
 
+    $('#addBookHeader').on("click",function(){
+        $('#addBookHeaderForm').submit();
+    });
+
     $('#addLibrarian').on("click",function(){
         $('#addLibrarianForm').submit();
     }).hover(function () {

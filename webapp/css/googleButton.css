@@ -56,3 +56,4 @@ td, th{
 .googleButton:focus:not(:active)::after {
     animation: ripple 1s ease-out;
 }
+

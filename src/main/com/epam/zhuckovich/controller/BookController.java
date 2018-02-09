@@ -11,13 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 
-
 @MultipartConfig
 @WebServlet("/bookController")
 public class BookController extends HttpServlet{
 
     private static final String SQL_FIND = "SELECT book_content FROM book_content WHERE bookID = ?";
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookID = request.getParameter("bookID");

@@ -2,9 +2,9 @@ package com.epam.zhuckovich.entity;
 
 import java.sql.Date;
 
-public class Order extends Entity{
+public class Order extends Entity {
 
-    public enum OrderType{
+    public enum OrderType {
         READING_ROOM, SUBSCRIPTION
     }
 

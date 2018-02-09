@@ -18,8 +18,8 @@ header{
     width: 100%;
     position: fixed;
     top: 0;
-    background-color: #B3D600;
-    text-shadow: 1px 1px 0px black, 0 0 1em black;
+    background-color: #35B54F;
+    text-shadow: 1px 1px 0 black, 0 0 1em black;
     z-index: 2;
 }
 
@@ -61,6 +61,15 @@ footer{
     height: 70%;
 }
 
+#firstErrorRow{
+    height: 15%;
+}
+
+#secondErrorRow{
+    height: 50%;
+}
+
+
 .sideColumn{
     height: 100%;
 }
@@ -75,6 +84,62 @@ footer{
     margin-top: 100%;
 }
 
+.tableRow{
+    min-height: 110%;
+}
+
+/*Styles for error pages*/
+
+#errorBlockLogo{
+    width: 80%;
+    margin-left: 8%;
+    margin-top: 80px;
+}
+
+#errorPageTitle{
+    margin-top: 90px;
+}
+
+#errorPageBody{
+    padding-right: 20px;
+    color: white;
+    text-shadow: 1px 1px 0 black, 0 0 1em black;
+}
+
+
+/*Styles for tables*/
+
+.firstTableRow{
+    height: 3%;
+}
+
+.secondTableRow{
+    height: 97%;
+}
+
+.row.secondTableRow{
+    margin-right: 0;
+}
+
+/*Styles for edit page*/
+
+.firstEditRow{
+    height: 3%;
+}
+
+.secondEditRow{
+    height: 80%;
+}
+
+.thirdEditRow{
+    height: 90%;
+}
+
+#editAccountAvatar{
+    width: 100%;
+    border-radius: 20px;
+}
+
 /*Different color blocks for form input */
 
 #addLibrarianBlock{
@@ -83,11 +148,25 @@ footer{
     border-radius: 20px;
 }
 
+#errorBlock{
+    background-color: #33c4ba;
+    min-height: 95%;
+    border-radius: 20px;
+}
+
+
 #addBookBlock{
     background-color: #424c93;
     height: 100%;
     overflow:scroll;
     border-radius: 20px
+}
+
+#editAccountBlock{
+    min-height: 100%;
+    overflow:scroll;
+    background-color: #3b5998;
+    border-radius: 20px;
 }
 
 
@@ -97,6 +176,25 @@ footer{
     float: left;
     width: 35px;
 }
+
+.blockImage{
+    float: left;
+    width: 35px;
+}
+
+.blockTitle{
+    color: white;
+    margin-top: 0;
+    padding-left: 45px;
+}
+
+#bookingTableLogo{
+    float: left;
+    width: 35px;
+    margin-top: 20px;
+    margin-left: 2%;
+}
+
 
 #pageTitle{
     margin-left: 8%;
@@ -110,6 +208,11 @@ footer{
 .submitButton{
     margin: 0;
     width:110%;
+}
+
+.editAccountSubmitButton{
+    margin: 0;
+    width:100%;
 }
 
 /*Styles for inputs and buttons*/
@@ -237,7 +340,7 @@ form .inputGroup input:valid ~ label {
 
 
 
-label,#page h1 {
+label,#page h1,h4 {
     color:white;
     text-shadow: 1px 1px 0 black, 0 0 1em black;
 }
@@ -264,4 +367,211 @@ div li{
     top: 35%;
     text-align: center;
     vertical-align: bottom;
+}
+
+
+
+/*Google material design buttons*/
+
+/* Material style */
+
+
+td, th{
+    text-align: left;
+}
+
+
+.googleButton {
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 11px;
+    padding: 7px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, .4);
+    background: #424c93;
+
+    white-space: normal;
+    width: 110px;
+    position: relative;
+    overflow: hidden;
+}
+
+.googleButton:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, .5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+.googleButton:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+
+.googleTableRow{
+    min-height: 80%;
+    margin-top: 20px;
+}
+
+
+.googleTable{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.googleTableTitle{
+    margin-left: 70px;
+}
+
+.hiddenForm{
+    display: none;
+}
+
+.modal-footer{
+    display: inline-flex;
+    margin-left: 310px;
+    border-top: none;
+}
+
+.deleteMemberHeader{
+    min-height: 17%;
+    border-radius: 20px;
+    background-color: #424c93;
+    color: white;
+}
+
+/*Styles for datatables*/
+
+#example_filter{
+    margin-bottom: 1%;
+    margin-right: 30px;
+}
+#example_filter label{
+    color:white;
+}
+.mdl-button{
+    color: white;
+}
+#example_info{
+    color:white;
+}
+.btn dropdown-toggle btn-default{
+    margin-top:0;
+}
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    background : none;
+}
+form .question input:valid {
+    margin-top: 10px;
+}
+form .question input:focus {
+    outline: none;
+    background: white;
+    color: #33c4ba;
+    margin-top: 10px;
+}
+.mdl-button--raised.mdl-button--colored{
+}
+.mdl-button--raised.mdl-button--colored:hover{
+}
+
+/*Styles for images in user menu*/
+
+#menuImages > div > div {
+    -webkit-filter: brightness(100%);
+}
+
+#menuImages > div > div:hover {
+    -webkit-filter: brightness(70%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+    cursor: pointer;
+}
+
+#menuImages > div > div:not( :hover ){
+    -webkit-filter: brightness(100%);
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    -ms-transition: all 1s ease;
+    transition: all 1s ease;
+}
+
+#menuImages{
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#addBook{
+    background: url('https://www.thehagueuniversity.com/images/default-source/studievoorzieningen/zoeken-en-vinden.jpg?sfvrsn=275152ee_4&size=600') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#addLibrarian{
+    background: url('Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#editAccount{
+    background: url('Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#deleteBookMenu{
+    background: url('https://az616578.vo.msecnd.net/files/2016/05/19/635992798386672964-148953701_Stack-of-books-great-education.jpg') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#deleteLibrarianMenu{
+    background: url('https://bloximages.newyork1.vip.townnews.com/collegian.psu.edu/content/tncms/assets/v3/editorial/2/0e/20e79ee0-9437-11e7-bcc3-67e65471482e/59b1f5c76ef4b.image.jpg?resize=1200%2C800') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#deleteMemberMenu{
+    background: url('https://agescotland.files.wordpress.com/2012/06/two-men-in-library.jpg') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#titleBlock{
+    background-color: #F06060;
+    height:100%;
+    text-align: center;
+    display: none
+}
+
+#titleBlock label{
+    display: none;
 }

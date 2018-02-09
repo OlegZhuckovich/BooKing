@@ -1,72 +1,51 @@
 package com.epam.zhuckovich.customtag;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
 public class InfoTag extends TagSupport{
 
+    private static final Logger LOGGER = LogManager.getLogger(InfoTag.class);
+
+    private String role;
+
+    public void setRole(String role){
+        this.role = role;
+    }
+
     @Override
     public int doStartTag(){
         try {
             JspWriter jspWriter = pageContext.getOut();
-            jspWriter.write("\"dom\": '<\"toolbar\">frtip',\n" +
+            jspWriter.write("<script>\n" +
+                    "        $(document).ready(function () {\n" +
+                    "            $('#example').DataTable( {\"language\": {\n" +
+                    "                \"zeroRecords\": '<fmt:message key=\"tableZeroRecords\" bundle=\"${booking}\"/>',\n" +
+                    "                \"info\": '<fmt:message key=\"tableInfo\" bundle=\"${booking}\"/>',\n" +
+                    "                \"infoEmpty\": '<fmt:message key=\"tableInfoEmpty\" bundle=\"${booking}\"/>',\n" +
+                    "                \"infoFiltered\": '<fmt:message key=\"tableInfoFiltered\" bundle=\"${booking}\"/>',\n" +
+                    "                \"search\":'<fmt:message key=\"tableSearch\" bundle=\"${booking}\"/>'\n" +
+                    "            },\n" +
+                    "                \"dom\": '<\"toolbar\">frtip',\n" +
                     "                \"scrollX\": true,\n" +
                     "                \"lengthMenu\": [[5], [5]],\n" +
                     "                \"pagingType\": \"numbers\",\n" +
                     "                columnDefs: [\n" +
                     "                    {\n" +
-                    "                        targets: [ 0, 1, 2 ],\n" +
+                    "                        targets: '_all',\n" +
                     "                        className: 'mdl-data-table__cell--non-numeric'\n" +
                     "                    }\n" +
                     "                ]\n" +
                     "            });\n" +
-                    "            $(\"#textField\").focusout(function(){ $(this).css(\"color\", \"white\"); });\n" +
-                    "            $(\"#bookTitle\").focus(function () {\n" +
-                    "                $(\"#submitButton\").css(\"margin-top\", \"10px\");\n" +
-                    "            });\n" +
-                    "            $(\"div.toolbar\").html('');\n" +
-                    "        } );\n" +
-                    "    </script>\n" +
-                    "    <style>\n" +
-                    "        #example_filter{\n" +
-                    "            margin-bottom: 1%;\n" +
-                    "            margin-right: 30px;\n" +
-                    "        }\n" +
-                    "        #example_filter label{\n" +
-                    "            color:white;\n" +
-                    "        }\n" +
-                    "        .mdl-button{\n" +
-                    "            color: white;\n" +
-                    "        }\n" +
-                    "        #example_info{\n" +
-                    "            color:white;\n" +
-                    "        }\n" +
-                    "        .btn dropdown-toggle btn-default{\n" +
-                    "            margin-top:0;\n" +
-                    "        }\n" +
-                    "        table.dataTable thead .sorting,\n" +
-                    "        table.dataTable thead .sorting_asc,\n" +
-                    "        table.dataTable thead .sorting_desc {\n" +
-                    "            background : none;\n" +
-                    "        }\n" +
-                    "        form .question input:valid {\n" +
-                    "            margin-top: 10px;\n" +
-                    "        }\n" +
-                    "        form .question input:focus {\n" +
-                    "            outline: none;\n" +
-                    "            background: white;\n" +
-                    "            color: #33c4ba;\n" +
-                    "            margin-top: 10px;\n" +
-                    "        }\n" +
-                    "        .mdl-button--raised.mdl-button--colored{\n" +
-                    "        }\n" +
-                    "        .mdl-button--raised.mdl-button--colored:hover{\n" +
-                    "        }\n" +
-                    "    </style>"
-            );
+                    "        });\n" +
+                    "    </script>");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.ERROR,"IOException occurred while processing the custom tag");
         }
         return SKIP_BODY;
     }

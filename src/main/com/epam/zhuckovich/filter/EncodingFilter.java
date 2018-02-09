@@ -2,11 +2,9 @@ package com.epam.zhuckovich.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = { "/*" },
-           initParams = { @WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding Parameter")})
+@WebFilter
 public class EncodingFilter implements Filter {
     private String code;
 
@@ -20,9 +18,8 @@ public class EncodingFilter implements Filter {
         String codeRequest = request.getCharacterEncoding();
         if (code != null && !code.equalsIgnoreCase(codeRequest)) {
             request.setCharacterEncoding(code);
-            response.setCharacterEncoding(code);
         }
-        chain.doFilter(request, response);
+        chain.doFilter(request,response);
     }
 
     @Override

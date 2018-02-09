@@ -122,8 +122,7 @@ public class Author extends Entity{
         return "AuthorID: " + id + "\n" +
                 "Name: " + name + "\n" +
                 "Surname: " + surname + "\n" +
-                "Biography: " + biography + "\n" +
-                "Photo: " + photo.toString() + "\n";
+                "Biography: " + biography + "\n";
     }
 
 }

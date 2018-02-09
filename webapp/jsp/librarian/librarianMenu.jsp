@@ -11,6 +11,7 @@
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style1.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -58,12 +59,12 @@
     </div>
 </div>
 <!--forms for different actions-->
-<form id="readingRoomBookDeliveryForm" action="/controller" style="display: none"><input type="hidden" name="command" value="reading_room_menu"></form>
-<form id="subscriptionBookDeliveryForm" action="/controller" style="display: none"><input type="hidden" name="command" value="subscription_menu"></form>
-<form id="addAuthorForm" action="/jsp/librarian/addAuthor.jsp" style="display: none"></form>
-<form id="editBookForm" action="/jsp/librarian/editBook.jsp" style="display: none"><input type="hidden" name="command" value="view_authors"></form>
-<form id="editAccountForm" action="/jsp/common/editAccount.jsp" style="display: none"></form>
-<form id="deleteAccountForm" action="/controller" method="get" style="display: none">
+<form id="readingRoomBookDeliveryForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="reading_room_menu"></form>
+<form id="subscriptionBookDeliveryForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="subscription_menu"></form>
+<form id="addAuthorForm" action="/jsp/librarian/addAuthor.jsp" class="hiddenForm"></form>
+<form id="editBookForm" action="/jsp/librarian/editBook.jsp" class="hiddenForm"><input type="hidden" name="command" value="view_authors"></form>
+<form id="editAccountForm" action="/jsp/common/editAccount.jsp" class="hiddenForm"></form>
+<form id="deleteAccountForm" action="/controller" method="get" class="hiddenForm">
     <input type="hidden" name="command" value="delete_account">
     <input type="hidden" name="deleteAccount" value="librarian">
 </form>

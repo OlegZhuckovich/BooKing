@@ -5,13 +5,19 @@ import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.connection.ConnectionPool;
 import com.epam.zhuckovich.connection.ProxyConnection;
+import com.epam.zhuckovich.exception.SQLTechnicalException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class UserDAO extends AbstractDAO<Integer,User> {
+public final class UserDAO extends AbstractDAO<User> {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserDAO.class);
 
     private static UserDAO userDAO;
 
@@ -56,27 +62,31 @@ public final class UserDAO extends AbstractDAO<Integer,User> {
     }
 
     public List findAll(){
-        ProxyConnection cn = null;
-        Statement st = null;
+        ProxyConnection connection = null;
+        Statement statement = null;
         List<String> emailList = new ArrayList<>();
         try{
-            cn = ConnectionPool.getInstance().getConnection();
-            cn.setAutoCommit(false);
-            st = cn.createStatement();
-            ResultSet userResultSet = st.executeQuery(FIND_ALL_USERS_QUERY);
+            connection = ConnectionPool.getInstance().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.createStatement();
+            ResultSet userResultSet = statement.executeQuery(FIND_ALL_USERS_QUERY);
             while(userResultSet.next()){
-                emailList.add(userResultSet.getString("email"));
+                emailList.add(userResultSet.getString(EMAIL));
             }
-            cn.commit();
-        } catch(SQLException e){
-            cn.rollback();
+            connection.commit();
+        } catch (SQLTechnicalException e){
+            LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during findAll operation");
+            connection.rollback();
+        } catch (SQLException e){
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAll operation");
+            connection.rollback();
         } finally {
-            close(st,cn);
+            close(statement,connection);
         }
         return emailList;
     }
 
-    public List<User> findMemberByEmail(PreparedStatement statement, String email, String password){
+    public List<User> findMemberByEmail(PreparedStatement statement, String email, String password) {
         List<User> userList = new ArrayList<>();
         try{
             statement.setString(1,email);
@@ -103,6 +113,7 @@ public final class UserDAO extends AbstractDAO<Integer,User> {
                             .setSurname(userResultSet.getString(SURNAME))
                             .setEmail(email)
                             .setUserType(UserType.valueOf(userResultSet.getString(ROLE).toUpperCase()))
+                            .setRegistrationDate(userResultSet.getDate(REGISTRATION_DATE))
                             .setAddress(userAddress)
                             .build());
                 if(userList.get(0).getUserType() == UserType.ADMINISTRATOR){
@@ -110,7 +121,7 @@ public final class UserDAO extends AbstractDAO<Integer,User> {
                 }
             }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findMemberByEmail operation");
         }
         return userList;
     }
@@ -136,27 +147,30 @@ public final class UserDAO extends AbstractDAO<Integer,User> {
                 }
             }
         } catch(SQLException e){
-
+            LOGGER.log(Level.ERROR,"SQLException was occurred during findAllRemovableUsers operation");
         }
         return userList;
     }
 
     public void updateAvatar(InputStream photo, int userID){
-        System.out.println("Результат:");
-        ProxyConnection cn = null;
-        PreparedStatement st = null;
+        ProxyConnection connection = null;
+        PreparedStatement statement = null;
         try{
-            cn = ConnectionPool.getInstance().getConnection();
-            cn.setAutoCommit(false);
-            st = cn.prepareStatement(EDIT_ACCOUNT_QUERY);
-            st.setBinaryStream(1,photo);
-            st.setInt(2,userID);
-            int operation = st.executeUpdate();
-            cn.commit();
-        } catch(SQLException e){
-            cn.rollback();
+            connection = ConnectionPool.getInstance().getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(EDIT_ACCOUNT_QUERY);
+            statement.setBinaryStream(1,photo);
+            statement.setInt(2,userID);
+            int operation = statement.executeUpdate();
+            connection.commit();
+        } catch (SQLTechnicalException e){
+            LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during updateAvatar operation");
+            connection.rollback();
+        } catch (SQLException e){
+            LOGGER.log(Level.ERROR,"SQLException was occurred during updateAvatar operation");
+            connection.rollback();
         } finally {
-            close(st,cn);
+            close(statement,connection);
         }
     }
 
@@ -174,7 +188,11 @@ public final class UserDAO extends AbstractDAO<Integer,User> {
             if (resultSet.next()) {
                 content = resultSet.getBytes("avatar");
             }
-        } catch(SQLException e){
+        } catch (SQLTechnicalException e) {
+            LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during updateAvatar operation");
+            connection.rollback();
+        } catch (SQLException e) {
+            LOGGER.log(Level.ERROR,"SQLException was occurred during updateAvatar operation");
             connection.rollback();
         } finally {
             close(statement,connection);

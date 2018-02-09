@@ -14,6 +14,12 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
+//InterruptedException
+//SQLException
+//ServletException
+//IllegalArgumentException
+//IOException
+
 //Only for classes and interfaces ::::::: @author (required), @version (required) @param, @see
 //Only for methods @param, @return, @throws, @see, @serialData
 //Constructors @param
@@ -85,10 +91,9 @@ class AuthorCommand {
             request.getSession().setAttribute(AUTHOR,author.getName() + SPACE + author.getSurname());
             return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU));
         } catch (IOException e) {
-            LOGGER.log(Level.ERROR,"IOException was occured");
+            LOGGER.log(Level.ERROR, "IOException was occurred during getting the photo from the client");
         } catch (ServletException e) {
-            LOGGER.log(Level.FATAL,"ServletException was occured");
-            throw new RuntimeException();
+            LOGGER.log(Level.ERROR, "ServletException was occurred during getting the photo from the client");
         }
         return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU));
     }
