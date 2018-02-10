@@ -37,7 +37,7 @@ public class OrderDAO extends AbstractDAO<Order>{
     private static final String MEMBER_ORDERS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, ordered_book.order_date, ordered_book.return_date, ordered_book.order_type " +
                                                             "FROM book " +
                                                             "INNER JOIN ordered_book ON ordered_book.bookID = book.bookID " +
-                                                      "WHERE memberID = ? AND return_date IS NOT NULL";
+                                                      "WHERE memberID = ? AND return_date IS NOT NULL AND return_date > CURDATE()";
 
     private static final String ORDER_BOOK_QUERY = "INSERT INTO ordered_book (memberID, bookID, order_date, order_type) VALUES (?,?,CURDATE(),?)";
     private static final String ISSUE_READING_ROOM_QUERY = "UPDATE ordered_book SET return_date = CURDATE() WHERE memberID = ? AND bookID = ?";

@@ -25,8 +25,8 @@ public class OrderService {
         return orderDAO.executeQuery(statement -> orderDAO.findAllMemberOrders(statement,userID),OrderDAO.getMemberOrdersQuery());
     }
 
-    public boolean orderBook(int userID, int bookID, String orderType){
-        return orderDAO.executeUpdate(OrderDAO.getOrderBookQuery(), userID, bookID, orderType) != 0;
+    public int orderBook(int userID, int bookID, String orderType){
+        return orderDAO.executeUpdate(OrderDAO.getOrderBookQuery(), userID, bookID, orderType);
     }
 
     public boolean issueBookInReadingRoom(String memberID, String bookID) {

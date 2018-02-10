@@ -26,7 +26,7 @@ public final class UserDAO extends AbstractDAO<User> {
                                                         "FROM member " +
                                                         "LEFT JOIN adress ON adress.adressID=member.adressID " +
                                                   "WHERE email = ? AND password = ?";
-    private static final String ADD_USER_QUERY = "INSERT INTO LibraryDatabase.member (name, surname, email, password, role, registration_date) VALUES (?,?,?,?,?,CURDATE())";
+    private static final String ADD_USER_QUERY = "INSERT INTO LibraryDatabase.member (name, surname, email, password, role, registration_date, avatar) VALUES (?,?,?,?,?, CURDATE(),?)";
     private static final String FIND_ALL_MEMBERS = "SELECT member.memberID, member.name, member.email, member.registration_date, member.books_ordered, adress.city, adress.street, adress.house, adress.telephone_number " +
                                                         "FROM member " +
                                                         "LEFT JOIN adress ON adress.adressID = member.adressID";

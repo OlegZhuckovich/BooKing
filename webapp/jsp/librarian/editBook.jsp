@@ -7,64 +7,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <c:import url="../common/web.jsp"/>
-    <script>require(['editAccount'])</script>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.material.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable( {"language": {
+                "zeroRecords": '<fmt:message key="tableZeroRecords" bundle="${booking}"/>',
+                "info": '<fmt:message key="tableInfo" bundle="${booking}"/>',
+                "infoEmpty": '<fmt:message key="tableInfoEmpty" bundle="${booking}"/>',
+                "infoFiltered": '<fmt:message key="tableInfoFiltered" bundle="${booking}"/>',
+                "search":'<fmt:message key="tableSearch" bundle="${booking}"/>'
+            },
+                "dom": '<"toolbar">frtip',
+                "scrollX": true,
+                "lengthMenu": [[5], [5]],
+                "pagingType": "numbers",
+                columnDefs: [
+                    {
+                        targets: '_all',
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ]
+            });
+        });
+    </script>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content">
-
-    <form action="/controller" method="post">
-
-        <div>
-            <label for="bookTitle"><fmt:message key="bookTitle" bundle="${booking}"/></label>
-            <input type="text" id="bookTitle" name="bookTitle">
+<div id="content" class="container-fluid tableRow content">
+    <div class="row firstTableRow"></div>
+    <div class="row secondTableRow">
+        <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
+        <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
+            <div class="row deleteMemberHeader">
+                <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingTableLogo">
+                <h1 class="googleTableTitle"><fmt:message key="editBook" bundle="${booking}"/></h1>
+                <div class="col-xs-12 col-sm-12 col-md-12 sideColumn">
+                    <span><fmt:message key="editBookInfo" bundle="${booking}"/></span>
+                </div>
+            </div>
+            <c:if test="${ not empty bookList}">
+                <div class="row googleTableRow">
+                    <table id="example" class="mdl-data-table googleTable" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th><fmt:message key="bookTitle" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookAuthor" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookGenre" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookPublishingHouse" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookYear" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookPages" bundle="${booking}"/></th>
+                            <th><fmt:message key="bookQuantity" bundle="${booking}"/></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="book" items="${bookList}" varStatus="count">
+                            <tr>
+                                <td><c:out value="${book.title}"/></td>
+                                <td>
+                                    <c:forEach var="author" items="${book.authors}">
+                                        <c:out value="${author.name} ${author.surname}"/><br/>
+                                    </c:forEach>
+                                </td>
+                                <td><c:out value="${book.genre}"/></td>
+                                <td><c:out value="${book.publishingHouse}"/></td>
+                                <td><c:out value="${book.numberInformation.year}"/></td>
+                                <td><c:out value="${book.numberInformation.pages}"/></td>
+                                <td><c:out value="${book.numberInformation.quantity}"/></td>
+                                <td>
+                                    <form action="/controller" method="post" id="deleteBookForm">
+                                        <input type="hidden" name="bookID" value="${book.id}">
+                                        <input type="hidden" name="command" value="edit_book">
+                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="deleteBook" bundle="${booking}"/>">
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:if>
         </div>
-
-        <div>
-            <label><fmt:message key="bookGenre" bundle="${booking}"/></label>
-            <select name="bookGenre">
-            <c:forEach var="book" items="${bookList}" varStatus="count">
-                <option value="${count}"><c:out value="${book}"/></option>
-            </c:forEach>
-            </select>
-        </div>
-
-        <div>
-            <label for="bookPublishingHouse"><fmt:message key="bookPublishingHouse" bundle="${booking}"/></label>
-            <input type="text" id="bookPublishingHouse" name="bookPublishingHouse">
-        </div>
-
-        <div>
-            <label><fmt:message key="bookYear" bundle="${booking}"/></label>
-            <select name="bookYear">
-            </select>
-        </div>
-
-        <div>
-            <label for="bookPages"><fmt:message key="bookPages" bundle="${booking}"/></label>
-            <input type="text" id="bookPages" name="bookPages">
-        </div>
-
-        <div>
-            <label for="bookQuantity"><fmt:message key="bookQuantity" bundle="${booking}"/></label>
-            <input type="number" min="1" max="100" id="bookQuantity" name="bookQuantity">
-        </div>
-
-        <div>
-            <label for="bookAuthor"><fmt:message key="bookAuthor" bundle="${booking}"/></label>
-            <input type="text" id="bookAuthor" name="bookAuthor">
-        </div>
-
-        <div>
-            <label><fmt:message key="saveChanges" bundle="${booking}" var="saveChanges"/></label>
-            <input type="submit" id="saveChangesButton" name="saveChangesButton" value="${saveChanges}">
-            <input type="hidden" name="command" value="edit_account">
-        </div>
-    </form>
+        <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
+    </div>
 </div>
 <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
 </body>
 </html>
-

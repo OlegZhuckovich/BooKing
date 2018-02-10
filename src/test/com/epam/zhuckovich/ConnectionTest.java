@@ -22,7 +22,6 @@ public class ConnectionTest {
 
     @BeforeClass
     public void setUp(){
-        LOGGER.log(Level.INFO,"dasdasdasdas");
         bookDAO = BookDAO.getInstance();
         connection = ConnectionPool.getInstance().getConnection();
     }

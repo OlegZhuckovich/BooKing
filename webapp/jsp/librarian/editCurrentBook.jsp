@@ -53,7 +53,7 @@
             <div class="container-fluid">
                 <div>
                     <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo">
-                    <h1 id="pageTitle"><fmt:message key="addBook" bundle="${booking}"/></h1>
+                    <h1 id="pageTitle"><fmt:message key="editBook" bundle="${booking}"/></h1>
                 </div>
                 <div class="row sideColumn">
                     <div class="col-xs-2 col-sm-2 col-md-2 sideColumn">
@@ -65,35 +65,35 @@
                             <!--название книги-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="bookTitle" name="bookTitle" required/>
+                                    <input type="text" id="bookTitle" name="bookTitle" value="${book.title}" required/>
                                     <label><fmt:message key="bookTitle" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--издательство книги-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="bookPublishingHouse" name="bookPublishingHouse" required/>
+                                    <input type="text" id="bookPublishingHouse" name="bookPublishingHouse" value="${book.publishingHouse}" required/>
                                     <label><fmt:message key="bookPublishingHouse" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--количество экземпляров-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="number" min="1" max="100" id="bookQuantity" name="bookQuantity"  required/>
+                                    <input type="number" min="1" max="100" id="bookQuantity" name="bookQuantity" value="${book.numberInformation.quantity}" required/>
                                     <label for="bookQuantity"><fmt:message key="bookQuantity" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--год издания-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="bookYear" name="bookYear" maxlength="4"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
+                                    <input type="text" id="bookYear" name="bookYear" maxlength="4" value="${book.numberInformation.year}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
                                     <label><fmt:message key="bookYear" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--количество страниц-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="bookPages" name="bookPages" maxlength="5" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
+                                    <input type="text" id="bookPages" name="bookPages" maxlength="5" value="${book.numberInformation.pages}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required/>
                                     <label><fmt:message key="bookPages" bundle="${booking}"/></label>
                                 </div>
                             </div>
@@ -104,13 +104,20 @@
                                         <!--жанр книги-->
                                         <select id="bookGenre" name="bookGenre" class="selectpicker" title="<fmt:message key="bookGenre" bundle="${booking}"/>" data-live-search="true" required>
                                             <c:forEach var="genre" items="${genreList}" varStatus="count">
-                                                <option><c:out value="${genre}"/></option>
+                                                <c:choose>
+                                                    <c:when test="${book.genre == genre}">
+                                                        <option selected="selected"><c:out value="${genre}"/></option>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <option><c:out value="${genre}"/></option>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:forEach>
                                         </select>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                         <!--авторы книги-->
-                                        <select id="bookAuthor" name="bookAuthor" class="selectpicker" multiple data-max-options="3" data-size="10" data-live-search="true" title="<fmt:message key="bookAuthor" bundle="${booking}"/>" required>
+                                        <select id="bookAuthor" name="bookAuthor" class="selectpicker" multiple data-max-options="3" data-size="10" data-live-search="true" title="<fmt:message key="chooseNewAuthor" bundle="${booking}"/>" required>
                                             <c:forEach var="author" items="${authorList}">
                                                 <option id="${author.id}" value="${author.id}"><c:out value="${author.name}"/> <c:out value="${author.surname}"/></option>
                                             </c:forEach>

@@ -9,10 +9,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserService {
 
     private static final String ENCRYPTION_MECHANISM = "MD5";
+    private static final String NAME_SURNAME_REGEX = "[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?";
+    private static final String EMAIL_REGEX = "[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}";
+    private static final String PASSWORD_REGEX = "[\\w]{5,40}";
+
 
     private UserDAO userDAO;
 
@@ -26,22 +32,42 @@ public class UserService {
         return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
     }
 
-    public boolean insertUser(String name, String surname, String email, String password){
-        String finalPassword = encription(password);
-        User newUser = User.newBuilder()
-                           .setName(name)
-                           .setSurname(surname)
-                           .setEmail(email)
-                           .setPassword(finalPassword)
-                           .setUserType(UserType.MEMBER)
-                           .build();
-        List<String> emailUsers = userDAO.findAll();
-        for(String currentEmail:emailUsers){
-            if(currentEmail.equals(email)){
-                return false;
-            }
+    public int registerUser(String name, String surname, String email, String password, InputStream photo){
+
+        int operationResult = 0;
+
+        if(name==null || surname==null || email==null || password==null || photo==null){
+            return operationResult;
         }
-        return userDAO.executeUpdate(UserDAO.getAddUserQuery(), newUser.getName(), newUser.getSurname(), newUser.getEmail(), newUser.getPassword(), newUser.getUserType().toString()) != 0;
+        boolean nameMatch, surnameMatch, emailMatch, passwordMatch;
+        Pattern nameSurnameRegex = Pattern.compile(NAME_SURNAME_REGEX);
+        Pattern emailRegex = Pattern.compile(EMAIL_REGEX);
+        Pattern passwordRegex = Pattern.compile(PASSWORD_REGEX);
+
+        Matcher nameMatcher = nameSurnameRegex.matcher(name);
+        Matcher surnameMatcher = nameSurnameRegex.matcher(surname);
+        Matcher emailMatcher = emailRegex.matcher(email);
+        Matcher passwordMatcher = passwordRegex.matcher(password);
+
+
+        nameMatch = nameMatcher.matches();
+        surnameMatch = surnameMatcher.matches();
+        emailMatch = emailMatcher.matches();
+        passwordMatch = passwordMatcher.matches();
+
+        if(nameMatch && surnameMatch && emailMatch && passwordMatch){
+            String finalPassword = encription(password);
+            User newUser = User.newBuilder()
+                    .setName(name)
+                    .setSurname(surname)
+                    .setEmail(email)
+                    .setPassword(finalPassword)
+                    .setPhoto(photo)
+                    .setUserType(UserType.MEMBER)
+                    .build();
+            operationResult = userDAO.executeUpdate(UserDAO.getAddUserQuery(), newUser.getName(), newUser.getSurname(), newUser.getEmail(), newUser.getPassword(), newUser.getUserType().toString(), newUser.getPhoto());
+        }
+        return operationResult;
     }
 
 
@@ -79,7 +105,6 @@ public class UserService {
     }
 
     public boolean editAccount(InputStream photo, int userID){
-        System.out.println("jglgksdgl");
         userDAO.updateAvatar(photo,userID);
         return true;
     }

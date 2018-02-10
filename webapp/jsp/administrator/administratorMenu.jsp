@@ -7,7 +7,6 @@
 <html>
 <head>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style1.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
@@ -20,18 +19,17 @@
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<!--content of the page-->
 <div id="content" class="container-fluid">
-    <div class="row" style="height: 10%"></div>
-    <div class="row" style="height: 60%">
+    <div class="row" id="firstRow"></div>
+    <div class="row" id="menuRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
         <div id="menuImages" class="col-xs-12 col-sm-10 col-md-8 sideColumn">
-            <div class="row" style="height: 50%">
+            <div class="row menuInnerRow">
                 <div id="addBook" class="col-xs-4 col-sm-4 col-md-4"></div>
                 <div id="addLibrarian" class="col-xs-4 col-sm-4 col-md-4"></div>
                 <div id="editAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
             </div>
-            <div class="row" style="height: 50%">
+            <div class="row menuInnerRow">
                 <div id="deleteBookMenu" class="col-xs-4 col-sm-4 col-md-4"></div>
                 <div id="deleteLibrarianMenu" class="col-xs-4 col-sm-4 col-md-4"></div>
                 <div id="deleteMemberMenu" class="col-xs-4 col-sm-4 col-md-4"></div>
@@ -39,7 +37,7 @@
         </div>
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
     </div>
-    <div class="row" style="height: 8%">
+    <div class="row titleBlockRow">
         <div class="hidden-xs col-sm-1 col-md-2"></div>
         <div id="titleBlock" class="col-xs-12 col-sm-10 col-md-8">
             <div class="col-xs-2 col-sm-3 col-md-3"></div>

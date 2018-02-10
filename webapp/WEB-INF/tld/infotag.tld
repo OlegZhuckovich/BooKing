@@ -12,10 +12,5 @@
         <name>info-name</name>
         <tag-class>com.epam.zhuckovich.customtag.InfoTag</tag-class>
         <body-content>empty</body-content>
-        <attribute>
-            <name>role</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
     </tag>
 </taglib>

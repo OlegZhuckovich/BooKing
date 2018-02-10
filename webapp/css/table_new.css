@@ -69,6 +69,13 @@ footer{
     height: 50%;
 }
 
+#menuRow{
+    height: 60%;
+}
+
+.menuInnerRow{
+    height: 50%;
+}
 
 .sideColumn{
     height: 100%;
@@ -144,6 +151,12 @@ footer{
 
 #addLibrarianBlock{
     background-color: #33c4ba;
+    min-height: 85%;
+    border-radius: 20px;
+}
+
+#addAuthorBlock{
+    background-color: #33c4ba;
     min-height: 95%;
     border-radius: 20px;
 }
@@ -217,7 +230,7 @@ footer{
 
 /*Styles for inputs and buttons*/
 
-.transition, form button, form .inputGroup label, form .inputGroup input {
+.transition, form button, form .inputGroup label, form .inputGroup input, textarea {
     -moz-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
     -o-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
     -webkit-transition: all 0.25s cubic-bezier(0.53, 0.01, 0.35, 1.5);
@@ -318,6 +331,49 @@ form .inputGroup input:valid ~ label {
     -ms-transform: translate(5px, -35px) scale(0.6);
     -webkit-transform: translate(5px, -35px) scale(0.6);
     transform: translate(5px, -35px) scale(0.6);
+}
+
+form .inputGroup textarea{
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid white;
+    font-size: 17px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    border-radius: 60px;
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+}
+
+form .inputGroup textarea:focus {
+    outline: none;
+    background: white;
+    color: #424c93;
+    margin-top: 50px;
+}
+
+form .inputGroup textarea:valid {
+    margin-top: 50px;
+}
+
+form .inputGroup textarea:focus ~ label{
+    -moz-transform: translate(0, -50px);
+    -ms-transform: translate(0, -50px);
+    -webkit-transform: translate(0, -50px);
+    transform: translate(0, -70px);
+}
+
+form .inputGroup textarea:valid ~ label {
+    text-transform: uppercase;
+    font-style: italic;
+    -moz-transform: translate(5px, -70px) scale(0.6);
+    -ms-transform: translate(5px, -70px) scale(0.6);
+    -webkit-transform: translate(5px, -70px) scale(0.6);
+    transform: translate(5px, -70px) scale(0.6);
 }
 
 /*Other styles*/
@@ -446,7 +502,7 @@ td, th{
     margin-left: 70px;
 }
 
-.hiddenForm{
+.hiddenForm, .hiddenLabel{
     display: none;
 }
 
@@ -541,12 +597,6 @@ form .question input:focus {
     height: 100%;
 }
 
-#editAccount{
-    background: url('Library.png') no-repeat;
-    background-size: 100% 100%;
-    height: 100%;
-}
-
 #deleteBookMenu{
     background: url('https://az616578.vo.msecnd.net/files/2016/05/19/635992798386672964-148953701_Stack-of-books-great-education.jpg') no-repeat;
     background-size: 100% 100%;
@@ -574,4 +624,138 @@ form .question input:focus {
 
 #titleBlock label{
     display: none;
+}
+
+.titleBlockRow{
+    height: 8%;
+}
+
+/*Styles for menu images*/
+
+#readingRoomBookDelivery{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+
+#subscriptionBookDelivery{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#addAuthor{
+    background: url('https://24smi.org/public/media/2017/6/10/01_NMBSs1L.jpg') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#editBook{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#editAccount{
+    background: url('https://media.gettyimages.com/photos/asian-happy-students-with-laptop-computer-working-and-studying-in-picture-id696959144') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#deleteAccount{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+}
+
+#orderBook{
+    background: url('https://mainehumanities.org/wp-content/uploads/2015/05/student-in-library.jpg') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#viewOrderedBooks{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#authorGallery{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+#trainingVideo{
+    background: url('../css/Library.png') no-repeat;
+    background-size: 100% 100%;
+    height: 100%
+}
+
+/*Styles for login page*/
+
+#loginContent{
+    margin-top: 85px;
+    background-size: 100% 100%;
+}
+
+#firstLoginRow{
+    height: 15%;
+}
+
+#secondLoginRow{
+    height: 50%;
+}
+
+.loginInputMargin{
+    margin-left: 50px;
+}
+
+.loginInputMargin button {
+    width:80%;
+    margin-top: 0;
+}
+
+#loginTitle{
+    font-size: 35px;
+    margin-left: 115px;
+}
+
+#loginLogo{
+    width: 70px;
+    margin-top: 10px;
+    margin-left: 30px;
+    float: left;
+}
+
+#background-carousel{
+    position:fixed;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+.carousel,
+.carousel-inner {
+    width:100%;
+    height:100%;
+    z-index:0;
+    overflow:hidden;
+}
+.item {
+    width:100%;
+    height:100%;
+    background-position:center center;
+    background-size:cover;
+    z-index:0;
+}
+
+#content-wrapper {
+    position:absolute;
+    z-index:1 !important;
+    min-width:100%;
+    min-height:100%;
+}
+.well {
+    opacity:0.85
 }

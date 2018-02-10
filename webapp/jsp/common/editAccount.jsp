@@ -34,7 +34,7 @@
                             <div class="uploadButton">
                                 <input type="file" accept="image/jpeg" id="avatarUser" name="avatarUser" hidden required/>
                             </div>
-                            <h4 style="text-align: center"><fmt:message key="editAccount" bundle="${booking}"/>: <fmt:formatDate value="${sessionScope.user.registrationDate}"/></h4>
+                            <h4 style="text-align: center"><fmt:message key="registrationDate" bundle="${booking}"/>: <fmt:formatDate value="${sessionScope.user.registrationDate}"/></h4>
                         </div>
                         <div class="col-xs-12 col-sm-4 col-md-4 sideColumn">
                             <div>

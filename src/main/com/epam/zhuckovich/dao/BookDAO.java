@@ -28,6 +28,7 @@ public class BookDAO extends AbstractDAO<Book>{
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                         "FROM book ";
 
+
     /**
      * This query is used for searching books by
      * different criteria, such as title, genre, authors

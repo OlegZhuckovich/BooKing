@@ -7,46 +7,133 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <c:import url="common/web.jsp"/>
-    <script>require(['registerValidation'])</script>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function validation() {
+            var name = $('#nameRegister').val();
+            var surname = $('#surnameRegister').val();
+            var email = $('#emailRegister').val();
+            var password = $('#passwordRegister').val();
+            var repeatPassword = $('#repeatPasswordRegister').val();
+            var photo = $('#avatarUser').val();
+            var expansion = photo.substring(photo.lastIndexOf('.')+1);
+            //Регулярные выражения для проверки
+            var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?");
+            var emailRegex = new RegExp("[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}");
+            var passwordRegex = new RegExp("[\\w]{5,40}");
+            if(!nameSurnameRegex.test(name)){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianNameError" bundle="${booking}"/>', "error"); return false;
+            } else if (!nameSurnameRegex.test(surname)){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianSurnameError" bundle="${booking}"/>', "error"); return false;
+            } else if (!emailRegex.test(email)){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianEmailError" bundle="${booking}"/>', "error"); return false;
+            } else if (!passwordRegex.test(password)){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianPasswordError" bundle="${booking}"/>', "error"); return false;
+            } else if (password !== repeatPassword){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianRepeatPasswordError" bundle="${booking}"/>', "error"); return false;
+            } else if (expansion !== 'jpg'){
+                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianPhotoError" bundle="${booking}"/>', "error"); return false;
+            }
+        }
+    </script>
     <title>BooKing</title>
 </head>
 <body id="page">
-    <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-    <div id="content">
-        <form action="/controller" method="post" id="registerForm">
-            <div>
-                <label for="nameRegister"><fmt:message key="nameRegister" bundle="${booking}"/></label>
-                <input type="text" id="nameRegister" name="nameRegister">
+<c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
+<div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/registrationBackground.png') no-repeat; background-size: 100% 100%;">
+    <div class="row" id="firstRow"></div>
+    <div class="row" id="secondRow">
+        <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
+        <div class="col-xs-12 col-sm-10 col-md-8" id="addLibrarianBlock" style="background-color:#3786FF;">
+            <div class="container-fluid">
+                <div>
+                    <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo">
+                    <h1 id="pageTitle"><fmt:message key="registerMember" bundle="${booking}"/></h1>
+                </div>
+                <div class="row sideColumn">
+                    <div class="col-xs-2 col-sm-2 col-md-2 sideColumn">
+                        <img src="${pageContext.request.contextPath}/images/register1.svg" class="topImage">
+                        <img src="${pageContext.request.contextPath}/images/register3.svg" class="bottomImage">
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 sideColumn">
+                        <form action="/controller" method="post" id="registerForm" onsubmit="return validation()" enctype="multipart/form-data">
+                            <!--имя библиотекаря-->
+                            <div class="form-group">
+                                <div class="inputGroup">
+                                    <input type="text" id="nameRegister" name="nameRegister" required/>
+                                    <label><fmt:message key="nameRegister" bundle="${booking}"/></label>
+                                </div>
+                            </div>
+                            <!--фамилия библиотекаря-->
+                            <div class="form-group">
+                                <div class="inputGroup">
+                                    <input type="text" id="surnameRegister" name="surnameRegister" required/>
+                                    <label><fmt:message key="surnameRegister" bundle="${booking}"/></label>
+                                </div>
+                            </div>
+                            <!--email пользователя-->
+                            <div class="form-group">
+                                <div class="inputGroup">
+                                    <input type="email" id="emailRegister" name="emailRegister" required/>
+                                    <label><fmt:message key="emailRegister" bundle="${booking}"/></label>
+                                </div>
+                            </div>
+                            <!--пароль-->
+                            <div class="form-group">
+                                <div class="inputGroup">
+                                    <input type="password" id="passwordRegister" name="passwordRegister" required/>
+                                    <label><fmt:message key="passwordRegister" bundle="${booking}"/></label>
+                                </div>
+                            </div>
+                            <!--повтор пароля-->
+                            <div class="form-group">
+                                <div class="inputGroup">
+                                    <input type="password" id="repeatPasswordRegister" name="repeatPasswordRegister" required/>
+                                    <label><fmt:message key="repeatPasswordRegister" bundle="${booking}"/></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-inline row">
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                        <!--загружаемое фото-->
+                                        <div class="uploadButton">
+                                            <input type="file" accept="image/jpeg" id="avatarUser" name="avatarUser" hidden required/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                        <!--кнопка submit-->
+                                        <div class="form-group">
+                                            <div class="inputGroup">
+                                                <button type="submit" class="submitButton" style="width: 100%;"><fmt:message key="registerButton" bundle="${booking}"/></button>
+                                                <input type="hidden" name="command" value="register">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 sideColumn">
+                        <img src="${pageContext.request.contextPath}/images/register2.svg" class="topImage">
+                        <img src="${pageContext.request.contextPath}/images/register4.svg" class="bottomImage">
+                    </div>
+                </div>
             </div>
-
-            <div>
-                <label for="surnameRegister"><fmt:message key="surnameRegister" bundle="${booking}"/></label>
-                <input type="text" id="surnameRegister" name="surnameRegister">
-            </div>
-
-            <div>
-                <label for="emailRegister"><fmt:message key="emailRegister" bundle="${booking}"/></label>
-                <input type="email" id="emailRegister" name="emailRegister">
-            </div>
-
-            <div>
-                <label for="passwordRegister"><fmt:message key="passwordRegister" bundle="${booking}"/></label>
-                <input type="password" id="passwordRegister" name="passwordRegister">
-            </div>
-
-            <div>
-                <label for="repeatPasswordRegister"><fmt:message key="repeatPasswordRegister" bundle="${booking}"/></label>
-                <input type="password" id="repeatPasswordRegister" name="repeatPasswordRegister">
-            </div>
-
-            <div>
-                <label><fmt:message key="registerButton" bundle="${booking}" var="registerButton"/></label>
-                <input type="submit" id="registerButton" name="registerButton" value="${registerButton}">
-                <input type="hidden" name="command" value="register">
-            </div>
-        </form>
+        </div>
+        <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
     </div>
-    <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
+</div>
+<c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
+<c:if test="${ not empty registrationResult}">
+    <script>swal('<fmt:message key="registrationResultErrorTitle" bundle="${booking}"/>','<fmt:message key="registrationResultErrorBody" bundle="${booking}"/>', "error");</script>
+    <c:remove var="registrationResult" scope="session"/>
+</c:if>
 </body>
 </html>

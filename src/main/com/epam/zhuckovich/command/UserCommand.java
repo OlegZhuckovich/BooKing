@@ -28,6 +28,7 @@ class UserCommand {
 
     private static final Logger LOGGER = LogManager.getLogger(UserCommand.class);
 
+    private static final String SPACE = " ";
     private static final String USER_PARAMETER = "user";
     private static final String USER_ID_PARAMETER = "userID";
     private static final String OPERATION_PARAMETER = "operationSuccess";
@@ -47,7 +48,7 @@ class UserCommand {
     private static final String LIBRARIAN_MENU_PAGE = "librarianMenu";
     private static final String ADMINISTRATOR_MENU_PAGE = "administratorMenu";
     private static final String LOGIN_PAGE = "loginPage";
-    private static final String ERROR_LOGIN_MESSAGE = "errorLoginMessage";
+    private static final String ERROR_LOGIN_MESSAGE = "loginError";
 
     private static final String NAME_REGISTER= "nameRegister";
     private static final String SURNAME_REGISTER = "surnameRegister";
@@ -66,6 +67,13 @@ class UserCommand {
     private static final String TELEPHONE_USER = "telephoneUser";
     private static final String PASSWORD_USER = "passwordUser";
     private static final String REPEAT_PASSWORD_USER = "repeatPasswordUser";
+
+    private static final String REGISTRATION_PAGE = "registrationPage";
+    private static final String REGISTRATION_RESULT = "registrationResult";
+    private static final String ERROR = "error";
+    private static final String SUCCESS = "success";
+    private static final String USER_REGISTRATION = "userRegistration";
+
 
     private UserService service;
 
@@ -89,12 +97,15 @@ class UserCommand {
     Router login(HttpServletRequest request) {
         String email = request.getParameter(LOGIN_INPUT);
         String password = request.getParameter(PASSWORD_INPUT);
+        if(email == null || password == null){
+            return new Router(Router.RouterType.FORWARD,PageManager.getPage(LOGIN_PAGE));
+        }
         User user = service.checkUser(email, password);
         UserType member = user.getUserType();
-        if (member == null) {
-            request.setAttribute(ERROR_LOGIN_MESSAGE, "Вход не выполнен");
-            return new Router(Router.RouterType.FORWARD,PageManager.getPage(LOGIN_PAGE));
-        } else {
+        if(member == null){
+            request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+        }
             switch (member) {
                 case ADMINISTRATOR:
                     request.getSession().setAttribute(USER_PARAMETER, user);
@@ -106,10 +117,9 @@ class UserCommand {
                     request.getSession().setAttribute(USER_PARAMETER, user);
                     return new Router(Router.RouterType.REDIRECT,PageManager.getPage(MEMBER_MENU_PAGE));
                 default:
-                    request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, "Вход не выполнен");
+                    request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
                     return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
             }
-        }
     }
 
     /**
@@ -134,13 +144,25 @@ class UserCommand {
         String surname = request.getParameter(SURNAME_REGISTER);
         String email = request.getParameter(EMAIL_REGISTER);
         String password = request.getParameter(PASSWORD_REGISTER);
-        boolean isUserAdded = service.insertUser(name, surname, email, password);
-        if(isUserAdded){
-            request.setAttribute("registerMessage","Пользователь зарегистрирован");
-        } else {
-            request.setAttribute("registerMessage","Что-то пошло не так");
+        Part photoPart = null;
+        InputStream photo = null;
+        try {
+            photoPart = request.getPart(AVATAR_USER);
+            photo = photoPart.getInputStream();
+        } catch (IOException e) {
+            LOGGER.log(Level.ERROR,"IOException was occurred during user registration");
+        } catch (ServletException e) {
+            LOGGER.log(Level.ERROR,"ServletException was occurred during user registration");
         }
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+        int isUserAdded = service.registerUser(name, surname, email, password, photo);
+        if(isUserAdded == 0){
+            request.getSession().setAttribute(REGISTRATION_RESULT,ERROR);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(REGISTRATION_PAGE));
+        } else {
+            request.getSession().setAttribute(USER_REGISTRATION,name + SPACE + surname);
+            request.getSession().setAttribute(REGISTRATION_RESULT,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+        }
     }
 
     /**

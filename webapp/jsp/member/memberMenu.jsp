@@ -7,48 +7,46 @@
 <html>
 <head>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
-    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style1.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script src="../../js/memberMenu.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/memberMenu.js" type="text/javascript"></script>
     <title>BooKing</title>
 </head>
 <body id="page">
     <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
         <div id="content" class="container-fluid">
-            <div class="row" style="height: 10%"></div>
-            <div class="row" style="height: 60%">
-                <div class="hidden-xs col-sm-1 col-md-2" style="height: 100%"></div>
-                <div id="menuImages" class="col-xs-12 col-sm-10 col-md-8" style="height: 100%">
-                    <div class="row" style="height: 50%">
-                        <div id="orderBook" class="col-xs-4 col-sm-4 col-md-4" style="background: url('https://mainehumanities.org/wp-content/uploads/2015/05/student-in-library.jpg') no-repeat;background-size: 100% 100%; height: 100%"></div>
-                        <div id="viewOrderedBooks" class="col-xs-4 col-sm-4 col-md-4" style="background: url('../../css/Library.png') no-repeat;background-size: 100% 100%; height: 100%"></div>
-                        <div id="editAccount" class="col-xs-4 col-sm-4 col-md-4" style="background: url('../../css/Library.png') no-repeat;background-size: 100% 100%; height: 100%"></div>
+            <div class="row" id="firstRow"></div>
+            <div class="row" id="menuRow">
+                <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
+                <div id="menuImages" class="col-xs-12 col-sm-10 col-md-8 sideColumn">
+                    <div class="row menuInnerRow">
+                        <div id="orderBook" class="col-xs-4 col-sm-4 col-md-4"></div>
+                        <div id="viewOrderedBooks" class="col-xs-4 col-sm-4 col-md-4"></div>
+                        <div id="editAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
                     </div>
-                    <div class="row" style="height: 50%">
-                        <div id="authorGallery" class="col-xs-4 col-sm-4 col-md-4" style="background: url('../../css/Library.png') no-repeat;background-size: 100% 100%; height: 100%"></div>
-                        <div id="trainingVideo" class="col-xs-4 col-sm-4 col-md-4" style="background: url('../../css/Library.png') no-repeat;background-size: 100% 100%; height: 100%"></div>
-                        <div id="deleteAccount" class="col-xs-4 col-sm-4 col-md-4" style="background: url('../../css/Library.png') no-repeat;background-size: 100% 100%; height: 100%"></div>
+                    <div class="row menuInnerRow">
+                        <div id="authorGallery" class="col-xs-4 col-sm-4 col-md-4"></div>
+                        <div id="trainingVideo" class="col-xs-4 col-sm-4 col-md-4"></div>
+                        <div id="deleteAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
                     </div>
                 </div>
-                <div class="hidden-xs col-sm-1 col-md-2" style="height: 100%"></div>
+                <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
             </div>
-            <div class="row" style="height: 8%">
+            <div class="row titleBlockRow">
                 <div class="hidden-xs col-sm-1 col-md-2"></div>
-                <div id="titleBlock" class="col-xs-12 col-sm-10 col-md-8" style="background-color: #F06060; height:100%; text-align: center; display: none">
+                <div id="titleBlock" class="col-xs-12 col-sm-10 col-md-8">
                     <div class="col-xs-2 col-sm-3 col-md-3"></div>
                     <div class="col-xs-8 col-sm-6 col-md-6">
-                        <label id="orderBookLabel" style="display: none"><fmt:message key="orderBook" bundle="${booking}"/></label>
-                        <label id="viewOrderedBooksLabel" style="display: none"><fmt:message key="viewOrderedBooks" bundle="${booking}"/></label>
-                        <label id="editAccountLabel" style="display: none"><fmt:message key="editAccount" bundle="${booking}"/></label>
-                        <label id="authorGalleryLabel" style="display: none"><fmt:message key="authorGallery" bundle="${booking}"/></label>
-                        <label id="trainingVideoLabel" style="display: none"><fmt:message key="trainingVideo" bundle="${booking}"/></label>
-                        <label id="deleteAccountLabel" style="display: none"><fmt:message key="deleteAccount" bundle="${booking}"/></label>
+                        <label id="orderBookLabel" class="hiddenLabel"><fmt:message key="orderBook" bundle="${booking}"/></label>
+                        <label id="viewOrderedBooksLabel" class="hiddenLabel"><fmt:message key="viewOrderedBooks" bundle="${booking}"/></label>
+                        <label id="editAccountLabel" class="hiddenLabel"><fmt:message key="editAccount" bundle="${booking}"/></label>
+                        <label id="authorGalleryLabel" class="hiddenLabel"><fmt:message key="authorGallery" bundle="${booking}"/></label>
+                        <label id="trainingVideoLabel" class="hiddenLabel"><fmt:message key="trainingVideo" bundle="${booking}"/></label>
+                        <label id="deleteAccountLabel" class="hiddenLabel"><fmt:message key="deleteAccount" bundle="${booking}"/></label>
                     </div>
                     <div class="col-xs-2 col-sm-3 col-md-3"></div>
                 </div>

@@ -24,6 +24,10 @@ class OrderCommand {
     private static final String BOOK_ID_PARAMETER = "bookID";
     private static final String MEMBER_ID_PARAMETER = "memberID";
 
+    private static final String ORDER_RESULT = "orderResult";
+    private static final String SUCCESS = "success";
+    private static final String ERROR = "error";
+
     private OrderService service;
 
     OrderCommand(){
@@ -49,15 +53,21 @@ class OrderCommand {
     Router orderBook(HttpServletRequest request) {
         String stringOrderType = request.getParameter(ACTION);
         User user = (User)request.getSession().getAttribute(USER_ATTRIBUTE);
-        int userID = user.getId();
         String stringBookID = request.getParameter(BOOK_ID_PARAMETER);
+        int userID = user.getId();
         int bookID = Integer.parseInt(stringBookID);
         Order.OrderType orderType = Order.OrderType.valueOf(stringOrderType.toUpperCase());
+        int orderBookResult = 0;
         switch (orderType){
             case READING_ROOM:
-                service.orderBook(userID,bookID, stringOrderType);break;
+                orderBookResult = service.orderBook(userID,bookID, stringOrderType); break;
             case SUBSCRIPTION:
-                service.orderBook(userID,bookID, stringOrderType);break;
+                orderBookResult = service.orderBook(userID,bookID, stringOrderType); break;
+        }
+        if(orderBookResult == 0){
+            request.getSession().setAttribute(ORDER_RESULT,ERROR);
+        } else {
+            request.getSession().setAttribute(ORDER_RESULT,SUCCESS);
         }
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ORDER_BOOK_PAGE));
     }

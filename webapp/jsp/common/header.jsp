@@ -83,7 +83,7 @@
         </div>
     </ul>
     <form method="post"> 
-        <select id="language" name="language" onchange="submit()"> 
+        <select id="language" name="language" style="margin-top: 12px" onchange="submit()"> 
             <option value="ru_RU" ${language == 'ru_RU' ? 'selected' : ''}><fmt:message key="russian" bundle="${booking}"/></option> 
             <option value="en_EN" ${language == 'en_EN' ? 'selected' : ''}><fmt:message key="english" bundle="${booking}"/></option> 
             <option value="be_BY" ${language == 'be_BY' ? 'selected' : ''}><fmt:message key="belarusian" bundle="${booking}"/></option> 

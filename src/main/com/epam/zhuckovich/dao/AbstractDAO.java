@@ -53,6 +53,7 @@ public class AbstractDAO<T extends Entity> {
             LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during executeUpdate");
             connection.rollback();
         } catch (SQLException exp) {
+            exp.printStackTrace();
             LOGGER.log(Level.ERROR,"SQLException was occurred during executeUpdate");
         } finally {
             close(preparedStatement,connection);

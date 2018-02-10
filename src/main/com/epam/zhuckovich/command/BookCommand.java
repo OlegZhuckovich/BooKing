@@ -39,6 +39,8 @@ class BookCommand {
 
     private static final String BOOK_LIST_PARAMETER = "bookList";
     private static final String DELETE_BOOK_PAGE = "deleteBook";
+    private static final String EDIT_BOOK_PAGE = "editBook";
+    private static final String EDIT_CURRENT_BOOK_PAGE = "editCurrentBook";
 
     private static final String ORDER_BOOK_PAGE = "orderBook";
     private static final String CRITERIA_PARAMETER = "criteriaSelect";
@@ -65,6 +67,8 @@ class BookCommand {
     private static final String SUCCESS = "success";
     private static final String ERROR = "error";
 
+    private static final String BOOK = "book";
+
     private BookService service;
 
     /**
@@ -89,6 +93,32 @@ class BookCommand {
         request.setAttribute(BOOK_LIST_PARAMETER,service.findAllBooks());
         return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_BOOK_PAGE));
     }
+
+    Router editBookMenu(HttpServletRequest request){
+        List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
+        List<Author> authorList = service.findAllAuthors();
+        request.setAttribute(GENRE_LIST_PARAMETER,genreList);
+        request.setAttribute(AUTHOR_LIST_PARAMETER,authorList);
+        request.setAttribute(BOOK_LIST_PARAMETER,service.findAllBooks());
+        return new Router(Router.RouterType.FORWARD, PageManager.getPage(EDIT_BOOK_PAGE));
+    }
+
+
+    Router editCurrentBookMenu(HttpServletRequest request){
+        Book book = null;
+        String bookID = request.getParameter(BOOK_ID_PARAMETER);
+        int numberBookID = Integer.parseInt(bookID);
+        List<Book> bookList = service.findAllBooks();
+        for(Book tempBook: bookList){
+            if(tempBook.getId() == numberBookID){
+                book = tempBook;
+            }
+        }
+        request.setAttribute(BOOK,book);
+        return new Router(Router.RouterType.FORWARD,PageManager.getPage(EDIT_CURRENT_BOOK_PAGE));
+    }
+
+
 
     /**
      * <p>Method that delete book from library</p>

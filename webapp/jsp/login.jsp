@@ -12,94 +12,92 @@
 <html>
 <head>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
-    <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css'>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel="stylesheet" href="../css/button.css">
-    <link rel="stylesheet" href="../css/select.css">
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script src="../js/validator.js" type="text/javascript"></script>
-    <script src="../js/select.js" type="text/javascript"></script>
-    <script>require(['registerValidation'])</script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
+    <info:info-name/>
     <script>
-        $('.carousel').carousel();
+        $(function(){
+            $('.carousel').carousel({
+                interval: 10000
+            });
+        });
     </script>
+    <style>
+        html,body {
+            height:100%;
+            width:100%;
+            position:relative;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
     <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-    <!--pdf object-->
-    <!--<object data="/jsp/file.pdf" type="application/pdf" width="100%" height="500px"></object>-->
-    <div class="carousel slide carousel-fade" data-ride="carousel">
-
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-            </div>
-            <div class="item">
-            </div>
-            <div class="item">
+    <div id="background-carousel">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="item active" style="background-image:url('http://madlonsbigbear.com/wp-content/uploads/imgp/Modern-Library-Interiors-8-7088.jpg')"></div>
+                <div class="item" style="background-image:url('http://bcilibraries.com/wordpress/wp-content/uploads/Radius-Steel-Library-Shelving.jpg')"></div>
+                <div class="item" style="background-image:url('http://www.surroundyourself.com/wp-content/uploads/2015/10/101915_ModernLibrary_Cover.jpg')"></div>
             </div>
         </div>
     </div>
-
-
-    <div id="content">
-        <div class="container-fluid">
-            <div class="row"></div>
-            <div class="row">
-                <div class=" col-sm-4">
-                </div>
-                <div class=" col-sm-4" id="loginBlock" style="border-radius: 10px">
-                    <form action="/controller" method="post">
-
-                        <div class="form-group">
-                            <div class="question">
-                                <input type="text" id="bookTitle" name="bookTitle" required/>
-                                <label><fmt:message key="bookTitle" bundle="${booking}"/></label>
+    <div id="loginContent" class="container-fluid">
+        <div class="row" id="firstLoginRow"></div>
+        <div class="row" id="secondLoginRow">
+            <div class="hidden-xs col-sm-4 col-md-4"></div>
+            <div class="col-xs-12 col-sm-4 col-md-4" id="editAccountBlock">
+                <div class="container-fluid">
+                    <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="loginLogo">
+                    <h1 id="loginTitle">BooKing</h1>
+                    <div class="row sideColumn">
+                        <div class="hidden-xs col-sm-1 col-md-1"></div>
+                        <div class="hidden-xs col-sm-10 col-md-10"></div>
+                        <form action="/controller" method="post">
+                            <div class="form-group">
+                                <div class="inputGroup loginInputMargin" style="padding-top: 5px;">
+                                    <input type="text" id="emailInput" name="emailInput" style="width: 80%"  required/>
+                                    <label><fmt:message key="email" bundle="${booking}"/></label>
+                                </div>
                             </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <div class="question">
-                                <input type="text" id="emailInput" name="emailInput" required/>
-                                <label><fmt:message key="email" bundle="${booking}"/></label>
+                            <div class="form-group">
+                                <div class="inputGroup loginInputMargin">
+                                    <input type="password" id=passwordInput name="passwordInput" style="width: 80%" required/>
+                                    <label for="passwordInput"><fmt:message key="password" bundle="${booking}"/></label>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="question">
-                            <input type="password" id=passwordInput name="passwordInput">
-                            <label for="passwordInput"><fmt:message key="password" bundle="${booking}"/></label>
-                        </div>
-
-
-                        <div class="question">
-                            <input type="submit" id="loginButton" name="loginButton" class="btn btn-default" value="<fmt:message key="entryButton" bundle="${booking}"/>">
-                            <input type="hidden" name="command" value="login">
-                        </div>
-                    </form>
-                    <form action="/jsp/registration.jsp" method="post">
-                        <label><fmt:message key="registerButton" bundle="${booking}" var="registerButton"/></label>
-                        <input type="submit" id="registerButton" name="registerButton" value="${registerButton}">
-                    </form>
-                    <div>
-                        ${registerMessage}
+                            <!--кнопка submit-->
+                            <div class="form-group">
+                                <div class="inputGroup loginInputMargin">
+                                    <button type="submit" id="loginButton" name="loginButton"><fmt:message key="entryButton" bundle="${booking}"/></button>
+                                    <input type="hidden" name="command" value="login">
+                                </div>
+                            </div>
+                        </form>
+                        <form action="/jsp/registration.jsp" method="post">
+                            <div class="form-group">
+                                <div class="inputGroup loginInputMargin">
+                                    <button type="submit" id="registerButton" name="registerButton"><fmt:message key="registerButton" bundle="${booking}"/></button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        ${errorLoginMessage}
-                    </div>
-                </div>
-                <div class=" col-sm-4">
+                    <div class="hidden-xs col-sm-1 col-md-1"></div>
                 </div>
             </div>
-            <div class="row"></div>
         </div>
+        <div class="hidden-xs col-sm-4 col-md-4"></div>
     </div>
     <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
+    <c:if test="${ not empty loginError}">
+        <script>swal('<fmt:message key="loginErrorTitle" bundle="${booking}"/>','<fmt:message key="loginErrorBody" bundle="${booking}"/> ', "warning");</script>
+        <c:remove var="loginError" scope="session"/>
+    </c:if>
+    <c:if test="${ not empty registrationResult}">
+        <script>swal('<fmt:message key="registrationResultSuccessTitle" bundle="${booking}"/>','<fmt:message key="registrationResultSuccessBody1" bundle="${booking}"/> ' + '${userRegistration}' + ' <fmt:message key="registrationResultSuccessBody2" bundle="${booking}"/>', "success");</script>
+        <c:remove var="registrationResult" scope="session"/>
+        <c:remove var="user" scope="session"/>
+    </c:if>
 </body>
 </html>

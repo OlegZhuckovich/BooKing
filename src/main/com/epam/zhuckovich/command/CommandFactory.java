@@ -75,6 +75,12 @@ public class CommandFactory {
                 case DELETE_BOOK:
                     command = httpRequest -> new BookCommand().deleteBook(request);
                     break;
+                case EDIT_BOOK:
+                    command = httpRequest -> new BookCommand().editCurrentBookMenu(request);
+                    break;
+                case EDIT_BOOKS_MENU:
+                    command = httpRequest -> new BookCommand().editBookMenu(request);
+                    break;
                 case DELETE_BOOK_MENU:
                     command = httpRequest -> new BookCommand().deleteBookMenu(request);
                     break;
