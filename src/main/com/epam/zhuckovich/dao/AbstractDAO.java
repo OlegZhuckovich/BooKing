@@ -18,6 +18,31 @@ public class AbstractDAO<T extends Entity> {
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractDAO.class);
 
+    static final String ADRESS_ID = "adressID";
+    static final String AUTHOR_ID = "authorID";
+    static final String BOOK_ID = "bookID";
+    static final String BIOGRAPHY = "biography";
+    static final String CITY = "city";
+    static final String EMAIL = "email";
+    static final String GENRE = "genre";
+    static final String HOUSE = "house";
+    static final String MEMBER_ID = "memberID";
+    static final String NAME = "name";
+    static final String ORDER_DATE = "order_date";
+    static final String ORDER_TYPE = "order_type";
+    static final String PAGES = "pages";
+    static final String PUBLISHING_HOUSE = "publishing_house";
+    static final String QUANTITY = "quantity";
+    static final String REGISTRATION_DATE = "registration_date";
+    static final String RETURN_DATE = "return_date";
+    static final String ROLE = "role";
+    static final String STREET = "street";
+    static final String SURNAME = "surname";
+    static final String TELEPHONE_NUMBER = "telephone_number";
+    static final String TITLE = "title";
+    static final String YEAR = "year";
+
+
     public List<T> executeQuery(ActionDAO<T> actionDAO, String query){
         ProxyConnection connection = null;
         PreparedStatement preparedStatement = null;

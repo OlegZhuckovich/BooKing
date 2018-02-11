@@ -30,47 +30,9 @@ import java.util.List;
  * @since       1.0
  */
 
-class BookCommand {
+class BookCommand extends AbstractCommand{
 
     private static final Logger LOGGER = LogManager.getLogger(BookCommand.class);
-
-    private static final String OPERATION_PARAMETER = "operationMessage";
-    private static final String BOOK_ID_PARAMETER = "bookID";
-
-    private static final String BOOK_LIST_PARAMETER = "bookList";
-    private static final String DELETE_BOOK_PAGE = "deleteBook";
-    private static final String EDIT_BOOK_PAGE = "editBook";
-    private static final String EDIT_CURRENT_BOOK_PAGE = "editCurrentBook";
-
-    private static final String ORDER_BOOK_PAGE = "orderBook";
-    private static final String CRITERIA_PARAMETER = "criteriaSelect";
-    private static final String SEARCH_VALUE = "searchField";
-
-    private static final String ADD_BOOK_PAGE = "addBook";
-
-    private static final String USER = "user";
-
-    private static final String GENRE_LIST_PARAMETER = "genreList";
-    private static final String AUTHOR_LIST_PARAMETER ="authorList";
-
-    private static final String BOOK_TITLE = "bookTitle";
-    private static final String BOOK_GENRE = "bookGenre";
-    private static final String BOOK_PUBLISHING_HOUSE = "bookPublishingHouse";
-    private static final String BOOK_YEAR = "bookYear";
-    private static final String BOOK_PAGES = "bookPages";
-    private static final String BOOK_QUANTITY = "bookQuantity";
-    private static final String BOOK_AUTHOR = "bookAuthor";
-    private static final String BOOK_CONTENT = "bookContent";
-
-    private static final String ADMINISTRATOR_MENU = "administratorMenu";
-    private static final String BOOK_ADDED_RESULT = "bookAddedResult";
-    private static final String SUCCESS = "success";
-    private static final String ERROR = "error";
-
-    private static final String BOOK = "book";
-    private static final String SEARCH_RESULT = "searchResult";
-    private static final String EMPTY_LIST = "emptyList";
-
     private BookService service;
 
     /**
@@ -100,15 +62,14 @@ class BookCommand {
         List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
         List<Author> authorList = service.findAllAuthors();
         request.setAttribute(GENRE_LIST_PARAMETER,genreList);
-        request.setAttribute(AUTHOR_LIST_PARAMETER,authorList);
+        request.setAttribute(AUTHOR_LIST,authorList);
         request.setAttribute(BOOK_LIST_PARAMETER,service.findAllBooks());
         return new Router(Router.RouterType.FORWARD, PageManager.getPage(EDIT_BOOK_PAGE));
     }
 
-
     Router editCurrentBookMenu(HttpServletRequest request){
         Book book = null;
-        String bookID = request.getParameter(BOOK_ID_PARAMETER);
+        String bookID = request.getParameter(BOOK_ID);
         int numberBookID = Integer.parseInt(bookID);
         List<Book> bookList = service.findAllBooks();
         for(Book tempBook: bookList){
@@ -129,10 +90,9 @@ class BookCommand {
      */
 
     Router deleteBook(HttpServletRequest request) {
-        String bookID = request.getParameter(BOOK_ID_PARAMETER);
+        String bookID = request.getParameter(BOOK_ID);
         System.out.println("bookID parameter: " + bookID);
         boolean operationSuccess = service.deleteBook(bookID);
-        request.setAttribute(OPERATION_PARAMETER,operationSuccess);
         return deleteBookMenu(request);
     }
 
@@ -166,7 +126,7 @@ class BookCommand {
         List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
         List<Author> authorList = service.findAllAuthors();
         request.setAttribute(GENRE_LIST_PARAMETER,genreList);
-        request.setAttribute(AUTHOR_LIST_PARAMETER,authorList);
+        request.setAttribute(AUTHOR_LIST,authorList);
         return new Router(Router.RouterType.FORWARD,PageManager.getPage(ADD_BOOK_PAGE));
     }
 
@@ -211,6 +171,5 @@ class BookCommand {
         }
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
     }
-
 
 }

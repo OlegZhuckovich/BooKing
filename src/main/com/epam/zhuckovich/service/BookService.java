@@ -23,7 +23,7 @@ public class BookService {
         if(searchValue == null || searchCriteria == null){
             return null;
         } else {
-            return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement,"%"+searchValue+"%", userID),BookDAO.getSearchBookQueryByCriteria()+searchCriteria+BookDAO.getLikeStatement());
+            return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement,"%"+searchValue+"%", userID),BookDAO.getSearchBookQueryByCriteria()+searchCriteria+BookDAO.getSearchBookByCriteriaLikeStatement());
         }
     }
 

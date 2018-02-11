@@ -19,21 +19,12 @@ public class BookDAO extends AbstractDAO<Book>{
 
     private static BookDAO bookDAO;
 
-    /**
-     * This query is used for finding all books from
-     * library for different actions: for example for
-     * deleting.
-     */
-
+    private static final String ADD_BOOK_QUERY = "INSERT INTO LibraryDatabase.book (title,genre,publishing_house,year,pages,quantity) VALUES (?,?,?,?,?,?)";
+    private static final String ADD_BOOK_AUTHOR_QUERY = "INSERT INTO book_author VALUES (?,?)";
+    private static final String ADD_BOOK_CONTENT_QUERY = "INSERT INTO book_content VALUES (?,?)";
+    private static final String DELETE_BOOK_QUERY = "UPDATE book SET quantity = 0 WHERE bookID = ?";
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                         "FROM book ";
-
-
-    /**
-     * This query is used for searching books by
-     * different criteria, such as title, genre, authors
-     * or year of publishing.
-     */
 
     private static final String SEARCH_BOOK_BY_CRITERIA_QUERY = "SELECT DISTINCT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                                     "FROM book " +
@@ -41,25 +32,14 @@ public class BookDAO extends AbstractDAO<Book>{
                                                                     "INNER JOIN author ON author.authorID = book_author.authorID " +
                                                                 "WHERE ";
 
-    private static final String LIKE_STATEMENT = " LIKE ? ESCAPE '!' AND book.quantity != 0 AND book.bookID NOT IN " +
-                                                    "(SELECT bookID " +
-                                                        "FROM ordered_book " +
-                                                    "WHERE memberID = ? AND (return_date >= CURDATE() OR return_date IS NULL))";
+    private static final String SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT = " LIKE ? ESCAPE '!' AND book.quantity != 0 AND book.bookID NOT IN " +
+                                                                            "(SELECT bookID " +
+                                                                                "FROM ordered_book " +
+                                                                             "WHERE memberID = ? AND (return_date >= CURDATE() OR return_date IS NULL))";
 
-    private static final String DELETE_BOOK_QUERY = "UPDATE book SET quantity = 0 WHERE bookID = ?";
-
-    private static final String ADD_BOOK_QUERY = "INSERT INTO LibraryDatabase.book (title,genre,publishing_house,year,pages,quantity) VALUES (?,?,?,?,?,?)";
-    private static final String ADD_BOOK_AUTHOR_QUERY = "INSERT INTO book_author VALUES (?,?)";
-    private static final String ADD_BOOK_CONTENT_QUERY = "INSERT INTO book_content VALUES (?,?)";
-
-
-    private static final String BOOK_ID = "bookID";
-    private static final String TITLE = "title";
-    private static final String GENRE = "genre";
-    private static final String PUBLISHING_HOUSE = "publishing_house";
-    private static final String YEAR = "year";
-    private static final String PAGES = "pages";
-    private static final String QUANTITY = "quantity";
+    /**
+     * Private constructor
+     */
 
     private BookDAO(){}
 
@@ -178,8 +158,8 @@ public class BookDAO extends AbstractDAO<Book>{
         return DELETE_BOOK_QUERY;
     }
 
-    public static String getLikeStatement(){
-        return LIKE_STATEMENT;
+    public static String getSearchBookByCriteriaLikeStatement(){
+        return SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT;
     }
 
     public static String getAddBookQuery(){

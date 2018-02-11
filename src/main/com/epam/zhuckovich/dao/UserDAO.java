@@ -45,19 +45,6 @@ public final class UserDAO extends AbstractDAO<User> {
     private static final String ADD_NEW_ADDRESS_TO_USER_QUERY = "UPDATE member SET adressID = ? WHERE memberID = ?";
     private static final String UPDATE_ADDRESS_QUERY = "UPDATE adress SET city = ?, street = ?, house = ?, telephone_number=? WHERE adressID = ?";
 
-    private static final String ID = "memberID";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String EMAIL = "email";
-    private static final String REGISTRATION_DATE = "registration_date";
-    private static final String ROLE = "role";
-
-    private static final String ADRESS_ID = "adressID";
-    private static final String CITY = "city";
-    private static final String STREET = "street";
-    private static final String HOUSE = "house";
-    private static final String TELEPHONE_NUMBER = "telephone_number";
-
 
     private UserDAO(){}
 
@@ -93,7 +80,7 @@ public final class UserDAO extends AbstractDAO<User> {
                             .build();
                 }
                 userList.add(User.newBuilder()
-                            .setId(userResultSet.getInt(ID))
+                            .setId(userResultSet.getInt(MEMBER_ID))
                             .setName(userResultSet.getString(NAME))
                             .setSurname(userResultSet.getString(SURNAME))
                             .setEmail(userResultSet.getString(EMAIL))
@@ -121,7 +108,7 @@ public final class UserDAO extends AbstractDAO<User> {
                 } else {
                     while (userResultSet.next()) {
                         User currentLibrarian = User.newBuilder()
-                                .setId(userResultSet.getInt(ID))
+                                .setId(userResultSet.getInt(MEMBER_ID))
                                 .setName(userResultSet.getString(NAME))
                                 .setSurname(userResultSet.getString(SURNAME))
                                 .setEmail(userResultSet.getString(EMAIL))

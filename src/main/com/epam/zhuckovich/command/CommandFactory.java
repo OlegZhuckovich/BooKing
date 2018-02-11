@@ -40,6 +40,24 @@ public class CommandFactory {
         }
         if (commandType != null) {
             switch (commandType) {
+                case ADD_LIBRARIAN:
+                    command = httpRequest -> new UserCommand().registration(request,UserType.LIBRARIAN);
+                    break;
+                case DELETE_ACCOUNT:
+                    command = httpRequest -> new UserCommand().deleteAccountRequest(request);
+                    break;
+                case DELETE_LIBRARIAN_MENU:
+                    command = httpRequest -> new UserCommand().deleteLibrarianMenu(request);
+                    break;
+                case DELETE_MEMBER_MENU:
+                    command = httpRequest -> new UserCommand().deleteMemberMenu(request);
+                    break;
+                case DELETE_USER:
+                    command = httpRequest -> new UserCommand().deleteUser(request);
+                    break;
+                case EDIT_ACCOUNT:
+                    command = httpRequest -> new UserCommand().editAccount(request);
+                    break;
                 case LOGIN:
                     command = httpRequest -> new UserCommand().login(request);
                     break;
@@ -49,35 +67,17 @@ public class CommandFactory {
                 case REGISTER:
                     command = httpRequest -> new UserCommand().registration(request, UserType.MEMBER);
                     break;
-                case ADD_LIBRARIAN:
-                    command = httpRequest -> new UserCommand().registration(request,UserType.LIBRARIAN);
-                    break;
-                case EDIT_ACCOUNT:
-                    command = httpRequest -> new UserCommand().editAccount(request);
-                    break;
-                case DELETE_ACCOUNT:
-                    command = httpRequest -> new UserCommand().deleteAccountRequest(request);
-                    break;
-                case DELETE_USER:
-                    command = httpRequest -> new UserCommand().deleteUser(request);
-                    break;
-                case DELETE_LIBRARIAN_MENU:
-                    command = httpRequest -> new UserCommand().deleteLibrarianMenu(request);
-                    break;
-                case DELETE_MEMBER_MENU:
-                    command = httpRequest -> new UserCommand().deleteMemberMenu(request);
-                    break;
                 case ADD_BOOK:
                     command = httpRequest -> new BookCommand().addBook(request);
                     break;
                 case ADD_BOOK_MENU:
                     command = httpRequest -> new BookCommand().openAddBookMenu(request);
                     break;
-                case SEARCH:
-                    command = httpRequest -> new BookCommand().searchBook(request);
-                    break;
                 case DELETE_BOOK:
                     command = httpRequest -> new BookCommand().deleteBook(request);
+                    break;
+                case DELETE_BOOK_MENU:
+                    command = httpRequest -> new BookCommand().deleteBookMenu(request);
                     break;
                 case EDIT_BOOK:
                     command = httpRequest -> new BookCommand().editCurrentBookMenu(request);
@@ -85,14 +85,20 @@ public class CommandFactory {
                 case EDIT_BOOKS_MENU:
                     command = httpRequest -> new BookCommand().editBookMenu(request);
                     break;
-                case DELETE_BOOK_MENU:
-                    command = httpRequest -> new BookCommand().deleteBookMenu(request);
+                case SEARCH:
+                    command = httpRequest -> new BookCommand().searchBook(request);
+                    break;
+                case ORDER_BOOK:
+                    command = httpRequest -> new OrderCommand().orderBook(request);
+                    break;
+                case READING_ROOM_ISSUE:
+                    command = httpRequest -> new OrderCommand().issueBookInReadingRoom(request);
                     break;
                 case READING_ROOM_MENU:
                     command = httpRequest -> new OrderCommand().openReadingRoomMenu(request);
                     break;
-                case READING_ROOM_ISSUE:
-                    command = httpRequest -> new OrderCommand().issueBookInReadingRoom(request);
+                case RETURN_BOOK:
+                    command = httpRequest -> new OrderCommand().returnBook(request);
                     break;
                 case SUBSCRIPTION_ISSUE:
                     command = httpRequest -> new OrderCommand().issueBookOnSubscription(request);
@@ -100,17 +106,11 @@ public class CommandFactory {
                 case SUBSCRIPTION_MENU:
                     command = httpRequest -> new OrderCommand().openSubscriptionMenu(request);
                     break;
-                case ORDER_BOOK:
-                    command = httpRequest -> new OrderCommand().orderBook(request);
-                    break;
                 case VIEW_ORDERED_BOOKS:
                     command = httpRequest -> new OrderCommand().viewOrderedBooks(request);
                     break;
-                case RETURN_BOOK:
-                    command = httpRequest -> new OrderCommand().returnBook(request);
-                    break;
                 case ADD_AUTHOR:
-                    command = httpRequest -> new AuthorCommand().addNewAuthor(request);
+                    command = httpRequest -> new AuthorCommand().addAuthor(request);
                     break;
                 case VIEW_AUTHORS:
                     command = httpRequest -> new AuthorCommand().viewAuthors(request);

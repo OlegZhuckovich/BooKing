@@ -32,12 +32,6 @@ public class AuthorDAO extends AbstractDAO<Author>{
                                                           "WHERE book.bookID = ?";
     private static final String FIND_ALL_AUTHORS = "SELECT authorID, name, surname, biography FROM author ";
 
-
-    private static final String AUTHOR_ID = "authorID";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String BIOGRAPHY = "biography";
-
     /**
      * Private constructor
      */
@@ -84,7 +78,7 @@ public class AuthorDAO extends AbstractDAO<Author>{
      * @return
      */
 
-    public boolean addNewAuthor(Author newAuthor) {
+    public boolean addAuthor(Author newAuthor) {
         return executeQuery(statement -> findAuthorsByNameSurname(statement, newAuthor.getName(), newAuthor.getSurname()), FIND_AUTHORS_BY_NAME_SURNAME_QUERY) == null
             && executeUpdate(ADD_NEW_AUTHOR_QUERY, newAuthor.getName(), newAuthor.getSurname(), newAuthor.getBiography(), newAuthor.getPhoto()) != 0;
     }

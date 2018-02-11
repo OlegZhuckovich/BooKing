@@ -48,23 +48,6 @@ public class OrderDAO extends AbstractDAO<Order>{
     private static final String RETURN_BOOK_QUERY = "UPDATE ordered_book SET return_date = CURDATE() WHERE memberID = ? AND bookID = ? AND return_date > CURDATE()";
     private static final String UPDATE_BOOK_QUANTITY = "UPDATE book SET quantity = quantity + 1 WHERE bookID = ?";
 
-    private static final String MEMBER_ID = "memberID";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
-    private static final String EMAIL = "email";
-    private static final String BOOK_ID = "bookID";
-    private static final String TITLE = "title";
-    private static final String GENRE = "genre";
-    private static final String PUBLISHING_HOUSE = "publishing_house";
-    private static final String YEAR = "year";
-    private static final String PAGES = "pages";
-    private static final String CITY = "city";
-    private static final String STREET = "street";
-    private static final String HOUSE = "house";
-    private static final String TELEPHONE_NUMBER = "telephone_number";
-    private static final String ORDER_DATE = "order_date";
-    private static final String RETURN_DATE = "return_date";
-    private static final String ORDER_TYPE = "order_type";
 
     private OrderDAO(){}
 
@@ -75,9 +58,6 @@ public class OrderDAO extends AbstractDAO<Order>{
         return orderDAO;
     }
 
-    public void checkOldReadingRoomOrders(){
-
-    }
 
     public List<Order> findAllReadingRoomOrders(PreparedStatement statement){
         List<Order> readingRoomOrderList = new ArrayList<>();

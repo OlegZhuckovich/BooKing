@@ -57,14 +57,14 @@
                         <form action="/controller" method="post">
                             <div class="form-group">
                                 <div class="inputGroup loginInputMargin" style="padding-top: 5px;">
-                                    <input type="text" id="emailInput" name="emailInput" style="width: 80%"  required/>
+                                    <input type="text" id="emailUser" name="emailUser" style="width: 80%"  required/>
                                     <label><fmt:message key="email" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="inputGroup loginInputMargin">
-                                    <input type="password" id=passwordInput name="passwordInput" style="width: 80%" required/>
-                                    <label for="passwordInput"><fmt:message key="password" bundle="${booking}"/></label>
+                                    <input type="password" id="passwordUser" name="passwordUser" style="width: 80%" required/>
+                                    <label><fmt:message key="password" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--кнопка submit-->

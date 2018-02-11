@@ -27,60 +27,9 @@ import java.util.List;
  * @since       1.0
  */
 
-class UserCommand {
+class UserCommand extends AbstractCommand{
 
     private static final Logger LOGGER = LogManager.getLogger(UserCommand.class);
-
-    private static final String ADMINISTRATOR_MENU_PAGE = "administratorMenu";
-    private static final String AVATAR_USER = "avatarUser";
-    private static final String DELETE_ACCOUNT_PARAMETER = "deleteAccount";
-    private static final String DELETE_LIBRARIAN_PAGE = "deleteLibrarian";
-    private static final String DELETE_MEMBER_PAGE = "deleteMember";
-    private static final String EDIT_ACCOUNT_PAGE = "editAccount";
-
-    private static final String SPACE = " ";
-    private static final String USER_REGISTRATION = "userRegistration";
-    private static final String USER_PARAMETER = "user";
-    private static final String USER_ID_PARAMETER = "userID";
-    private static final String OPERATION_PARAMETER = "operationSuccess";
-    private static final String PAGE_PARAMETER = "page";
-
-    private static final String LIBRARIAN_LIST_PARAMETER = "librarianList";
-    private static final String LIBRARIAN_MENU_PAGE = "librarianMenu";
-    private static final String LIBRARIAN_PAGE = "deleteLibrarian";
-    private static final String LOGIN_INPUT = "emailInput";
-    private static final String MEMBER_LIST_PARAMETER = "memberList";
-    private static final String MEMBER_MENU_PAGE = "memberMenu";
-
-
-    private static final String PASSWORD_INPUT = "passwordInput";
-    private static final String LOGIN_PAGE = "loginPage";
-    private static final String ERROR_LOGIN_MESSAGE = "loginError";
-
-    private static final String NAME_REGISTER= "nameRegister";
-    private static final String SURNAME_REGISTER = "surnameRegister";
-    private static final String EMAIL_REGISTER = "emailRegister";
-    private static final String PASSWORD_REGISTER = "passwordRegister";
-    private static final String REGISTRATION_PAGE = "registrationPage";
-    private static final String REGISTRATION_RESULT = "registrationResult";
-    private static final String ERROR = "error";
-    private static final String SUCCESS = "success";
-
-    private static final String NAME_USER = "nameUser";
-    private static final String SURNAME_USER = "surnameUser";
-    private static final String EMAIL_USER = "emailUser";
-    private static final String CITY_USER = "cityUser";
-    private static final String STREET_USER = "streetUser";
-    private static final String HOUSE_USER = "houseUser";
-    private static final String TELEPHONE_USER = "telephoneUser";
-    private static final String PASSWORD_USER = "passwordUser";
-    private static final String REPEAT_PASSWORD_USER = "repeatPasswordUser";
-
-    private static final String EMPTY_DELETE_BOOK = "emptyDeleteBook";
-    private static final String EMPTY_DELETE_LIBRARIAN = "emptyDeleteLibrarian";
-    private static final String EMPTY_DELETE_MEMBER = "emptyDeleteMember";
-
-
     private UserService service;
 
     /**
@@ -101,8 +50,8 @@ class UserCommand {
      */
 
     Router login(HttpServletRequest request) {
-        String email = request.getParameter(LOGIN_INPUT);
-        String password = request.getParameter(PASSWORD_INPUT);
+        String email = request.getParameter(EMAIL_USER);
+        String password = request.getParameter(PASSWORD_USER);
         if(email == null || password == null){
             return new Router(Router.RouterType.FORWARD,PageManager.getPage(LOGIN_PAGE));
         }
@@ -114,13 +63,13 @@ class UserCommand {
         }
             switch (member) {
                 case ADMINISTRATOR:
-                    request.getSession().setAttribute(USER_PARAMETER, user);
+                    request.getSession().setAttribute(USER, user);
                     return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
                 case LIBRARIAN:
-                    request.getSession().setAttribute(USER_PARAMETER, user);
+                    request.getSession().setAttribute(USER, user);
                     return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
                 case MEMBER:
-                    request.getSession().setAttribute(USER_PARAMETER, user);
+                    request.getSession().setAttribute(USER, user);
                     return new Router(Router.RouterType.REDIRECT,PageManager.getPage(MEMBER_MENU_PAGE));
                 default:
                     request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
@@ -146,10 +95,11 @@ class UserCommand {
      */
 
     Router registration(HttpServletRequest request, UserType registrationType) {
-        String name = request.getParameter(NAME_REGISTER);
-        String surname = request.getParameter(SURNAME_REGISTER);
-        String email = request.getParameter(EMAIL_REGISTER);
-        String password = request.getParameter(PASSWORD_REGISTER);
+        String name = request.getParameter(NAME_USER);
+        String surname = request.getParameter(SURNAME_USER);
+        String email = request.getParameter(EMAIL_USER);
+        String password = request.getParameter(PASSWORD_USER);
+        String repeatPassword = request.getParameter(REPEAT_PASSWORD_USER);
         Part photoPart;
         InputStream photo = null;
         try {
@@ -179,7 +129,7 @@ class UserCommand {
 
     Router deleteUser(HttpServletRequest request) {
         String page = request.getParameter(PAGE_PARAMETER);
-        String userID = request.getParameter(USER_ID_PARAMETER);
+        String userID = request.getParameter(USER_ID);
         boolean operationSuccess = service.deleteUser(userID);
         System.out.println("UserID = " + userID);
         request.setAttribute(OPERATION_PARAMETER,operationSuccess);
@@ -224,7 +174,7 @@ class UserCommand {
     Router editAccount(HttpServletRequest request){
         try {
             int operationResult = 0;
-            User user = (User) request.getSession().getAttribute(USER_PARAMETER);
+            User user = (User) request.getSession().getAttribute(USER);
             User.Builder editableUserBuilder = User.newBuilder()
                     .setId(user.getId())
                     .setName(request.getParameter(NAME_USER))
@@ -270,7 +220,7 @@ class UserCommand {
             } else {
                 request.getSession().setAttribute(OPERATION_PARAMETER,SUCCESS);
             }
-            request.getSession().setAttribute(USER_PARAMETER,service.findMemberById(user.getId()));
+            request.getSession().setAttribute(USER,service.findMemberById(user.getId()));
         } catch(IOException e){
             LOGGER.log(Level.ERROR, "IOException was occurred during getting the photo from the client while user editing account");
         } catch(ServletException e){
@@ -281,7 +231,7 @@ class UserCommand {
 
 
     Router deleteAccountRequest(HttpServletRequest request){
-        User user = (User) request.getSession().getAttribute(USER_PARAMETER);
+        User user = (User) request.getSession().getAttribute(USER);
         Integer userID = user.getId();
         UserType userType = user.getUserType();
         int operationResult = 0;

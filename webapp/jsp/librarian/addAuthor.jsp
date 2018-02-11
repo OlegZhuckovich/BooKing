@@ -66,21 +66,21 @@
                                 <!--имя автора-->
                                 <div class="form-group">
                                     <div class="inputGroup">
-                                        <input type="text" id="nameAuthor" name="nameAuthor" required/>
+                                        <input type="text" id="authorName" name="authorName" required/>
                                         <label><fmt:message key="nameAuthor" bundle="${booking}"/></label>
                                     </div>
                                 </div>
                                 <!--фамилия автора-->
                                 <div class="form-group">
                                     <div class="inputGroup">
-                                        <input type="text" id="surnameAuthor" name="surnameAuthor" required/>
+                                        <input type="text" id="authorSurname" name="authorSurname" required/>
                                         <label><fmt:message key="surnameAuthor" bundle="${booking}"/></label>
                                     </div>
                                 </div>
                                 <!--биография автора-->
                                 <div class="form-group">
                                     <div class="inputGroup">
-                                        <textarea id="biographyAuthor" name="biographyAuthor" cols="40" rows="5" style="color: white;height: 100px;" onfocus="this.style.color='#33c4ba';" required></textarea>
+                                        <textarea id="authorBiography" name="authorBiography" cols="40" rows="5" style="color: white;height: 100px;" onfocus="this.style.color='#33c4ba';" required></textarea>
                                         <label style="position: relative; top: -30px;"><fmt:message key="biographyAuthor" bundle="${booking}"/></label>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                     <div class="form-inline row">
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                             <div class="uploadButton">
-                                                <input title="<fmt:message key="authorAvatar" bundle="${booking}"/>" type="file" accept="image/jpeg" name="photoAuthor" id="photoAuthor" hidden required/>
+                                                <input title="<fmt:message key="authorAvatar" bundle="${booking}"/>" type="file" accept="image/jpeg" name="authorPhoto" id="authorPhoto" hidden required/>
                                             </div>
                                         </div>
                                         <div class="form-group col-xs-12 col-sm-6 col-md-6">

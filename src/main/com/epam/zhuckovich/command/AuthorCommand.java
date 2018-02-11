@@ -14,12 +14,6 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
-//InterruptedException
-//SQLException
-//ServletException
-//IllegalArgumentException
-//IOException
-
 //Only for classes and interfaces ::::::: @author (required), @version (required) @param, @see
 //Only for methods @param, @return, @throws, @see, @serialData
 //Constructors @param
@@ -33,28 +27,13 @@ import java.io.InputStream;
  * @since       1.0
  */
 
-class AuthorCommand {
+class AuthorCommand extends AbstractCommand{
 
     private static final Logger LOGGER = LogManager.getLogger(AuthorCommand.class);
-
-    private static final String SPACE = " ";
-    private static final String NAME_AUTHOR = "nameAuthor";
-    private static final String SURNAME_AUTHOR = "surnameAuthor";
-    private static final String BIOGRAPHY_AUTHOR = "biographyAuthor";
-    private static final String PHOTO_AUTHOR = "photoAuthor";
-    private static final String ADD_AUTHOR_PAGE = "addAuthor";
-    private static final String AUTHOR_LIST = "authorList";
-    private static final String AUTHOR_GALLERY_PAGE = "authorGallery";
-    private static final String LIBRARIAN_MENU = "librarianMenu";
-    private static final String AUTHOR = "author";
-    private static final String AUTHOR_ADDED_RESULT = "authorAddedResult";
-    private static final String SUCCESS = "success";
-    private static final String ERROR = "error";
-
     private AuthorService service;
 
     /**
-     * Class constructor
+     * Class constructor that initializes the AuthorService variable
      */
 
     AuthorCommand(){
@@ -68,22 +47,22 @@ class AuthorCommand {
      * @return         the Router which redirects app to librarian menu page
      */
 
-    Router addNewAuthor(HttpServletRequest request) {
+    Router addAuthor(HttpServletRequest request) {
         try {
-            String name = request.getParameter(NAME_AUTHOR);
-            String surname = request.getParameter(SURNAME_AUTHOR);
-            String biography = request.getParameter(BIOGRAPHY_AUTHOR);
-            Part photoPart = request.getPart(PHOTO_AUTHOR);
+            String authorName = request.getParameter(AUTHOR_NAME);
+            String authorSurname = request.getParameter(AUTHOR_SURNAME);
+            String authorBiography = request.getParameter(AUTHOR_BIOGRAPHY);
+            Part authorPhotoPart = request.getPart(AUTHOR_PHOTO);
             Author.Builder newAuthor = Author.newBuilder()
-                                .setName(name)
-                                .setSurname(surname)
-                                .setBiography(biography);
-            if (photoPart != null) {
-                InputStream photo = photoPart.getInputStream();
-                newAuthor.setPhoto(photo);
+                                .setName(authorName)
+                                .setSurname(authorSurname)
+                                .setBiography(authorBiography);
+            if (authorPhotoPart != null) {
+                InputStream authorPhoto = authorPhotoPart.getInputStream();
+                newAuthor.setPhoto(authorPhoto);
             }
             Author author = newAuthor.build();
-            if(service.addNewAuthor(author)){
+            if(service.addAuthor(author)){
                 request.getSession().setAttribute(AUTHOR_ADDED_RESULT,SUCCESS);
             } else {
                 request.getSession().setAttribute(AUTHOR_ADDED_RESULT,ERROR);
@@ -101,13 +80,13 @@ class AuthorCommand {
     /**
      * <p>Method for obtaining information about all the authors
      * available in the application.</p>
-     * @param request
-     * @return
+     * @param request sends the list of authors to the client
+     * @return        forwards app to author gallery page
      */
 
     Router viewAuthors(HttpServletRequest request){
         request.setAttribute(AUTHOR_LIST,service.viewAuthors());
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(LIBRARIAN_MENU));
+        return new Router(Router.RouterType.FORWARD, PageManager.getPage(AUTHOR_GALLERY));
     }
 
 }

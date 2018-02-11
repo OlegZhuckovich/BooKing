@@ -67,35 +67,35 @@
                             <!--имя библиотекаря-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="nameRegister" name="nameRegister" required/>
+                                    <input type="text" id="nameUser" name="nameUser" required/>
                                     <label><fmt:message key="nameRegister" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--фамилия библиотекаря-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="text" id="surnameRegister" name="surnameRegister" required/>
+                                    <input type="text" id="surnameUser" name="surnameUser" required/>
                                     <label><fmt:message key="surnameRegister" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--email пользователя-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="email" id="emailRegister" name="emailRegister" required/>
+                                    <input type="email" id="emailUser" name="emailUser" required/>
                                     <label><fmt:message key="emailRegister" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--пароль-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="password" id="passwordRegister" name="passwordRegister" required/>
+                                    <input type="password" id="passwordUser" name="passwordUser" required/>
                                     <label><fmt:message key="passwordRegister" bundle="${booking}"/></label>
                                 </div>
                             </div>
                             <!--повтор пароля-->
                             <div class="form-group">
                                 <div class="inputGroup">
-                                    <input type="password" id="repeatPasswordRegister" name="repeatPasswordRegister" required/>
+                                    <input type="password" id="repeatPasswordUser" name="repeatPasswordUser" required/>
                                     <label><fmt:message key="repeatPasswordRegister" bundle="${booking}"/></label>
                                 </div>
                             </div>
