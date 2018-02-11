@@ -42,17 +42,22 @@
             });
         });
     </script>
+    <style>
+        .mdl-button--raised.mdl-button--colored,.mdl-button--raised.mdl-button--colored:hover{
+            background-color: #2196F3;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid tableRow content">
-    <div class="row firstTableRow"></div>
+<div id="content" class="container-fluid tableRow content" style="background: url('${pageContext.request.contextPath}/images/deleteMember.png'); background-size: 100% 100%;">
+    <div class="row-fluid firstTableRow"></div>
     <div class="row secondTableRow">
         <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
         <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
             <!--Для поля поиска-->
-            <div class="row deleteMemberHeader">
+            <div class="row deleteMemberHeader" style="background-color: #2196F3;">
                 <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingTableLogo">
                 <h1 class="googleTableTitle"><fmt:message key="deleteMember" bundle="${booking}"/></h1>
                 <div class="col-xs-12 col-sm-12 col-md-12 sideColumn">
@@ -79,7 +84,7 @@
                                 <td><c:out value="${member.email}"/></td>
                                 <td><fmt:formatDate value="${member.registrationDate}"/></td>
                                 <td>
-                                    <button type="button" class="googleButton" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
+                                    <button type="button" class="googleButton" style="background-color: #2196F3;" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
                                     <div id="divIDNo${count.index}" class="modal fade" role="dialog">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -95,9 +100,9 @@
                                                         <input type="hidden" name="userID" value="${member.id}">
                                                         <input type="hidden" name="command" value="delete_user">
                                                         <input type="hidden" name="page" value="deleteMember">
-                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
+                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton"  style="background-color: #2196F3;" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
                                                     </form>
-                                                    <button type="button"  class="googleButton" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
+                                                    <button type="button"  class="googleButton" style="background-color: #2196F3;" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
                                                 </div>
                                             </div>
                                         </div>

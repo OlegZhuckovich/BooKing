@@ -24,7 +24,6 @@
             var repeatPassword = $('#repeatPasswordUser').val();
             var photo = $('#avatarUser').val();
             var expansion = photo.substring(photo.lastIndexOf('.')+1);
-            //Регулярные выражения для проверки
             var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?");
             var emailRegex = new RegExp("[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}");
             var passwordRegex = new RegExp("[\\w]{5,40}");
@@ -43,15 +42,20 @@
             }
         }
     </script>
+    <style>
+        form .inputGroup input:focus{
+            color:#E65100;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid">
+<div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/addLibrarianBackground.png'); background-size: 100% 100%;">
     <div class="row" id="firstRow"></div>
     <div class="row" id="secondRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
-        <div class="col-xs-12 col-sm-10 col-md-8" id="addLibrarianBlock">
+        <div class="col-xs-12 col-sm-10 col-md-8" id="addLibrarianBlock" style="background-color: #E65100">
             <div class="container-fluid">
                 <div>
                     <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo">

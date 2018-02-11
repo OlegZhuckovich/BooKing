@@ -130,6 +130,7 @@ class BookCommand {
 
     Router deleteBook(HttpServletRequest request) {
         String bookID = request.getParameter(BOOK_ID_PARAMETER);
+        System.out.println("bookID parameter: " + bookID);
         boolean operationSuccess = service.deleteBook(bookID);
         request.setAttribute(OPERATION_PARAMETER,operationSuccess);
         return deleteBookMenu(request);

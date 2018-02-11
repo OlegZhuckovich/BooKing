@@ -1,6 +1,7 @@
 package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
+import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +47,10 @@ public class CommandFactory {
                     command = httpRequest -> new UserCommand().logout(request);
                     break;
                 case REGISTER:
-                    command = httpRequest -> new UserCommand().registration(request);
+                    command = httpRequest -> new UserCommand().registration(request, UserType.MEMBER);
+                    break;
+                case ADD_LIBRARIAN:
+                    command = httpRequest -> new UserCommand().registration(request,UserType.LIBRARIAN);
                     break;
                 case EDIT_ACCOUNT:
                     command = httpRequest -> new UserCommand().editAccount(request);

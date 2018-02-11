@@ -74,5 +74,17 @@
     <c:remove var="bookAddedResult" scope="session"/>
     <c:remove var="bookTitle" scope="session"/>
 </c:if>
+<c:if test="${not empty emptyDeleteBook}">
+    <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${bookTitle}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+    <c:remove var="emptyDeleteBook" scope="session"/>
+</c:if>
+<c:if test="${not empty emptyDeleteLibrarian}">
+    <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${bookTitle}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+    <c:remove var="emptyDeleteLibrarian" scope="session"/>
+</c:if>
+<c:if test="${not empty emptyDeleteMember}">
+    <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${bookTitle}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+    <c:remove var="emptyDeleteMember" scope="session"/>
+</c:if>
 </body>
 </html>

@@ -21,18 +21,44 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <info:info-name role="${language}"/>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable( {"language": {
+                "zeroRecords": '<fmt:message key="tableZeroRecords" bundle="${booking}"/>',
+                "info": '<fmt:message key="tableInfo" bundle="${booking}"/>',
+                "infoEmpty": '<fmt:message key="tableInfoEmpty" bundle="${booking}"/>',
+                "infoFiltered": '<fmt:message key="tableInfoFiltered" bundle="${booking}"/>',
+                "search":'<fmt:message key="tableSearch" bundle="${booking}"/>'
+            },
+                "dom": '<"toolbar">frtip',
+                "scrollX": true,
+                "lengthMenu": [[5], [5]],
+                "pagingType": "numbers",
+                columnDefs: [
+                    {
+                        targets: '_all',
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ]
+            });
+        });
+    </script>
+    <style>
+        .mdl-button--raised.mdl-button--colored,.mdl-button--raised.mdl-button--colored:hover{
+            background-color: #8BC34A;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid tableRow content">
+<div id="content" class="container-fluid tableRow content" style="background: url('${pageContext.request.contextPath}/images/deleteLibrarian.png'); background-size: 100% 100%;">
     <div class="row-fluid firstTableRow"></div>
     <div class="row-fluid secondTableRow">
         <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
         <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
             <!--Для поля поиска-->
-            <div class="row deleteMemberHeader">
+            <div class="row deleteMemberHeader" style="background-color: #8BC34A;">
                 <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingTableLogo">
                 <h1 class="googleTableTitle"><fmt:message key="deleteLibrarian" bundle="${booking}"/></h1>
                 <div class="col-xs-12 col-sm-12 col-md-12 sideColumn">
@@ -59,12 +85,12 @@
                                 <td><c:out value="${librarian.email}"/></td>
                                 <td><fmt:formatDate value="${librarian.registrationDate}"/></td>
                                 <td>
-                                    <button type="button" class="googleButton" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
+                                    <button type="button" class="googleButton" style="background-color: #8BC34A;" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteLibrarian" bundle="${booking}"/></button>
                                     <div id="divIDNo${count.index}" class="modal fade" role="dialog">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <button type="button" class="close" style="background-color: #8BC34A;" data-dismiss="modal">&times;</button>
                                                     <h4 class="modal-title"><fmt:message key="confirmHeader" bundle="${booking}"/></h4>
                                                 </div>
                                                 <div class="modal-body">
@@ -75,9 +101,9 @@
                                                         <input type="hidden" name="userID" value="${librarian.id}">
                                                         <input type="hidden" name="command" value="delete_user">
                                                         <input type="hidden" name="page" value="deleteLibrarian">
-                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
+                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" style="background-color: #8BC34A;" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
                                                     </form>
-                                                    <button type="button"  class="googleButton" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
+                                                    <button type="button"  class="googleButton" style="background-color: #8BC34A;" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
                                                 </div>
                                             </div>
                                         </div>

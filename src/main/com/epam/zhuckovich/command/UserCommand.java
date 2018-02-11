@@ -2,6 +2,7 @@ package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
 import com.epam.zhuckovich.entity.Address;
+import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.entity.User;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * <p>A class that contains methods for various actions
@@ -74,6 +76,9 @@ class UserCommand {
     private static final String PASSWORD_USER = "passwordUser";
     private static final String REPEAT_PASSWORD_USER = "repeatPasswordUser";
 
+    private static final String EMPTY_DELETE_BOOK = "emptyDeleteBook";
+    private static final String EMPTY_DELETE_LIBRARIAN = "emptyDeleteLibrarian";
+    private static final String EMPTY_DELETE_MEMBER = "emptyDeleteMember";
 
 
     private UserService service;
@@ -140,12 +145,12 @@ class UserCommand {
      * @return        the Router object that redirects a user to a login page
      */
 
-    Router registration(HttpServletRequest request) {
+    Router registration(HttpServletRequest request, UserType registrationType) {
         String name = request.getParameter(NAME_REGISTER);
         String surname = request.getParameter(SURNAME_REGISTER);
         String email = request.getParameter(EMAIL_REGISTER);
         String password = request.getParameter(PASSWORD_REGISTER);
-        Part photoPart = null;
+        Part photoPart;
         InputStream photo = null;
         try {
             photoPart = request.getPart(AVATAR_USER);
@@ -155,7 +160,7 @@ class UserCommand {
         } catch (ServletException e) {
             LOGGER.log(Level.ERROR,"ServletException was occurred during user registration");
         }
-        int isUserAdded = service.registerUser(name, surname, email, password, photo);
+        int isUserAdded = service.registerUser(name, surname, email, password, photo, registrationType);
         if(isUserAdded == 0){
             request.getSession().setAttribute(REGISTRATION_RESULT,ERROR);
             return new Router(Router.RouterType.REDIRECT,PageManager.getPage(REGISTRATION_PAGE));
@@ -193,14 +198,26 @@ class UserCommand {
      */
 
     Router deleteLibrarianMenu(HttpServletRequest request) {
-        request.setAttribute(LIBRARIAN_LIST_PARAMETER,service.findAllRemovableUsers(UserType.LIBRARIAN));
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
+        List<User> removableLibrarians = service.findAllRemovableUsers(UserType.LIBRARIAN);
+        if(removableLibrarians.isEmpty()){
+            request.getSession().setAttribute(EMPTY_DELETE_LIBRARIAN, SUCCESS);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
+        } else {
+            request.setAttribute(LIBRARIAN_LIST_PARAMETER,removableLibrarians);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
+        }
     }
     
     
     Router deleteMemberMenu(HttpServletRequest request) {
-        request.setAttribute(MEMBER_LIST_PARAMETER,service.findAllRemovableUsers(UserType.MEMBER));
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_MEMBER_PAGE));
+        List<User> removableMembers = service.findAllRemovableUsers(UserType.MEMBER);
+        if(removableMembers.isEmpty()){
+            request.getSession().setAttribute(EMPTY_DELETE_MEMBER, SUCCESS);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
+        } else {
+            request.setAttribute(MEMBER_LIST_PARAMETER,removableMembers);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_MEMBER_PAGE));
+        }
     }
 
 

@@ -45,7 +45,7 @@
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="addBookContent" class="container-fluid content">
+<div id="addBookContent" class="container-fluid content" style="background: url('${pageContext.request.contextPath}/images/addBookBackground.png'); background-size: 100% 100%;">
     <div class="row" id="firstRow"></div>
     <div class="row" id="secondRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>

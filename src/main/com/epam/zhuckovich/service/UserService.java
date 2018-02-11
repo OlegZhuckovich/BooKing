@@ -52,7 +52,7 @@ public class UserService {
     }
 
 
-    public int registerUser(String name, String surname, String email, String password, InputStream photo){
+    public int registerUser(String name, String surname, String email, String password, InputStream photo, UserType registrationType){
         int operationResult = 0;
         if(name==null || surname==null || email==null || password==null || photo==null){
             return operationResult;
@@ -69,14 +69,18 @@ public class UserService {
 
         if(nameMatch && surnameMatch && emailMatch && passwordMatch){
             String finalPassword = encription(password);
-            User newUser = User.newBuilder()
+            User.Builder newUserBuilder= User.newBuilder()
                     .setName(name)
                     .setSurname(surname)
                     .setEmail(email)
                     .setPassword(finalPassword)
-                    .setPhoto(photo)
-                    .setUserType(UserType.MEMBER)
-                    .build();
+                    .setPhoto(photo);
+            if(registrationType == UserType.MEMBER){
+                newUserBuilder.setUserType(UserType.MEMBER);
+            } else {
+                newUserBuilder.setUserType(UserType.LIBRARIAN);
+            }
+            User newUser = newUserBuilder.build();
             operationResult = userDAO.executeUpdate(UserDAO.getAddUserQuery(), newUser.getName(), newUser.getSurname(), newUser.getEmail(), newUser.getPassword(), newUser.getUserType().toString(), newUser.getPhoto());
         }
         return operationResult;
@@ -180,7 +184,6 @@ public class UserService {
             for (byte aPasswordByteData : passwordByteData) {
                 passwordStringBuilder.append(Integer.toString((aPasswordByteData & 0xff) + 0x100, 16).substring(1));
             }
-            System.out.println("Digest(in hex format):: " + passwordStringBuilder.toString());
         } catch(NoSuchAlgorithmException e){
             e.printStackTrace();
         }
