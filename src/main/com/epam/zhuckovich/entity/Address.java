@@ -56,46 +56,98 @@ public class Address extends Entity {
         return telephoneNumber;
     }
 
-
+    /**
+     * <p>Returns the builder to construct address</p>
+     * @return the address builder
+     */
 
     public static Builder newBuilder() {
         return new Address().new Builder();
     }
 
+    /**
+     * Inner class to construct address object
+     */
+
     public class Builder {
 
+        /**
+         * Private constructor
+         */
+
         private Builder() {}
+
+        /**
+         * <p>Sets the id of the address</p>
+         * @param addressId number value of address id
+         * @return the builder to construct address object
+         */
 
         public Builder setId(int addressId) {
             Address.this.id = addressId;
             return this;
         }
 
+        /**
+         * <p>Sets the city of the address</p>
+         * @param city city of address
+         * @return the builder to construct address object
+         */
+
         public Builder setCity(String city) {
             Address.this.city = city;
             return this;
         }
+
+        /**
+         * <p>Sets the street of the address</p>
+         * @param street street of address
+         * @return the builder to construct address object
+         */
 
         public Builder setStreet(String street) {
             Address.this.street = street;
             return this;
         }
 
+        /**
+         * <p>Sets the house of the address</p>
+         * @param house house of address
+         * @return the builder to construct address object
+         */
+
         public Builder setHouse(int house) {
             Address.this.house = house;
             return this;
         }
+
+        /**
+         * <p>Sets the user telephone number</p>
+         * @param telephoneNumber user telephone number
+         * @return the builder to construct address object
+         */
 
         public Builder setTelephoneNumber(int telephoneNumber) {
             Address.this.telephoneNumber = telephoneNumber;
             return this;
         }
 
+        /**
+         * <p>Build the address object</p>
+         * @return the address object
+         */
+
         public Address build() {
             return Address.this;
         }
 
     }
+
+    /**
+     * <p>Defines </p>
+     * @param object
+     * @return
+     */
 
     @Override
     public boolean equals(Object object){

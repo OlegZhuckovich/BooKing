@@ -42,16 +42,21 @@
             });
         });
     </script>
+    <style>
+        .mdl-button--raised.mdl-button--colored,.mdl-button--raised.mdl-button--colored:hover{
+            background-color: #FF9800;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid tableRow content">
-    <div class="row firstTableRow"></div>
+<div id="content" class="container-fluid tableRow content" style="background: url('${pageContext.request.contextPath}/images/viewOrderedBooks.png'); background-size: 100% 100%;">
+    <div class="row-fluid firstTableRow"></div>
     <div class="row secondTableRow">
         <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
         <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
-            <div class="row deleteMemberHeader">
+            <div class="row deleteMemberHeader" style="background-color: #FF9800;">
                 <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingTableLogo">
                 <h1 class="googleTableTitle"><fmt:message key="viewOrderedBooks" bundle="${booking}"/></h1>
                 <div class="col-xs-12 col-sm-12 col-md-12 sideColumn">
@@ -84,7 +89,7 @@
                                 <td><c:out value="${order.book.numberInformation.year}"/></td>
                                 <td><c:out value="${order.book.numberInformation.pages}"/></td>
                                 <td><fmt:formatDate value="${order.orderDate}"/></td>
-                                <td><c:out value="${order.returnDate}"/></td>
+                                <td><fmt:formatDate value="${order.returnDate}"/></td>
                                 <c:choose>
                                     <c:when test="${order.orderType == 'SUBSCRIPTION'}">
                                         <td><fmt:message key="subscription" bundle="${booking}"/></td>
@@ -97,11 +102,11 @@
                                     <form action="/bookController" method="get">
                                         <input type="hidden" name="bookID" value="${order.book.id}"/>
                                         <input type="hidden" name="command" value="read_book">
-                                        <input type="submit" id="readBookButton" class="googleButton" name="readBookButton" value="<fmt:message key="readBook" bundle="${booking}"/>">
+                                        <input type="submit" id="readBookButton" class="googleButton" style="background-color: #FF9800;" name="readBookButton" value="<fmt:message key="readBook" bundle="${booking}"/>">
                                     </form>
                                 </td>
                                 <td>
-                                    <button type="button" class="googleButton" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="deleteBook" bundle="${booking}"/></button>
+                                    <button type="button" class="googleButton" style="background-color: #FF9800;" data-toggle="modal" data-target="#divIDNo${count.index}"><fmt:message key="returnBook" bundle="${booking}"/></button>
                                     <div id="divIDNo${count.index}" class="modal fade" role="dialog">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -110,15 +115,15 @@
                                                     <h4 class="modal-title"><fmt:message key="confirmHeader" bundle="${booking}"/></h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <fmt:message key="deleteBookConfirmBody" bundle="${booking}"/>
+                                                    <fmt:message key="returnBookConfirmBody" bundle="${booking}"/>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <form action="/controller" method="post" id="deleteBookForm">
-                                                        <input type="hidden" name="bookID" value="${book.id}">
-                                                        <input type="hidden" name="command" value="delete_book">
-                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
+                                                    <form action="/controller" method="post" id="returnBookForm">
+                                                        <input type="hidden" name="bookID" value="${order.book.id}">
+                                                        <input type="hidden" name="command" value="return_book">
+                                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" style="background-color: #FF9800;" value="<fmt:message key="YesConfirmButton" bundle="${booking}"/>">
                                                     </form>
-                                                    <button type="button"  class="googleButton" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
+                                                    <button type="button"  class="googleButton" style="background-color: #FF9800;" data-dismiss="modal"><fmt:message key="NoConfirmButton" bundle="${booking}"/></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,6 +140,16 @@
     </div>
 </div>
 <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
+<c:if test="${not empty returnOperationResult}">
+    <c:choose>
+        <c:when test="${returnOperationResult == 'success'}">
+            <script>swal('<fmt:message key="orderBookResultSuccessTitle" bundle="${booking}"/>', '<fmt:message key="returnBookSuccessBody" bundle="${booking}"/>', "success");</script>
+        </c:when>
+        <c:otherwise>
+            <script>swal('<fmt:message key="orderBookResultErrorTitle" bundle="${booking}"/>', '<fmt:message key="returnBookErrorBody" bundle="${booking}"/>', "error");</script>
+        </c:otherwise>
+    </c:choose>
+    <c:remove var="returnOperationResult" scope="session"/>
+</c:if>
 </body>
 </html>
-

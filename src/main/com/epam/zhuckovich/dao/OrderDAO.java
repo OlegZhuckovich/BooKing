@@ -35,15 +35,18 @@ public class OrderDAO extends AbstractDAO<Order>{
                                                                 "INNER JOIN book ON book.bookID = ordered_book.bookID " +
                                                             "WHERE ordered_book.return_date IS NULL AND ordered_book.order_type = 'subscription'";
     private static final String MEMBER_ORDERS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, ordered_book.order_date, ordered_book.return_date, ordered_book.order_type " +
-                                                            "FROM book " +
-                                                            "INNER JOIN ordered_book ON ordered_book.bookID = book.bookID " +
-                                                      "WHERE memberID = ? AND return_date IS NOT NULL AND return_date > CURDATE()";
+                                                           "FROM book " +
+                                                           "INNER JOIN ordered_book ON ordered_book.bookID = book.bookID " +
+                                                      "WHERE memberID = ? AND return_date IS NOT NULL AND (return_date = CURDATE() AND order_type = 'reading_room') OR (return_date > CURDATE() AND order_type = 'subscription')";
 
     private static final String ORDER_BOOK_QUERY = "INSERT INTO ordered_book (memberID, bookID, order_date, order_type) VALUES (?,?,CURDATE(),?)";
     private static final String ISSUE_READING_ROOM_QUERY = "UPDATE ordered_book SET return_date = CURDATE() WHERE memberID = ? AND bookID = ?";
-    private static final String ISSUE_SUBSCRIPTION_QUERY = "UPDATE ordered_book SET return_date = CURDATE()+30 WHERE memberID = ? AND bookID = ?";
+    private static final String ISSUE_SUBSCRIPTION_QUERY = "UPDATE ordered_book SET return_date = DATE (DATE_ADD(NOW(), INTERVAL 30 DAY)) WHERE memberID = ? AND bookID = ?";
     private static final String DECREMENT_BOOK_QUANTITY_QUERY = "UPDATE book SET quantity = quantity - 1 WHERE bookID = ?";
     private static final String CHECK_OLD_ORDERS_QUERY = "DELETE FROM ordered_book WHERE order_date < CURDATE() AND return_date IS NULL";
+
+    private static final String RETURN_BOOK_QUERY = "UPDATE ordered_book SET return_date = CURDATE() WHERE memberID = ? AND bookID = ? AND return_date > CURDATE()";
+    private static final String UPDATE_BOOK_QUANTITY = "UPDATE book SET quantity = quantity + 1 WHERE bookID = ?";
 
     private static final String MEMBER_ID = "memberID";
     private static final String NAME = "name";
@@ -215,5 +218,13 @@ public class OrderDAO extends AbstractDAO<Order>{
 
     public static String getCheckOldOrdersQuery(){
         return CHECK_OLD_ORDERS_QUERY;
+    }
+
+    public static String getReturnBookQuery(){
+        return RETURN_BOOK_QUERY;
+    }
+
+    public static String getUpdateBookQuantity(){
+        return UPDATE_BOOK_QUANTITY;
     }
 }

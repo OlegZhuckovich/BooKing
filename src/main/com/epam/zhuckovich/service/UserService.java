@@ -18,38 +18,50 @@ public class UserService {
     private static final String NAME_SURNAME_REGEX = "[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?";
     private static final String EMAIL_REGEX = "[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}";
     private static final String PASSWORD_REGEX = "[\\w]{5,40}";
-
+    private static final String CITY_STREET_REGEX = "[A-ZА-Я][a-zа-я]{2,40}";
+    private static final String HOUSE_REGEX = "[\\d]{1,4}";
+    private static final String TELEPHONE_REGEX = "[\\d]{7,12}";
+    private Pattern nameSurnameRegex;
+    private Pattern emailRegex;
+    private Pattern passwordRegex;
+    private Pattern cityStreetRegex;
+    private Pattern houseRegex;
+    private Pattern telephoneRegex;
 
     private UserDAO userDAO;
 
     public UserService() {
+        nameSurnameRegex = Pattern.compile(NAME_SURNAME_REGEX);
+        emailRegex = Pattern.compile(EMAIL_REGEX);
+        passwordRegex = Pattern.compile(PASSWORD_REGEX);
+        cityStreetRegex = Pattern.compile(CITY_STREET_REGEX);
+        houseRegex = Pattern.compile(HOUSE_REGEX);
+        telephoneRegex = Pattern.compile(TELEPHONE_REGEX);
         this.userDAO = UserDAO.getInstance();
     }
 
     public User checkUser(String email, String password){
         String finalPassword = encription(password);
-        List<User> userList = userDAO.executeQuery(statement -> userDAO.findMemberByEmail(statement,email, finalPassword),UserDAO.getFindUserQuery());
+        List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,email, finalPassword),UserDAO.getFindUserQuery());
         return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
     }
 
+    public User findMemberById(int userID){
+        List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,userID),UserDAO.getFindUserByIdQuery());
+        return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
+    }
+
+
     public int registerUser(String name, String surname, String email, String password, InputStream photo){
-
         int operationResult = 0;
-
         if(name==null || surname==null || email==null || password==null || photo==null){
             return operationResult;
         }
         boolean nameMatch, surnameMatch, emailMatch, passwordMatch;
-        Pattern nameSurnameRegex = Pattern.compile(NAME_SURNAME_REGEX);
-        Pattern emailRegex = Pattern.compile(EMAIL_REGEX);
-        Pattern passwordRegex = Pattern.compile(PASSWORD_REGEX);
-
         Matcher nameMatcher = nameSurnameRegex.matcher(name);
         Matcher surnameMatcher = nameSurnameRegex.matcher(surname);
         Matcher emailMatcher = emailRegex.matcher(email);
         Matcher passwordMatcher = passwordRegex.matcher(password);
-
-
         nameMatch = nameMatcher.matches();
         surnameMatch = surnameMatcher.matches();
         emailMatch = emailMatcher.matches();
@@ -68,6 +80,60 @@ public class UserService {
             operationResult = userDAO.executeUpdate(UserDAO.getAddUserQuery(), newUser.getName(), newUser.getSurname(), newUser.getEmail(), newUser.getPassword(), newUser.getUserType().toString(), newUser.getPhoto());
         }
         return operationResult;
+    }
+
+    public int editAccountMainInformation(User editableUser){
+        int operationResult = 0;
+        boolean nameMatch, surnameMatch;
+        Matcher nameMatcher = nameSurnameRegex.matcher(editableUser.getName());
+        Matcher surnameMatcher = nameSurnameRegex.matcher(editableUser.getSurname());
+        nameMatch = nameMatcher.matches();
+        surnameMatch = surnameMatcher.matches();
+        if(nameMatch && surnameMatch){
+            if(userDAO.executeUpdate(UserDAO.getEditMainInformation(),editableUser.getName(),editableUser.getSurname(), editableUser.getId()) != 0){
+                operationResult++;
+            }
+        }
+        if(editableUser.getPassword() != null){
+            if(userDAO.executeUpdate(UserDAO.getEditPassword(),encription(editableUser.getPassword()),editableUser.getId()) != 0){
+                operationResult++;
+            }
+        }
+        return operationResult;
+    }
+
+    public int addNewAddressToUser(int addressID,int userID){
+        return userDAO.executeUpdate(UserDAO.getAddNewAddressToUserQuery(),addressID,userID);
+    }
+
+    public int updateAddress(User user, String city, String street, String house, String telephone, int updateType){
+        boolean cityMatch, streetMatch, houseMatch, telephoneMatch;
+        Matcher cityMatcher = cityStreetRegex.matcher(city);
+        Matcher streetMatcher = cityStreetRegex.matcher(street);
+        Matcher houseMatcher = houseRegex.matcher(house);
+        Matcher telephoneMatcher = telephoneRegex.matcher(telephone);
+        cityMatch = cityMatcher.matches();
+        streetMatch = streetMatcher.matches();
+        houseMatch = houseMatcher.matches();
+        telephoneMatch = telephoneMatcher.matches();
+        if(cityMatch && streetMatch && houseMatch && telephoneMatch){
+            if(updateType == 0){
+                return userDAO.addNewAddress(city, street,Integer.parseInt(house), Integer.parseInt(telephone));
+            } else {
+                return userDAO.executeUpdate(UserDAO.getUpdateAddressQuery(),city, street,Integer.parseInt(house), Integer.parseInt(telephone), user.getAddress().getId());
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    public int updateAvatar(InputStream photo, int userID){
+        return userDAO.updateAvatar(photo,userID);
+    }
+
+
+    public int deleteUserAddress(int addressID){
+        return userDAO.executeUpdate(UserDAO.getDeleteAddressQuery(),addressID);
     }
 
 
@@ -104,10 +170,6 @@ public class UserService {
         return operationSuccess;
     }
 
-    public boolean editAccount(InputStream photo, int userID){
-        userDAO.updateAvatar(photo,userID);
-        return true;
-    }
 
     String encription(String realPassword){
         StringBuilder passwordStringBuilder = new StringBuilder();
@@ -125,5 +187,4 @@ public class UserService {
         return passwordStringBuilder.toString();
     }
 
-    //other methods
 }

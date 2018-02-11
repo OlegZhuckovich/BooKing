@@ -10,6 +10,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script data-main="${pageContext.request.contextPath}/js/config.js" src="${pageContext.request.contextPath}/js/require.js"></script>
 </head>
 </html>

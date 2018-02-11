@@ -68,6 +68,8 @@ class BookCommand {
     private static final String ERROR = "error";
 
     private static final String BOOK = "book";
+    private static final String SEARCH_RESULT = "searchResult";
+    private static final String EMPTY_LIST = "emptyList";
 
     private BookService service;
 
@@ -145,7 +147,11 @@ class BookCommand {
         String searchCriteria = request.getParameter(CRITERIA_PARAMETER);
         User user = (User) request.getSession().getAttribute(USER);
         List<Book> findBooks = service.findBooksByCriteria(searchValue, searchCriteria, String.valueOf(user.getId()));
-        request.setAttribute("bookList",findBooks);
+        if(findBooks.isEmpty()){
+            request.setAttribute(SEARCH_RESULT, EMPTY_LIST);
+        } else {
+            request.setAttribute(BOOK_LIST_PARAMETER,findBooks);
+        }
         return new Router(Router.RouterType.FORWARD,PageManager.getPage(ORDER_BOOK_PAGE));
     }
 

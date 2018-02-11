@@ -15,6 +15,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/librarianMenu.js" type="text/javascript"></script>
+    <script>
+        function confirmDeleteAccount() {
+            swal({
+                title: '<fmt:message key="deleteAccountConfirmTitle" bundle="${booking}"/>',
+                text: '<fmt:message key="deleteAccountConfirmBody" bundle="${booking}"/>',
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            }).then(function(willDelete){
+                if (willDelete) {
+                    $('#deleteAccountForm').submit();
+                } else {
+                    swal('<fmt:message key="deleteAccountCancel" bundle="${booking}"/>');
+                }
+            });
+        }
+    </script>
     <title>BooKing</title>
 </head>
 <body id="page">
@@ -32,7 +49,7 @@
             <div class="row menuInnerRow">
                 <div id="editBook" class="col-xs-4 col-sm-4 col-md-4"></div>
                 <div id="editAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
-                <div id="deleteAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
+                <div id="deleteAccount" onclick="confirmDeleteAccount()" class="col-xs-4 col-sm-4 col-md-4"></div>
             </div>
         </div>
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
@@ -68,14 +85,22 @@
 <c:if test="${not empty authorAddedResult}">
     <c:choose>
         <c:when test="${authorAddedResult eq 'success'}">
-            <script>swal('<fmt:message key="addBookSuccess" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookAdded" bundle="${booking}"/>', "success");</script>
+            <script>swal('<fmt:message key="addBookSuccess" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookAdded" bundle="${booking}"/>', "success");</script>
         </c:when>
         <c:otherwise>
-            <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+            <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
         </c:otherwise>
     </c:choose>
     <c:remove var="authorAddedResult" scope="session"/>
     <c:remove var="author" scope="session"/>
+</c:if>
+<c:if test="${not empty emptyReadingRoomDelivery}">
+    <script>swal('','<fmt:message key="readingRoomDeliveryEmptyBody" bundle="${booking}"/>', "success");</script>
+    <c:remove var="emptyReadingRoomDelivery" scope="session"/>
+</c:if>
+<c:if test="${not empty emptySubscriptionDelivery}">
+    <script>swal('','<fmt:message key="subscriptionDeliveryEmptyBody" bundle="${booking}"/>', "success");</script>
+    <c:remove var="emptySubscriptionDelivery" scope="session"/>
 </c:if>
 </body>
 </html>

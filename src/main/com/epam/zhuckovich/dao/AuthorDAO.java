@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
+
 public class AuthorDAO extends AbstractDAO<Author>{
 
     private static final Logger LOGGER = LogManager.getLogger(AuthorDAO.class);
@@ -34,7 +38,17 @@ public class AuthorDAO extends AbstractDAO<Author>{
     private static final String SURNAME = "surname";
     private static final String BIOGRAPHY = "biography";
 
+    /**
+     * Private constructor
+     */
+
     private AuthorDAO(){}
+
+    /**
+     * <p>Method that returns the new AuthorDAO object if it is not
+     * created in other case returns the AuthorDAO object</p>
+     * @return the instance of AuthorDAO
+     */
 
     public static AuthorDAO getInstance() {
         if (authorDAO == null) {
@@ -42,6 +56,14 @@ public class AuthorDAO extends AbstractDAO<Author>{
         }
         return authorDAO;
     }
+
+    /**
+     *
+     * @param statement
+     * @param name
+     * @param surname
+     * @return
+     */
 
     List<Author> findAuthorsByNameSurname(PreparedStatement statement, String name, String surname) {
         boolean isResultSetEmpty = true;
@@ -56,10 +78,23 @@ public class AuthorDAO extends AbstractDAO<Author>{
         return isResultSetEmpty ? null : new ArrayList<>();
     }
 
+    /**
+     *
+     * @param newAuthor
+     * @return
+     */
+
     public boolean addNewAuthor(Author newAuthor) {
         return executeQuery(statement -> findAuthorsByNameSurname(statement, newAuthor.getName(), newAuthor.getSurname()), FIND_AUTHORS_BY_NAME_SURNAME_QUERY) == null
             && executeUpdate(ADD_NEW_AUTHOR_QUERY, newAuthor.getName(), newAuthor.getSurname(), newAuthor.getBiography(), newAuthor.getPhoto()) != 0;
     }
+
+    /**
+     *
+     * @param statement
+     * @param bookID
+     * @return
+     */
 
     List<Author> findAuthorsByBookID(PreparedStatement statement, int bookID){
         List<Author> authorList = new ArrayList<>();
@@ -82,6 +117,12 @@ public class AuthorDAO extends AbstractDAO<Author>{
         }
         return authorList;
     }
+
+    /**
+     *
+     * @param statement
+     * @return
+     */
 
     public List<Author> findAllAuthors(PreparedStatement statement){
         List<Author> authorList = new ArrayList<>();

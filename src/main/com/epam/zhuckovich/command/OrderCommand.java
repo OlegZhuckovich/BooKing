@@ -5,8 +5,10 @@ import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.service.OrderService;
+import com.sun.org.apache.bcel.internal.generic.RET;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 class OrderCommand {
 
@@ -24,9 +26,17 @@ class OrderCommand {
     private static final String BOOK_ID_PARAMETER = "bookID";
     private static final String MEMBER_ID_PARAMETER = "memberID";
 
+    private static final String ORDER_OPERATION_RESULT = "orderOperationResult";
+    private static final String RETURN_OPERATION_RESULT = "returnOperationResult";
     private static final String ORDER_RESULT = "orderResult";
     private static final String SUCCESS = "success";
     private static final String ERROR = "error";
+    private static final String MEMBER_MENU_PAGE = "memberMenu";
+    private static final String LIBRARIAN_MENU_PAGE = "librarianMenu";
+
+    private static final String EMPTY_READING_ROOM_DELIVERY = "emptyReadingRoomDelivery";
+    private static final String EMPTY_SUBSCRIPTION_DELIVERY = "emptySubscriptionDelivery";
+
 
     private OrderService service;
 
@@ -35,19 +45,37 @@ class OrderCommand {
     }
 
     Router openReadingRoomMenu(HttpServletRequest request){
-        request.setAttribute(READING_ROOM_ORDER_LIST_PARAMETER,service.findAllReadingRoomOrders());
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
+        List<Order> readingRoomList = service.findAllReadingRoomOrders();
+        if(readingRoomList.isEmpty()){
+            request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+        } else {
+            request.setAttribute(READING_ROOM_ORDER_LIST_PARAMETER,readingRoomList);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
+        }
     }
 
     Router openSubscriptionMenu(HttpServletRequest request){
-        request.setAttribute(SUBSCRIPTION_ORDER_LIST_PARAMETER,service.findAllSubscriptionOrders());
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
+        List<Order> subscriptionList = service.findAllSubscriptionOrders();
+        if(subscriptionList.isEmpty()){
+            request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+        } else {
+            request.setAttribute(SUBSCRIPTION_ORDER_LIST_PARAMETER,subscriptionList);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
+        }
     }
 
     Router viewOrderedBooks(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute(USER_ATTRIBUTE);
-        request.setAttribute(ORDER_LIST_PARAMETER,service.findAllMemberOrders(user.getId()));
-        return new Router(Router.RouterType.FORWARD, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+        List<Order> orderList = service.findAllMemberOrders(user.getId());
+        if(orderList.isEmpty()){
+            request.setAttribute(ORDER_OPERATION_RESULT, SUCCESS);
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(MEMBER_MENU_PAGE));
+        } else {
+            request.setAttribute(ORDER_LIST_PARAMETER,service.findAllMemberOrders(user.getId()));
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+        }
     }
 
     Router orderBook(HttpServletRequest request) {
@@ -75,15 +103,36 @@ class OrderCommand {
     Router issueBookInReadingRoom(HttpServletRequest request){
         String memberID = request.getParameter(MEMBER_ID_PARAMETER);
         String bookID = request.getParameter(BOOK_ID_PARAMETER);
-        service.issueBookInReadingRoom(memberID,bookID);
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
+        if(service.issueBookInReadingRoom(memberID,bookID).isEmpty()){
+            request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+        } else {
+            return openReadingRoomMenu(request);
+        }
     }
 
     Router issueBookOnSubscription(HttpServletRequest request){
         String memberID = request.getParameter(MEMBER_ID_PARAMETER);
         String bookID = request.getParameter(BOOK_ID_PARAMETER);
-        service.issueBookOnSubscription(memberID,bookID);
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
+        if(service.issueBookOnSubscription(memberID,bookID).isEmpty()){
+            request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+        } else {
+            return openSubscriptionMenu(request);
+        }
+    }
+
+    Router returnBook(HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute(USER_ATTRIBUTE);
+        String bookID = request.getParameter(BOOK_ID_PARAMETER);
+        int memberID = user.getId();
+        if(service.returnBook(memberID,Integer.parseInt(bookID))!=0){
+            request.getSession().setAttribute(RETURN_OPERATION_RESULT,SUCCESS);
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+        } else {
+            request.getSession().setAttribute(RETURN_OPERATION_RESULT,ERROR);
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+        }
     }
 
 

@@ -60,8 +60,6 @@ public class BookDAO extends AbstractDAO<Book>{
     private static final String YEAR = "year";
     private static final String PAGES = "pages";
     private static final String QUANTITY = "quantity";
-    private static final String NAME = "name";
-    private static final String SURNAME = "surname";
 
     private BookDAO(){}
 

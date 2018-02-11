@@ -30,9 +30,7 @@ $(document).ready(function(){
         $('#editAccountLabel').toggle();
     });
 
-    $('#deleteAccount').on("click",function(){
-        $('#deleteAccountForm').submit();
-    }).hover(function () {
+    $('#deleteAccount').hover(function () {
         $('#deleteAccountLabel').toggle();
     });
 

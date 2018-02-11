@@ -1,6 +1,7 @@
 package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
+import com.epam.zhuckovich.entity.Address;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.entity.User;
@@ -28,25 +29,29 @@ class UserCommand {
 
     private static final Logger LOGGER = LogManager.getLogger(UserCommand.class);
 
+    private static final String ADMINISTRATOR_MENU_PAGE = "administratorMenu";
+    private static final String AVATAR_USER = "avatarUser";
+    private static final String DELETE_ACCOUNT_PARAMETER = "deleteAccount";
+    private static final String DELETE_LIBRARIAN_PAGE = "deleteLibrarian";
+    private static final String DELETE_MEMBER_PAGE = "deleteMember";
+    private static final String EDIT_ACCOUNT_PAGE = "editAccount";
+
     private static final String SPACE = " ";
+    private static final String USER_REGISTRATION = "userRegistration";
     private static final String USER_PARAMETER = "user";
     private static final String USER_ID_PARAMETER = "userID";
     private static final String OPERATION_PARAMETER = "operationSuccess";
-    private static final String LIBRARIAN_PAGE = "deleteLibrarian";
-    private static final String EDIT_ACCOUNT_PAGE = "editAccount";
     private static final String PAGE_PARAMETER = "page";
 
     private static final String LIBRARIAN_LIST_PARAMETER = "librarianList";
-    private static final String DELETE_LIBRARIAN_PAGE = "deleteLibrarian";
-
-    private static final String MEMBER_LIST_PARAMETER = "memberList";
-    private static final String DELETE_MEMBER_PAGE = "deleteMember";
-
-    private static final String LOGIN_INPUT = "emailInput";
-    private static final String PASSWORD_INPUT = "passwordInput";
-    private static final String MEMBER_MENU_PAGE = "memberMenu";
     private static final String LIBRARIAN_MENU_PAGE = "librarianMenu";
-    private static final String ADMINISTRATOR_MENU_PAGE = "administratorMenu";
+    private static final String LIBRARIAN_PAGE = "deleteLibrarian";
+    private static final String LOGIN_INPUT = "emailInput";
+    private static final String MEMBER_LIST_PARAMETER = "memberList";
+    private static final String MEMBER_MENU_PAGE = "memberMenu";
+
+
+    private static final String PASSWORD_INPUT = "passwordInput";
     private static final String LOGIN_PAGE = "loginPage";
     private static final String ERROR_LOGIN_MESSAGE = "loginError";
 
@@ -54,13 +59,14 @@ class UserCommand {
     private static final String SURNAME_REGISTER = "surnameRegister";
     private static final String EMAIL_REGISTER = "emailRegister";
     private static final String PASSWORD_REGISTER = "passwordRegister";
-
-    private static final String DELETE_ACCOUNT_PARAMETER = "deleteAccount";
+    private static final String REGISTRATION_PAGE = "registrationPage";
+    private static final String REGISTRATION_RESULT = "registrationResult";
+    private static final String ERROR = "error";
+    private static final String SUCCESS = "success";
 
     private static final String NAME_USER = "nameUser";
     private static final String SURNAME_USER = "surnameUser";
     private static final String EMAIL_USER = "emailUser";
-    private static final String AVATAR_USER = "avatarUser";
     private static final String CITY_USER = "cityUser";
     private static final String STREET_USER = "streetUser";
     private static final String HOUSE_USER = "houseUser";
@@ -68,11 +74,6 @@ class UserCommand {
     private static final String PASSWORD_USER = "passwordUser";
     private static final String REPEAT_PASSWORD_USER = "repeatPasswordUser";
 
-    private static final String REGISTRATION_PAGE = "registrationPage";
-    private static final String REGISTRATION_RESULT = "registrationResult";
-    private static final String ERROR = "error";
-    private static final String SUCCESS = "success";
-    private static final String USER_REGISTRATION = "userRegistration";
 
 
     private UserService service;
@@ -205,33 +206,54 @@ class UserCommand {
 
     Router editAccount(HttpServletRequest request){
         try {
-            /*User.Builder editableUser = User.newBuilder()
+            int operationResult = 0;
+            User user = (User) request.getSession().getAttribute(USER_PARAMETER);
+            User.Builder editableUserBuilder = User.newBuilder()
+                    .setId(user.getId())
                     .setName(request.getParameter(NAME_USER))
-                    .setSurname(request.getParameter(SURNAME_USER))
-                    .setEmail(request.getParameter(EMAIL_USER));
-            if (!request.getParameter(CITY_USER).isEmpty()) {
-                editableUser = editableUser.setAddress(Address.newBuilder()
-                        .setCity(request.getParameter(CITY_USER))
-                        .setStreet(request.getParameter(STREET_USER))
-                        .setHouse(Integer.parseInt(request.getParameter(HOUSE_USER)))
-                        .setTelephoneNumber(Integer.parseInt(request.getParameter(TELEPHONE_USER)))
-                        .build());
+                    .setSurname(request.getParameter(SURNAME_USER));
+            String password = request.getParameter(PASSWORD_USER);
+            String repeatPassword = request.getParameter(REPEAT_PASSWORD_USER);
+            if(password != null && repeatPassword != null){
+                if(password.equals(repeatPassword) && password.length() >= 5 && password.length() <= 40){
+                    editableUserBuilder.setPassword(password);
+                }
             }
-            if (!request.getParameter(PASSWORD_USER).isEmpty()) {
-                editableUser = editableUser.setPassword(request.getParameter(PASSWORD_USER));
-            } else {*/
-                User user = (User) request.getSession().getAttribute(USER_PARAMETER);
-           //     editableUser = editableUser.setId(user.getId());
-           //   editableUser = editableUser.setPassword(user.getPassword());
-           // }
-           // if (!request.getParameter(AVATAR_USER).isEmpty()) {
-                Part photoPart = request.getPart(AVATAR_USER);
-                InputStream photo = photoPart.getInputStream();
-           //     editableUser = editableUser.setPhoto(photo);
-           // }
-          //  User user = editableUser.build();
-          //  System.out.println(user.toString());
-            service.editAccount(photo,user.getId());
+            User editableUser = editableUserBuilder.build();
+            if(service.editAccountMainInformation(editableUser)!=0){
+                operationResult++;
+            }
+            String city = request.getParameter(CITY_USER);
+            String street = request.getParameter(STREET_USER);
+            String house = request.getParameter(HOUSE_USER);
+            String telephone = request.getParameter(TELEPHONE_USER);
+            if(city.isEmpty() && street.isEmpty() && house.isEmpty() && telephone.isEmpty()){
+                if(service.deleteUserAddress(user.getAddress().getId())!=0){
+                    operationResult++;
+                }
+            } else if (user.getAddress() == null){
+                int addressID = service.updateAddress(user, city, street, house, telephone, 0);
+                if(service.addNewAddressToUser(addressID,user.getId())!=0){
+                    operationResult++;
+                }
+            } else {
+                if(service.updateAddress(user,city, street, house, telephone, 1)!=0){
+                    operationResult++;
+                }
+            }
+            Part photoPart = request.getPart(AVATAR_USER);
+            if(photoPart != null){
+                InputStream avatar = photoPart.getInputStream();
+                if(service.updateAvatar(avatar,user.getId())!=0){
+                    operationResult++;
+                }
+            }
+            if(operationResult==0){
+                request.getSession().setAttribute(OPERATION_PARAMETER,ERROR);
+            } else {
+                request.getSession().setAttribute(OPERATION_PARAMETER,SUCCESS);
+            }
+            request.getSession().setAttribute(USER_PARAMETER,service.findMemberById(user.getId()));
         } catch(IOException e){
             LOGGER.log(Level.ERROR, "IOException was occurred during getting the photo from the client while user editing account");
         } catch(ServletException e){
@@ -245,7 +267,13 @@ class UserCommand {
         User user = (User) request.getSession().getAttribute(USER_PARAMETER);
         Integer userID = user.getId();
         UserType userType = user.getUserType();
-        service.deleteAccount(userID, userType);
+        int operationResult = 0;
+        operationResult = service.deleteAccount(userID, userType);
+        if(operationResult == 0){
+            request.getSession().setAttribute(DELETE_ACCOUNT_PARAMETER,ERROR);
+        } else {
+            request.getSession().setAttribute(DELETE_ACCOUNT_PARAMETER,SUCCESS);
+        }
         switch (userType){
             case MEMBER:
                 return new Router(Router.RouterType.REDIRECT,PageManager.getPage(MEMBER_MENU_PAGE));

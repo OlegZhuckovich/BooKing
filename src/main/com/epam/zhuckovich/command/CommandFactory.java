@@ -102,6 +102,9 @@ public class CommandFactory {
                 case VIEW_ORDERED_BOOKS:
                     command = httpRequest -> new OrderCommand().viewOrderedBooks(request);
                     break;
+                case RETURN_BOOK:
+                    command = httpRequest -> new OrderCommand().returnBook(request);
+                    break;
                 case ADD_AUTHOR:
                     command = httpRequest -> new AuthorCommand().addNewAuthor(request);
                     break;

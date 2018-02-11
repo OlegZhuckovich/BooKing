@@ -2,9 +2,6 @@ package com.epam.zhuckovich.filter;
 
 import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.entity.UserType;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -15,8 +12,6 @@ import java.io.IOException;
 
 @WebFilter
 public class PageSecurityFilter implements Filter {
-
-    private static final Logger LOGGER = LogManager.getLogger(PageSecurityFilter.class);
 
     private final static String USER = "user";
     private final static String LOGIN_PAGE = "loginPage";
@@ -46,24 +41,23 @@ public class PageSecurityFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         HttpSession session = httpRequest.getSession();
         String currentPage  = httpRequest.getRequestURI();
-        try {
-            User currentUser = (User) session.getAttribute(USER);
-            if(currentUser != null){
-                UserType userType = currentUser.getUserType();
-                if(userType == UserType.ADMINISTRATOR && !currentPage.contains(ADMINISTRATOR_URI) && !currentPage.contains(COMMON_URI)){
-                    httpResponse.sendRedirect(httpRequest.getContextPath() + administratorMenu);
-                } else if(userType == UserType.LIBRARIAN && !currentPage.contains(LIBRARIAN_URI) && !currentPage.contains(COMMON_URI)){
-                    httpResponse.sendRedirect(httpRequest.getContextPath() + librarianMenu);
-                } else if(userType == UserType.MEMBER && !currentPage.contains(MEMBER_URI) && !currentPage.contains(COMMON_URI)){
-                    httpResponse.sendRedirect(httpRequest.getContextPath() + memberMenu);
-                } else {
-                    filterChain.doFilter(servletRequest, servletResponse);
-                }
-
+        Object user =  session.getAttribute(USER);
+        if(user instanceof String){
+            if(((String) user).isEmpty()) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + loginPage);
             }
-        } catch (ClassCastException e){
-            LOGGER.log(Level.ERROR,"ClassCastException was occurred during the filtering of the request");
-            httpResponse.sendRedirect(httpRequest.getContextPath() + loginPage);
+        } else {
+            User currentUser = (User) user;
+            UserType userType = currentUser.getUserType();
+            if(userType == UserType.ADMINISTRATOR && !currentPage.contains(ADMINISTRATOR_URI) && !currentPage.contains(COMMON_URI)){
+                httpResponse.sendRedirect(httpRequest.getContextPath() + administratorMenu);
+            } else if(userType == UserType.LIBRARIAN && !currentPage.contains(LIBRARIAN_URI) && !currentPage.contains(COMMON_URI)){
+                httpResponse.sendRedirect(httpRequest.getContextPath() + librarianMenu);
+            } else if(userType == UserType.MEMBER && !currentPage.contains(MEMBER_URI) && !currentPage.contains(COMMON_URI)){
+                httpResponse.sendRedirect(httpRequest.getContextPath() + memberMenu);
+            } else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.epam.zhuckovich.service;
 import com.epam.zhuckovich.dao.OrderDAO;
 import com.epam.zhuckovich.entity.Order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderService {
@@ -29,17 +30,35 @@ public class OrderService {
         return orderDAO.executeUpdate(OrderDAO.getOrderBookQuery(), userID, bookID, orderType);
     }
 
-    public boolean issueBookInReadingRoom(String memberID, String bookID) {
+    public List<Order> issueBookInReadingRoom(String memberID, String bookID) {
         int numberMemberID = Integer.parseInt(memberID);
         int numberBookID = Integer.parseInt(bookID);
-        return orderDAO.executeUpdate(OrderDAO.getIssueReadingRoomQuery(), numberMemberID, numberBookID) != 0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID) != 0;
+        List<Order> readingRoomOrderList = new ArrayList<>();
+        if(orderDAO.executeUpdate(OrderDAO.getIssueReadingRoomQuery(), numberMemberID, numberBookID)!=0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID)!=0){
+            readingRoomOrderList = findAllReadingRoomOrders();
+        }
+        return readingRoomOrderList;
     }
 
-    public boolean issueBookOnSubscription(String memberID, String bookID){
+    public List<Order> issueBookOnSubscription(String memberID, String bookID){
         int numberMemberID = Integer.parseInt(memberID);
         int numberBookID = Integer.parseInt(bookID);
-        return orderDAO.executeUpdate(OrderDAO.getSubscriptionOrderQuery(), numberMemberID, numberBookID) != 0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID) != 0;
+        List<Order> subscriptionOrderList = new ArrayList<>();
+        if(orderDAO.executeUpdate(OrderDAO.getIssueSubscriptionQuery(), numberMemberID, numberBookID) != 0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID) != 0){
+            subscriptionOrderList = findAllSubscriptionOrders();
+        }
+        return subscriptionOrderList;
     }
 
+    public int returnBook(int memberID, int bookID){
+        int operationResult = 0;
+        if(orderDAO.executeUpdate(OrderDAO.getReturnBookQuery(),memberID,bookID)!=0){
+            operationResult++;
+        }
+        if(orderDAO.executeUpdate(OrderDAO.getUpdateBookQuantity(), bookID)!=0){
+            operationResult++;
+        }
+        return operationResult;
+    }
 
 }

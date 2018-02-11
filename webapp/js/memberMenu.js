@@ -30,9 +30,7 @@ $(document).ready(function(){
         $('#trainingVideoLabel').toggle();
     });
 
-    $('#deleteAccount').on("click",function(){
-        $('#deleteAccountForm').submit();
-    }).hover(function(){
+    $('#deleteAccount').hover(function(){
         $('#deleteAccountLabel').toggle();
     });
 

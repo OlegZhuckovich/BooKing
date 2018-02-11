@@ -633,20 +633,20 @@ form .question input:focus {
 /*Styles for menu images*/
 
 #readingRoomBookDelivery{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/readingRoomBookDeliveryMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 
 #subscriptionBookDelivery{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/subscriptionBookDeliveryMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 #addAuthor{
-    background: url('https://24smi.org/public/media/2017/6/10/01_NMBSs1L.jpg') no-repeat;
+    background: url('../images/addAuthorMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%;
 }
@@ -658,25 +658,25 @@ form .question input:focus {
 }
 
 #editAccount{
-    background: url('https://media.gettyimages.com/photos/asian-happy-students-with-laptop-computer-working-and-studying-in-picture-id696959144') no-repeat;
+    background: url('../images/editAccountMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%;
 }
 
 #deleteAccount{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/deleteAccount.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%;
 }
 
 #orderBook{
-    background: url('https://mainehumanities.org/wp-content/uploads/2015/05/student-in-library.jpg') no-repeat;
+    background: url('../images/orderBookMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 #viewOrderedBooks{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/viewOrderedBooksMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
@@ -705,7 +705,7 @@ form .question input:focus {
 }
 
 #secondLoginRow{
-    height: 50%;
+    height: 45%;
 }
 
 .loginInputMargin{
@@ -719,13 +719,13 @@ form .question input:focus {
 
 #loginTitle{
     font-size: 35px;
-    margin-left: 115px;
+    margin-left: 35%;
 }
 
 #loginLogo{
     width: 70px;
     margin-top: 10px;
-    margin-left: 30px;
+    margin-left: 12%;
     float: left;
 }
 

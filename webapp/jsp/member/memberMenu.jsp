@@ -13,12 +13,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/memberMenu.js" type="text/javascript"></script>
+    <script>
+        function confirmDeleteAccount() {
+            swal({
+                title: '<fmt:message key="deleteAccountConfirmTitle" bundle="${booking}"/>',
+                text: '<fmt:message key="deleteAccountConfirmBody" bundle="${booking}"/>',
+                icon: "warning",
+                buttons: true,
+                dangerMode: true
+            }).then(function(willDelete){
+                if (willDelete) {
+                    $('#deleteAccountForm').submit();
+                } else {
+                    swal('<fmt:message key="deleteAccountCancel" bundle="${booking}"/>');
+                }
+            });
+        }
+    </script>
     <title>BooKing</title>
 </head>
 <body id="page">
     <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-        <div id="content" class="container-fluid">
+        <div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/memberMenuBackground.png'); background-size: 100% 100%;">
             <div class="row" id="firstRow"></div>
             <div class="row" id="menuRow">
                 <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
@@ -31,7 +49,7 @@
                     <div class="row menuInnerRow">
                         <div id="authorGallery" class="col-xs-4 col-sm-4 col-md-4"></div>
                         <div id="trainingVideo" class="col-xs-4 col-sm-4 col-md-4"></div>
-                        <div id="deleteAccount" class="col-xs-4 col-sm-4 col-md-4"></div>
+                        <div id="deleteAccount" onclick="confirmDeleteAccount()" class="col-xs-4 col-sm-4 col-md-4"></div>
                     </div>
                 </div>
                 <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
@@ -58,10 +76,25 @@
         <form id="editAccountForm" action="/jsp/common/editAccount.jsp" class="hiddenForm"></form>
         <form id="authorGalleryForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_authors"></form>
         <form id="trainingVideoForm" action="/jsp/member/trainingVideo.jsp" class="hiddenForm"></form>
-        <form id="deleteAccountForm" action="/controller" method="get" class="hiddenForm">
+        <form id="deleteAccountForm" action="/controller" method="get"  class="hiddenForm">
             <input type="hidden" name="command" value="delete_account">
             <input type="hidden" name="deleteAccount" value="user">
         </form>
     <c:import charEncoding="UTF-8" url="/jsp/common/footer.jspf"/>
+    <c:if test="${not empty deleteAccount}">
+        <c:choose>
+            <c:when test="${deleteAccount == 'success'}">
+                <script>swal('','<fmt:message key="deleteAccountSuccessBody" bundle="${booking}"/>', "success");</script>
+            </c:when>
+            <c:otherwise>
+                <script>swal('','<fmt:message key="deleteAccountErrorBody" bundle="${booking}"/>', "error");</script>
+            </c:otherwise>
+        </c:choose>
+        <c:remove var="deleteAccount" scope="session"/>
+    </c:if>
+    <c:if test="${not empty orderOperationResult}">
+        <script>swal('','<fmt:message key="viewOrderedBooksWarningBody" bundle="${booking}"/>', "warning");</script>
+        <c:remove var="orderOperationResult" scope="request"/>
+    </c:if>
 </body>
 </html>

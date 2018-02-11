@@ -23,7 +23,7 @@
             var name = $('#nameAuthor').val();
             var surname = $('#surnameAuthor').val();
             var photo = $('#photoAuthor').val();
-            var expansion = photo.substring(content.lastIndexOf('.')+1);
+            var expansion = photo.substring(photo.lastIndexOf('.')+1);
             var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?");
             if(nameSurnameRegex.test(name)){
                 if(nameSurnameRegex.test(surname)){
@@ -38,15 +38,20 @@
             }
         }
     </script>
+    <style>
+        form .inputGroup input:focus{
+            color:#33c4ba;
+        }
+    </style>
     <title>BooKing</title>
 </head>
 <body id="page">
     <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-    <div id="content" class="container-fluid">
+    <div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/addAuthorBackground.png'); background-size: 100% 100%;">
         <div class="row" id="firstRow"></div>
         <div class="row" id="secondRow">
             <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
-            <div class="col-xs-12 col-sm-10 col-md-8" id="addAuthorBlock">
+            <div class="col-xs-12 col-sm-10 col-md-8" id="addAuthorBlock" style="min-height: 85%">
                 <div class="container-fluid">
                     <div>
                         <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo"><h1 id="pageTitle"><fmt:message key="addAuthor" bundle="${booking}"/></h1>

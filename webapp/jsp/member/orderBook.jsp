@@ -49,12 +49,7 @@
         } );
     </script>
     <style>
-        .mdl-button--raised.mdl-button--colored{
-            background-color: #B3D600;
-        }
-        .mdl-button--raised.mdl-button--colored:hover{
-        }
-        form .inputGroup input:focus {
+        .mdl-button--raised.mdl-button--colored, .mdl-button--raised.mdl-button--colored:hover{
 
         }
     </style>
@@ -68,7 +63,7 @@
         <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
         <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">
             <!--Для поля поиска-->
-            <div class="row" style="min-height: 20%; border-radius: 20px; background-color: #424c93">
+            <div class="row" style="min-height: 23%; border-radius: 20px; background-color: #424c93">
                 <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" style="float: left; width: 35px;margin-top: 20px; margin-left: 2%;">
                 <h1 style="margin-left: 70px;"><fmt:message key="orderBook" bundle="${booking}"/></h1>
                 <form action="/controller" method="get" id="searchBookByCriteriaForm">
@@ -161,10 +156,14 @@
             <script>swal('<fmt:message key="orderBookResultSuccessTitle" bundle="${booking}"/>','<fmt:message key="orderBookResultSuccessBody" bundle="${booking}"/>', "success");</script>
         </c:when>
         <c:otherwise>
-            <script>swal('<fmt:message key="orderBookResultErrorTitle" bundle="${booking}"/>','<fmt:message key="orderBookResultErrorTitle" bundle="${booking}"/>', "error");</script>
+            <script>swal('<fmt:message key="orderBookResultErrorTitle" bundle="${booking}"/>','<fmt:message key="orderBookResultErrorBody" bundle="${booking}"/>', "error");</script>
         </c:otherwise>
     </c:choose>
     <c:remove var="orderResult" scope="session"/>
+</c:if>
+<c:if test="${not empty searchResult}">
+    <script>swal('<fmt:message key="orderBookResultNoBooksTitle" bundle="${booking}"/>','<fmt:message key="orderBookResultNoBooksBody" bundle="${booking}"/>', "error");</script>
+    <c:remove var="searchResult" scope="session"/>
 </c:if>
 </body>
 </html>
