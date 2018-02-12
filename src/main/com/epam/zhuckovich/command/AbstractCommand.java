@@ -1,9 +1,18 @@
 package com.epam.zhuckovich.command;
 
+/**
+ * <p>Class in which variables are located used by other classes of commands to
+ * extract parameters from request object.</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @since       1.0
+ */
 
 abstract class AbstractCommand {
 
-    //   AuthorCommand final variables
+    /**
+     * AuthorCommand final variables
+     */
 
     static final String AUTHOR = "author";
     static final String AUTHOR_ADDED_RESULT = "authorAddedResult";
@@ -14,7 +23,9 @@ abstract class AbstractCommand {
     static final String AUTHOR_SURNAME = "authorSurname";
     static final String LIBRARIAN_MENU = "librarianMenu";
 
-    //   BookCommand final variables
+    /**
+     * BookCommand final variables
+     */
 
     static final String ADD_BOOK_PAGE = "addBook";
     static final String ADMINISTRATOR_MENU = "administratorMenu";
@@ -54,7 +65,9 @@ abstract class AbstractCommand {
     static final String SUBSCRIPTION_ORDER_LIST_PARAMETER = "subscriptionOrderList";
     static final String VIEW_ORDERED_BOOKS_PAGE = "viewOrderedBooks";
 
-    //   UserCommand final variables
+    /**
+     * UserCommand final variables
+     */
 
     static final String ADMINISTRATOR_MENU_PAGE = "administratorMenu";
     static final String AVATAR_USER = "avatarUser";
@@ -85,7 +98,9 @@ abstract class AbstractCommand {
     static final String USER_ID = "userID";
     static final String USER_REGISTRATION = "userRegistration";
 
-    //   Common variables for several commands
+    /**
+     * Common variables for several commands
+     */
 
     static final String AUTHOR_LIST = "authorList";
     static final String BOOK_ID = "bookID";

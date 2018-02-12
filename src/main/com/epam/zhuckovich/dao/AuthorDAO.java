@@ -32,6 +32,8 @@ public class AuthorDAO extends AbstractDAO<Author>{
                                                           "WHERE book.bookID = ?";
     private static final String FIND_ALL_AUTHORS = "SELECT authorID, name, surname, biography FROM author ";
 
+    private static final String SQL_FIND = "SELECT photo FROM author WHERE name = ?";
+
     /**
      * Private constructor
      */

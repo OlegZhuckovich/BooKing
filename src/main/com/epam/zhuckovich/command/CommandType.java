@@ -1,7 +1,7 @@
 package com.epam.zhuckovich.command;
 
 /**
- * Enum which contains different action for different realeasation of Command functional interface
+ * Enum which contains different action for different realisation of Command functional interface
  */
 
 public enum CommandType {

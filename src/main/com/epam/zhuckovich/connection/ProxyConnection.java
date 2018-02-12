@@ -25,9 +25,20 @@ public class ProxyConnection {
 
     private Connection connection;
 
+    /**
+     * <p>Class constructor</p>
+     * @param connection connection to the database
+     */
+
     ProxyConnection(Connection connection){
         this.connection = connection;
     }
+
+    /**
+     * <p>Create statement on connection</p>
+     * @return                       statement that method created
+     * @throws SQLTechnicalException if method cannot create statement
+     */
 
     public Statement createStatement() throws SQLTechnicalException {
         try {
@@ -37,6 +48,13 @@ public class ProxyConnection {
         }
     }
 
+    /**
+     * <p>Create prepared statement on connection</p>
+     * @param sql contains sql query
+     * @return    preparedStatement that method created
+     * @throws SQLTechnicalException if method cannot create preparedStatement
+     */
+
     public PreparedStatement prepareStatement(String sql) throws SQLTechnicalException {
         try {
             return connection.prepareStatement(sql);
@@ -45,6 +63,14 @@ public class ProxyConnection {
         }
     }
 
+    /**
+     * <p>Create prepared statement on connection with generatedKeys</p>
+     * @param sql           contains sql query
+     * @param generatedKeys contains generatedKeys statement
+     * @return              preparedStatement that method created
+     * @throws SQLTechnicalException if method cannot create preparedStatement
+     */
+
     public PreparedStatement prepareStatement(String sql, int generatedKeys) throws SQLTechnicalException {
         try {
             return connection.prepareStatement(sql,generatedKeys);
@@ -52,6 +78,10 @@ public class ProxyConnection {
             throw new SQLTechnicalException(e);
         }
     }
+
+    /**
+     * Returns ProxyConnection to the ConnectionPool
+     */
 
     public void releaseConnection() {
         ConnectionPool.getInstance().releaseConnection(this);
@@ -65,6 +95,13 @@ public class ProxyConnection {
         }
     }
 
+    /**
+     * <p>Enables or disables autocommit, depending on the flag variable passed
+     * to the method</p>
+     * @param flag the variable that determines will enabled or disabled autocommit
+     * @throws SQLTechnicalException if autocommit cannot be enabled of disabled
+     */
+
     public void setAutoCommit(boolean flag) throws SQLTechnicalException {
         try {
             connection.setAutoCommit(flag);
@@ -73,6 +110,10 @@ public class ProxyConnection {
         }
     }
 
+    /**
+     * Commit changes made by sql query
+     */
+
     public void commit() throws SQLTechnicalException {
         try {
             connection.commit();
@@ -80,6 +121,10 @@ public class ProxyConnection {
             throw new SQLTechnicalException(e);
         }
     }
+
+    /**
+     * Rollback changes made by sql query
+     */
 
     public void rollback() {
         try {

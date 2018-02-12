@@ -5,7 +5,6 @@
          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
     <display-name>Archetype Created Web Application</display-name>
-    <!--Для обработки ошибок и исключений-->
     <jsp-config>
         <taglib>
             <taglib-uri>infotag</taglib-uri>

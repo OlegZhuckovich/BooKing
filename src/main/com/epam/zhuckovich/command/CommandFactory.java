@@ -24,10 +24,11 @@ public class CommandFactory {
     private static final String LOGIN_PAGE = "loginPage";
 
     /**
-     *
-     * @param commandValue
-     * @param request
-     * @return
+     * <p>Defines the type of command that came from the client in the request
+     * object</p>
+     * @param commandValue the string that converts to one of the CommandType enumeration item
+     * @param request      sends data from the client to the server
+     * @return             the Command object which will be executed in the future
      */
 
     public static Command defineCommand(String commandValue, HttpServletRequest request) {

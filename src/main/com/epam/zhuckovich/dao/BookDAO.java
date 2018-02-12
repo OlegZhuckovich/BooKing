@@ -25,7 +25,7 @@ public class BookDAO extends AbstractDAO<Book>{
     private static final String DELETE_BOOK_QUERY = "UPDATE book SET quantity = 0 WHERE bookID = ?";
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                         "FROM book ";
-
+    private static final String FIND_BOOK_CONTENT_QUERY = "SELECT book_content FROM book_content WHERE bookID = ?";
     private static final String SEARCH_BOOK_BY_CRITERIA_QUERY = "SELECT DISTINCT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                                     "FROM book " +
                                                                     "INNER JOIN book_author ON book_author.bookID=book.bookID " +
@@ -117,7 +117,7 @@ public class BookDAO extends AbstractDAO<Book>{
         return bookID;
     }
 
-    public byte[] loadBook(int bookID, String query){
+    public byte[] loadBook(int bookID){
         ProxyConnection connection = null;
         PreparedStatement preparedStatement = null;
         Blob bookFile;
@@ -125,7 +125,7 @@ public class BookDAO extends AbstractDAO<Book>{
         try{
             connection = ConnectionPool.getInstance().getConnection();
             connection.setAutoCommit(false);
-            preparedStatement = connection.prepareStatement(query);
+            preparedStatement = connection.prepareStatement(FIND_BOOK_CONTENT_QUERY);
             preparedStatement.setInt(1,bookID);
             ResultSet bookResultSet = preparedStatement.executeQuery();
             if(bookResultSet.next()){
@@ -160,10 +160,6 @@ public class BookDAO extends AbstractDAO<Book>{
 
     public static String getSearchBookByCriteriaLikeStatement(){
         return SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT;
-    }
-
-    public static String getAddBookQuery(){
-        return ADD_BOOK_QUERY;
     }
 
     public static String getAddBookAuthorQuery(){

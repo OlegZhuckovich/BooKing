@@ -10,8 +10,16 @@ public class OrderService {
 
     private OrderDAO orderDAO;
 
+    /**
+     * Class constructor
+     */
+
     public OrderService() {
         this.orderDAO = OrderDAO.getInstance();
+    }
+
+    public List<Order> findAllMemberOrders(int userID){
+        return orderDAO.executeQuery(statement -> orderDAO.findAllMemberOrders(statement,userID),OrderDAO.getMemberOrdersQuery());
     }
 
     public List<Order> findAllReadingRoomOrders(){
@@ -20,10 +28,6 @@ public class OrderService {
 
     public List<Order> findAllSubscriptionOrders(){
         return orderDAO.executeQuery(statement -> orderDAO.findAllSubscriptionOrders(statement),OrderDAO.getSubscriptionOrderQuery());
-    }
-
-    public List<Order> findAllMemberOrders(int userID){
-        return orderDAO.executeQuery(statement -> orderDAO.findAllMemberOrders(statement,userID),OrderDAO.getMemberOrdersQuery());
     }
 
     public int orderBook(int userID, int bookID, String orderType){

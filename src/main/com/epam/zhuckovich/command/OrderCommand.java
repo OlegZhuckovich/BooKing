@@ -5,18 +5,38 @@ import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.service.OrderService;
-import com.sun.org.apache.bcel.internal.generic.RET;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+/**
+ * <p>A class that contains methods for processing user orders in the
+ * library.</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @see         Order
+ * @since       1.0
+ */
 
 class OrderCommand extends AbstractCommand{
 
     private OrderService service;
 
+    /**
+     * Class constructor
+     */
+
     OrderCommand(){
         this.service = new OrderService();
     }
+
+    /**
+     * <p>A method in which the issuance of a particular book to a particular
+     * reader in the reading room by a librarian.</p>
+     * @param request sends memberID and bookID to the server
+     * @return        the router that redirects to the librarian menu page if all books
+     *                in the reading room are issued, otherwise call openReadingRoomMenu method.
+     */
 
     Router issueBookInReadingRoom(HttpServletRequest request){
         String memberID = request.getParameter(MEMBER_ID_PARAMETER);
@@ -29,6 +49,14 @@ class OrderCommand extends AbstractCommand{
         }
     }
 
+    /**
+     * <p>A method in which the issuance of a particular book to a particular
+     * reader on subscription by a librarian.</p>
+     * @param request sends memberID and bookID to the server
+     * @return        the router that redirects to the librarian menu page if all books
+     *                on subscription are issued, otherwise call openSubscriptionMenu method.
+     */
+
     Router issueBookOnSubscription(HttpServletRequest request){
         String memberID = request.getParameter(MEMBER_ID_PARAMETER);
         String bookID = request.getParameter(BOOK_ID);
@@ -39,6 +67,14 @@ class OrderCommand extends AbstractCommand{
             return openSubscriptionMenu(request);
         }
     }
+
+    /**
+     * <p>Finds all book orders in the reading room</p>
+     * @param request used to send a list of orders to the reading room to client
+     * @return        router that redirects user to the librarian menu page if the
+     *                order list is empty, otherwise forwards user to the reading room
+     *                book delivery page
+     */
 
     Router openReadingRoomMenu(HttpServletRequest request){
         List<Order> readingRoomList = service.findAllReadingRoomOrders();
@@ -51,6 +87,14 @@ class OrderCommand extends AbstractCommand{
         }
     }
 
+    /**
+     * <p>Finds all book orders on subscription</p>
+     * @param request used to send a list of orders on subscription to client
+     * @return        router that redirects user to the librarian menu page if the
+     *                order list is empty, otherwise forwards user to the subscription
+     *                book delivery page
+     */
+
     Router openSubscriptionMenu(HttpServletRequest request){
         List<Order> subscriptionList = service.findAllSubscriptionOrders();
         if(subscriptionList.isEmpty()){
@@ -62,9 +106,15 @@ class OrderCommand extends AbstractCommand{
         }
     }
 
+    /**
+     * <p>A method used to order books in the reading room or on a subscription by readers</p>
+     * @param request sends information about the user, book and the type of order to the server
+     * @return        router that redirects user to the order book page
+     */
+
     Router orderBook(HttpServletRequest request) {
-        String stringOrderType = request.getParameter(ACTION);
         User user = (User)request.getSession().getAttribute(USER);
+        String stringOrderType = request.getParameter(ACTION);
         String stringBookID = request.getParameter(BOOK_ID);
         int userID = user.getId();
         int bookID = Integer.parseInt(stringBookID);
@@ -84,11 +134,17 @@ class OrderCommand extends AbstractCommand{
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ORDER_BOOK_PAGE));
     }
 
+    /**
+     * <p>A method that is used to return books by readers back to the library</p>
+     * @param request sends information about the user and book to the server
+     * @return        router that redirects user to the view ordered books page
+     */
+
     Router returnBook(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute(USER);
         String bookID = request.getParameter(BOOK_ID);
         int memberID = user.getId();
-        if(service.returnBook(memberID,Integer.parseInt(bookID))!=0){
+        if(service.returnBook(memberID,Integer.parseInt(bookID))!= 0){
             request.getSession().setAttribute(RETURN_OPERATION_RESULT,SUCCESS);
             return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
         } else {
@@ -96,6 +152,14 @@ class OrderCommand extends AbstractCommand{
             return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
         }
     }
+
+    /**
+     * <p>A method used to view ordered books in the library</p>
+     * @param request sends information about the user the server
+     * @return        router that forwards user to the member menu page if
+     *                the user order list is empty, otherwise forwards to the
+     *                view ordered books page
+     */
 
     Router viewOrderedBooks(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute(USER);

@@ -29,14 +29,11 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getParameter(COMMAND_PARAMETER));
         Router page = CommandFactory.defineCommand(request.getParameter(COMMAND_PARAMETER).toUpperCase(),request).execute(request);
-        System.out.println(page.getPage());
         switch(page.getRouterType()){
             case FORWARD:
                 RequestDispatcher dispatcher = request.getRequestDispatcher(page.getPage());
                 dispatcher.forward(request, response);
-                System.out.println("форвард");
                 break;
             case REDIRECT:
                 response.sendRedirect(page.getPage());

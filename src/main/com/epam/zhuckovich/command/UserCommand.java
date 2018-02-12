@@ -1,8 +1,6 @@
 package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
-import com.epam.zhuckovich.entity.Address;
-import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.entity.User;
@@ -19,8 +17,8 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * <p>A class that contains methods for various actions
- * with the authors of the books presented in the library's fund.</p>
+ * <p>The class contains methods for performing various actions with users,
+ * such as registering, login, logout, editing and deleting an account</p>
  * @author      Oleg Zhuckovich
  * @version     %I%, %G%
  * @see         User
@@ -55,7 +53,7 @@ class UserCommand extends AbstractCommand{
         if(email == null || password == null){
             return new Router(Router.RouterType.FORWARD,PageManager.getPage(LOGIN_PAGE));
         }
-        User user = service.checkUser(email, password);
+        User user = service.findUserByEmailPassword(email, password);
         UserType member = user.getUserType();
         if(member == null){
             request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
@@ -89,8 +87,8 @@ class UserCommand extends AbstractCommand{
     }
 
     /**
-     * <p>Method for registering the reader in the program</p>
-     * @param request contains name, surname, email and password for creating a reader account
+     * <p>Method for registering the reader or librarian in the program</p>
+     * @param request contains name, surname, email and password for creating a user account
      * @return        the Router object that redirects a user to a login page
      */
 
@@ -131,7 +129,6 @@ class UserCommand extends AbstractCommand{
         String page = request.getParameter(PAGE_PARAMETER);
         String userID = request.getParameter(USER_ID);
         boolean operationSuccess = service.deleteUser(userID);
-        System.out.println("UserID = " + userID);
         request.setAttribute(OPERATION_PARAMETER,operationSuccess);
         if(page.equals(LIBRARIAN_PAGE)){
             return deleteLibrarianMenu(request);
@@ -141,10 +138,11 @@ class UserCommand extends AbstractCommand{
     }
 
     /**
-     *
-     *
-     * @param request
-     * @return
+     * <p>A method for searching all librarians who requested an account deletion</p>
+     * @param request sends a list of librarians to remove to the client
+     * @return        the Router object that forwards a user to the administrator menu page
+     *                if list of removable librarians is empty, otherwise forwards a user to
+     *                the delete librarian page
      */
 
     Router deleteLibrarianMenu(HttpServletRequest request) {
@@ -157,8 +155,15 @@ class UserCommand extends AbstractCommand{
             return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
         }
     }
-    
-    
+
+    /**
+     * <p>A method for searching all members who requested an account deletion</p>
+     * @param request sends a list of members to remove to the client
+     * @return        the Router object that forwards a user to the administrator menu page
+     *                if list of removable members is empty, otherwise forwards a user to
+     *                the delete member page
+     */
+
     Router deleteMemberMenu(HttpServletRequest request) {
         List<User> removableMembers = service.findAllRemovableUsers(UserType.MEMBER);
         if(removableMembers.isEmpty()){
@@ -170,6 +175,11 @@ class UserCommand extends AbstractCommand{
         }
     }
 
+    /**
+     * <p>Method for editing an account of all types of users: the reader, the librarian or the administrator</p>
+     * @param request receives data to edit an account
+     * @return        redirects user to the edit account page with a report on the success of the operation
+     */
 
     Router editAccount(HttpServletRequest request){
         try {
@@ -229,13 +239,17 @@ class UserCommand extends AbstractCommand{
         return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_ACCOUNT_PAGE));
     }
 
+    /**
+     * <p>The method used to perform the account deletion procedure</p>
+     * @param request receives memberID to account deletion
+     * @return        redirects user to the menu page depending on the type of user
+     */
 
     Router deleteAccountRequest(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute(USER);
         Integer userID = user.getId();
         UserType userType = user.getUserType();
-        int operationResult = 0;
-        operationResult = service.deleteAccount(userID, userType);
+        int operationResult = service.deleteAccount(userID, userType);
         if(operationResult == 0){
             request.getSession().setAttribute(DELETE_ACCOUNT_PARAMETER,ERROR);
         } else {

@@ -5,7 +5,7 @@ import com.epam.zhuckovich.controller.Router;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * <p>A functional interface designed to perform various actions
+ * <p>The functional interface designed to perform various actions
  * defined in the class CommandFactory.</p>
  * @author      Oleg Zhuckovich
  * @version     %I%, %G%

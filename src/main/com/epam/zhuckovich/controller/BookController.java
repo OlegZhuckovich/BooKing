@@ -13,23 +13,26 @@ import java.io.OutputStream;
 
 @MultipartConfig
 @WebServlet("/bookController")
-public class BookController extends HttpServlet{
+public class BookController extends HttpServlet {
 
-    private static final String SQL_FIND = "SELECT book_content FROM book_content WHERE bookID = ?";
+    private static final String APPLICATION_PDF = "application/pdf";
+    private static final String BOOK_ID = "bookID";
+    private static final String CONTENT_DISPOSITION = "Content-Disposition";
+    private static final String FILE_NOT_FOUND = "File not found";
+    private static final String INLINE = "inline";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String bookID = request.getParameter("bookID");
-        BookDAO bookDAO = BookDAO.getInstance();
-        byte[] bookFile = bookDAO.loadBook(Integer.parseInt(bookID),SQL_FIND);
+        String bookID = request.getParameter(BOOK_ID);
+        byte[] bookFile = BookDAO.getInstance().loadBook(Integer.parseInt(bookID));
         if(bookFile!=null){
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition","inline");
+            response.setContentType(APPLICATION_PDF);
+            response.setHeader(CONTENT_DISPOSITION,INLINE);
             response.setContentLength(bookFile.length);
             OutputStream output = response.getOutputStream();
             output.write(bookFile);
             output.flush();
         } else {
-            response.sendError(404, "File not found");
+            response.sendError(404, FILE_NOT_FOUND);
         }
     }
 }

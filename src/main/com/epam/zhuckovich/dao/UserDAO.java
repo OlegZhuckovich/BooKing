@@ -45,6 +45,8 @@ public final class UserDAO extends AbstractDAO<User> {
     private static final String ADD_NEW_ADDRESS_TO_USER_QUERY = "UPDATE member SET adressID = ? WHERE memberID = ?";
     private static final String UPDATE_ADDRESS_QUERY = "UPDATE adress SET city = ?, street = ?, house = ?, telephone_number=? WHERE adressID = ?";
 
+    private static final String FIND_USER_AVATAR = "SELECT avatar FROM member WHERE memberID = ?";
+
 
     private UserDAO(){}
 
@@ -189,7 +191,7 @@ public final class UserDAO extends AbstractDAO<User> {
         PreparedStatement statement = null;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            statement = connection.prepareStatement("SELECT avatar FROM member WHERE memberID = ?");
+            statement = connection.prepareStatement(FIND_USER_AVATAR);
             statement.setString(1, imageName);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {

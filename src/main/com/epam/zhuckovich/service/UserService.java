@@ -40,8 +40,8 @@ public class UserService {
         this.userDAO = UserDAO.getInstance();
     }
 
-    public User checkUser(String email, String password){
-        String finalPassword = encription(password);
+    public User findUserByEmailPassword(String email, String password){
+        String finalPassword = encryption(password);
         List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,email, finalPassword),UserDAO.getFindUserQuery());
         return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
     }
@@ -68,7 +68,7 @@ public class UserService {
         passwordMatch = passwordMatcher.matches();
 
         if(nameMatch && surnameMatch && emailMatch && passwordMatch){
-            String finalPassword = encription(password);
+            String finalPassword = encryption(password);
             User.Builder newUserBuilder= User.newBuilder()
                     .setName(name)
                     .setSurname(surname)
@@ -99,7 +99,7 @@ public class UserService {
             }
         }
         if(editableUser.getPassword() != null){
-            if(userDAO.executeUpdate(UserDAO.getEditPassword(),encription(editableUser.getPassword()),editableUser.getId()) != 0){
+            if(userDAO.executeUpdate(UserDAO.getEditPassword(),encryption(editableUser.getPassword()),editableUser.getId()) != 0){
                 operationResult++;
             }
         }
@@ -175,7 +175,7 @@ public class UserService {
     }
 
 
-    String encription(String realPassword){
+    String encryption(String realPassword){
         StringBuilder passwordStringBuilder = new StringBuilder();
         try {
             MessageDigest messageDigest = MessageDigest.getInstance(ENCRYPTION_MECHANISM);

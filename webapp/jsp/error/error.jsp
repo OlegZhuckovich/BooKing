@@ -7,7 +7,7 @@
 <html>
 <head>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/BooKingLogo.png" type="image/x-icon">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/table_new.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

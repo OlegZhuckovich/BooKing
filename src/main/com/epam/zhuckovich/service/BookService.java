@@ -15,31 +15,9 @@ public class BookService {
         this.bookDAO = BookDAO.getInstance();
     }
 
-    public List<Book> findAllBooks(){
-        return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement),BookDAO.getFindAllBooksQuery());
-    }
-
-    public List<Book> findBooksByCriteria(String searchValue, String searchCriteria, String userID){
-        if(searchValue == null || searchCriteria == null){
-            return null;
-        } else {
-            return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement,"%"+searchValue+"%", userID),BookDAO.getSearchBookQueryByCriteria()+searchCriteria+BookDAO.getSearchBookByCriteriaLikeStatement());
-        }
-    }
-
-    public boolean deleteBook(String bookID){
-        Integer integerBookID = Integer.parseInt(bookID);
-        return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), integerBookID) != 0;
-    }
-
-    public List<Author> findAllAuthors(){
-        AuthorDAO authorDAO = AuthorDAO.getInstance();
-        return authorDAO.executeQuery(authorDAO::findAllAuthors,AuthorDAO.getFindAllAuthors());
-    }
-
     public boolean addBook(Book book){
         if(book.getTitle()==null || book.getPublishingHouse()==null || book.getNumberInformation()==null || book.getGenre()==null || book.getAuthors()==null || book.getAuthors().isEmpty()){
-              return false;
+            return false;
         }
         int quantity = book.getNumberInformation().getQuantity();
         int year = book.getNumberInformation().getYear();
@@ -49,7 +27,7 @@ public class BookService {
         }
         int bookID = bookDAO.addBook(book.getTitle(),String.valueOf(book.getGenre()),book.getPublishingHouse(),book.getNumberInformation().getYear(), book.getNumberInformation().getPages(), book.getNumberInformation().getQuantity());
         if(bookID == 0){
-           return false;
+            return false;
         } else {
             for(Author bookAuthor:book.getAuthors()){
                 int operationSuccess = bookDAO.executeUpdate(BookDAO.getAddBookAuthorQuery(),bookAuthor.getId(),bookID);
@@ -69,5 +47,26 @@ public class BookService {
         return true;
     }
 
+    public boolean deleteBook(String bookID){
+        Integer integerBookID = Integer.parseInt(bookID);
+        return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), integerBookID) != 0;
+    }
+
+    public List<Author> findAllAuthors(){
+        AuthorDAO authorDAO = AuthorDAO.getInstance();
+        return authorDAO.executeQuery(authorDAO::findAllAuthors,AuthorDAO.getFindAllAuthors());
+    }
+
+    public List<Book> findAllBooks(){
+        return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement),BookDAO.getFindAllBooksQuery());
+    }
+
+    public List<Book> findBooksByCriteria(String searchValue, String searchCriteria, String userID){
+        if(searchValue == null || searchCriteria == null){
+            return null;
+        } else {
+            return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement,"%"+searchValue+"%", userID),BookDAO.getSearchBookQueryByCriteria()+searchCriteria+BookDAO.getSearchBookByCriteriaLikeStatement());
+        }
+    }
 
 }
