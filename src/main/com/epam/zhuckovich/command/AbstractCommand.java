@@ -17,7 +17,7 @@ abstract class AbstractCommand {
     static final String AUTHOR = "author";
     static final String AUTHOR_ADDED_RESULT = "authorAddedResult";
     static final String AUTHOR_BIOGRAPHY = "authorBiography";
-    static final String AUTHOR_GALLERY = " authorGallery";
+    static final String AUTHOR_GALLERY = "authorGallery";
     static final String AUTHOR_PHOTO = "authorPhoto";
     static final String AUTHOR_NAME = "authorName";
     static final String AUTHOR_SURNAME = "authorSurname";

@@ -12,6 +12,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <p>A class that checks the validity of information received from methods
+ * of the UserCommand class and accesses the dao layer.</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @see         User
+ * @since       1.0
+ */
+
 public class UserService {
 
     private static final String ENCRYPTION_MECHANISM = "MD5";
@@ -30,6 +39,10 @@ public class UserService {
 
     private UserDAO userDAO;
 
+    /**
+     *  Class constructor
+     */
+
     public UserService() {
         nameSurnameRegex = Pattern.compile(NAME_SURNAME_REGEX);
         emailRegex = Pattern.compile(EMAIL_REGEX);
@@ -40,17 +53,40 @@ public class UserService {
         this.userDAO = UserDAO.getInstance();
     }
 
+    /**
+     * <p>Turns to the dao layer to search for a user in the database by email and password</p>
+     * @param email    email received from the client
+     * @param password password received from the client
+     * @return         user if it was found
+     */
+
     public User findUserByEmailPassword(String email, String password){
         String finalPassword = encryption(password);
         List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,email, finalPassword),UserDAO.getFindUserQuery());
         return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
     }
 
+    /**
+     * <p>Turns to the dao layer to search for a user in the database by id</p>
+     * @param userID userID parameter
+     * @return       user if it was found
+     */
+
     public User findMemberById(int userID){
         List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,userID),UserDAO.getFindUserByIdQuery());
         return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
     }
 
+    /**
+     * <p>The method for registering a new reader or librarian in the application</p>
+     * @param name             user name
+     * @param surname          user surname
+     * @param email            user email
+     * @param password         user password
+     * @param photo            user photo
+     * @param registrationType can be MEMBER or LIBRARIAN
+     * @return                 returns a number other than 0 if the user was successfully registered
+     */
 
     public int registerUser(String name, String surname, String email, String password, InputStream photo, UserType registrationType){
         int operationResult = 0;
@@ -86,6 +122,12 @@ public class UserService {
         return operationResult;
     }
 
+    /**
+     * <p>The method for editing basic account information (name, surname and password)</p>
+     * @param editableUser user whose data is being edited
+     * @return             returns a number other than 0 if the account was successfully edited
+     */
+
     public int editAccountMainInformation(User editableUser){
         int operationResult = 0;
         boolean nameMatch, surnameMatch;
@@ -106,9 +148,27 @@ public class UserService {
         return operationResult;
     }
 
+    /**
+     * <p>Adds a new address to an existing user</p>
+     * @param addressID addressID parameter
+     * @param userID    userID parameter
+     * @return          returns a number other than 0 if the address was successfully added to user
+     */
+
     public int addNewAddressToUser(int addressID,int userID){
         return userDAO.executeUpdate(UserDAO.getAddNewAddressToUserQuery(),addressID,userID);
     }
+
+    /**
+     * <p>Updates information about user address</p>
+     * @param user       user parameter
+     * @param city       city parameter
+     * @param street     street parameter
+     * @param house      house parameter
+     * @param telephone  telephone parameter
+     * @param updateType type of update
+     * @return           returns a number other than 0 if the address was successfully updated
+     */
 
     public int updateAddress(User user, String city, String street, String house, String telephone, int updateType){
         boolean cityMatch, streetMatch, houseMatch, telephoneMatch;
@@ -131,20 +191,33 @@ public class UserService {
         }
     }
 
+    /**
+     * <p>Updates user avatar</p>
+     * @param photo  new user photo
+     * @param userID userID parameter
+     * @return       returns a number other than 0 if the photo was successfully updated
+     */
+
     public int updateAvatar(InputStream photo, int userID){
         return userDAO.updateAvatar(photo,userID);
     }
 
+    /**
+     * <p>Removes the current user address</p>
+     * @param addressID addressID parameter
+     * @return          returns a number other than 0 if the user address was successfully deleted
+     */
 
     public int deleteUserAddress(int addressID){
         return userDAO.executeUpdate(UserDAO.getDeleteAddressQuery(),addressID);
     }
 
 
-    public boolean orderBook(){
-        return false;
-    }
-
+    /**
+     * <p>Returns the list of all removable users</p>
+     * @param userType type of user
+     * @return         the list of all removable users
+     */
 
     public List<User> findAllRemovableUsers(UserType userType){
         List<User> userList = new ArrayList<>();
@@ -157,11 +230,24 @@ public class UserService {
         return userList;
     }
 
+    /**
+     * <p>Delete user from application with userID parameter</p>
+     * @param userID userID parameter
+     * @return       true if user was successfully deleted
+     */
 
     public boolean deleteUser(String userID){
         Integer numberUserID = Integer.parseInt(userID);
         return userDAO.executeUpdate(UserDAO.getDeleteUserQuery(), numberUserID) != 0;
     }
+
+    /**
+     * <p>The method for filing a request for the removal of
+     * an account by the reader or librarian</p>
+     * @param userID   userID parameter
+     * @param userType type of user
+     * @return         returns a number other than 0 if the application for account deletion was successfully sent
+     */
 
     public int deleteAccount(Integer userID, UserType userType){
         int operationSuccess = 0;
@@ -174,6 +260,11 @@ public class UserService {
         return operationSuccess;
     }
 
+    /**
+     * <p>The method for encryption of the user's password</p>
+     * @param realPassword user-entered password
+     * @return             user-entered password after encryption
+     */
 
     String encryption(String realPassword){
         StringBuilder passwordStringBuilder = new StringBuilder();
@@ -187,6 +278,7 @@ public class UserService {
         } catch(NoSuchAlgorithmException e){
             e.printStackTrace();
         }
+        System.out.println(passwordStringBuilder.toString());
         return passwordStringBuilder.toString();
     }
 

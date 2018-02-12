@@ -94,7 +94,7 @@
     </c:if>
     <c:if test="${not empty orderOperationResult}">
         <script>swal('','<fmt:message key="viewOrderedBooksWarningBody" bundle="${booking}"/>', "warning");</script>
-        <c:remove var="orderOperationResult" scope="request"/>
+        <c:remove var="orderOperationResult" scope="session"/>
     </c:if>
 </body>
 </html>

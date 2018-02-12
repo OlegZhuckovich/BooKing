@@ -13,6 +13,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>The class contains methods for adding extraction and processing
+ * of data about books from the database</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @since       1.0
+ */
+
 public class BookDAO extends AbstractDAO<Book>{
 
     private static final Logger LOGGER = LogManager.getLogger(BookDAO.class);
@@ -43,12 +51,27 @@ public class BookDAO extends AbstractDAO<Book>{
 
     private BookDAO(){}
 
+    /**
+     * <p>Method that returns the new BookDAO object if it is not
+     * created in other case returns the BookDAO object</p>
+     * @return the instance of BookDAO
+     */
+
     public static BookDAO getInstance() {
         if (bookDAO == null) {
             bookDAO = new BookDAO();
         }
         return bookDAO;
     }
+
+    /**
+     * <p>The method that finds all books all books that are contained
+     * in the database or searches books for parameters if parameters variable
+     * length is not 0</p>
+     * @param statement  preparedStatement
+     * @param parameters parameters for searching
+     * @return           the list of books
+     */
 
     public List<Book> findAllBooks(PreparedStatement statement, String...parameters) {
         List<Book> bookList = new ArrayList<>();
@@ -68,7 +91,7 @@ public class BookDAO extends AbstractDAO<Book>{
                 while(bookResultSet.next()){
                     int bookID = bookResultSet.getInt(BOOK_ID);
                     AuthorDAO authorDAO = AuthorDAO.getInstance();
-                    List<Author> bookAuthorList = authorDAO.executeQuery(preparedStatement -> authorDAO.findAuthorsByBookID(preparedStatement,bookID),AuthorDAO.getFindAuthorsByBookId());
+                    List<Author> bookAuthorList = authorDAO.executeQuery(preparedStatement -> authorDAO.findAuthorsByBookID(preparedStatement,bookID),AuthorDAO.getFindAuthorsByBookIdQuery());
                     Book book = Book.newBuilder()
                             .setId(bookResultSet.getInt(BOOK_ID))
                             .setTitle(bookResultSet.getString(TITLE))
@@ -85,6 +108,12 @@ public class BookDAO extends AbstractDAO<Book>{
         }
         return bookList;
     }
+
+    /**
+     * <p>The method that adds new book to the library</p>
+     * @param parameters bookParameters
+     * @return           bookID if the book was added, otherwise 0
+     */
 
     public int addBook(Object...parameters){
         ProxyConnection connection = null;
@@ -117,6 +146,12 @@ public class BookDAO extends AbstractDAO<Book>{
         return bookID;
     }
 
+    /**
+     * <p>Method that loads book content from the database</p>
+     * @param bookID bookID parameter
+     * @return       the contents of the book presented as a byte stream
+     */
+
     public byte[] loadBook(int bookID){
         ProxyConnection connection = null;
         PreparedStatement preparedStatement = null;
@@ -129,7 +164,7 @@ public class BookDAO extends AbstractDAO<Book>{
             preparedStatement.setInt(1,bookID);
             ResultSet bookResultSet = preparedStatement.executeQuery();
             if(bookResultSet.next()){
-                bookFile = bookResultSet.getBlob("book_content");
+                bookFile = bookResultSet.getBlob(BOOK_CONTENT);
                 book = bookFile.getBytes(1, (int) bookFile.length());
             }
             connection.commit();
@@ -145,26 +180,55 @@ public class BookDAO extends AbstractDAO<Book>{
         return book;
     }
 
+    /**
+     * <p>Returns the FIND_ALL_BOOKS_QUERY query</p>
+     * @return    the FIND_ALL_BOOKS_QUERY query
+     */
 
     public static String getFindAllBooksQuery(){
         return FIND_ALL_BOOKS_QUERY;
     }
 
+    /**
+     * <p>Returns the SEARCH_BOOK_BY_CRITERIA_QUERY query</p>
+     * @return    the SEARCH_BOOK_BY_CRITERIA_QUERY query
+     */
+
     public static String getSearchBookQueryByCriteria(){
         return SEARCH_BOOK_BY_CRITERIA_QUERY;
     }
+
+    /**
+     * <p>Returns the DELETE_BOOK_QUERY query</p>
+     * @return    the DELETE_BOOK_QUERY query
+     */
 
     public static String getDeleteBookQuery(){
         return DELETE_BOOK_QUERY;
     }
 
+    /**
+     * <p>Returns the SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT query</p>
+     * @return    the SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT query
+     */
+
     public static String getSearchBookByCriteriaLikeStatement(){
         return SEARCH_BOOK_BY_CRITERIA_LIKE_STATEMENT;
     }
 
+    /**
+     * <p>Returns the ADD_BOOK_AUTHOR_QUERY query</p>
+     * @return    the ADD_BOOK_AUTHOR_QUERY query
+     */
+
     public static String getAddBookAuthorQuery(){
         return ADD_BOOK_AUTHOR_QUERY;
     }
+
+    /**
+     * <p>Returns the ADD_BOOK_CONTENT_QUERY query</p>
+     * @return    the ADD_BOOK_CONTENT_QUERY query
+     */
 
     public static String getAddBookContentQuery(){
         return ADD_BOOK_CONTENT_QUERY;

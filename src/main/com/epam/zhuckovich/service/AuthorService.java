@@ -23,10 +23,21 @@ public class AuthorService {
 
     private AuthorDAO authorDAO;
 
+    /**
+     * Class constructor
+     */
+
     public AuthorService() {
         this.authorDAO = AuthorDAO.getInstance();
         nameSurnameRegex = Pattern.compile(NAME_SURNAME_REGEX);
     }
+
+    /**
+     * <p>Checks the data to add a new author to match the regular expressions
+     * and sends them to the dao layer for further processing</p>
+     * @param newAuthor author that will be added to the database
+     * @return          true if author was added
+     */
 
     public boolean addAuthor(Author newAuthor) {
         if (newAuthor.getName() == null || newAuthor.getSurname() == null || newAuthor.getBiography() == null || newAuthor.getPhoto() == null) {
@@ -40,7 +51,12 @@ public class AuthorService {
         return nameMatch && surnameMatch && authorDAO.addAuthor(newAuthor);
     }
 
+    /**
+     * <p>Turn to the dao layer to get a list of all authors of books</p>
+     * @return the list of book authors
+     */
+
     public List<Author> viewAuthors(){
-        return authorDAO.executeQuery(statement -> authorDAO.findAllAuthors(statement),AuthorDAO.getFindAllAuthors());
+        return authorDAO.executeQuery(statement -> authorDAO.findAllAuthors(statement),AuthorDAO.getFindAllAuthorsQuery());
     }
 }

@@ -7,13 +7,34 @@ import com.epam.zhuckovich.entity.Book;
 
 import java.util.List;
 
+/**
+ * <p>A class that checks the validity of information received from methods
+ * of the BookCommand class and accesses the dao layer.</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @see         Book
+ * @since       1.0
+ */
+
 public class BookService {
 
     private BookDAO bookDAO;
 
+    /**
+     *  Class constructor
+     */
+
     public BookService() {
         this.bookDAO = BookDAO.getInstance();
     }
+
+    /**
+     * <p>Checks the data of the new book for compliance with regular expressions and
+     * allowed intervals and, if successful, sends information to the dao layer for
+     * further processing</p>
+     * @param book book that will be added
+     * @return     true if book was added to the database
+     */
 
     public boolean addBook(Book book){
         if(book.getTitle()==null || book.getPublishingHouse()==null || book.getNumberInformation()==null || book.getGenre()==null || book.getAuthors()==null || book.getAuthors().isEmpty()){
@@ -47,19 +68,45 @@ public class BookService {
         return true;
     }
 
+    /**
+     * <p>Converts the bookID parameter to int type to delete a book
+     * from the database</p>
+     * @param bookID bookID parameter
+     * @return       true if the operation was completed successfully
+     */
+
     public boolean deleteBook(String bookID){
         Integer integerBookID = Integer.parseInt(bookID);
         return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), integerBookID) != 0;
     }
 
+    /**
+     * <p>Returns the list of all authors</p>
+     * @return the list of authors
+     */
+
     public List<Author> findAllAuthors(){
         AuthorDAO authorDAO = AuthorDAO.getInstance();
-        return authorDAO.executeQuery(authorDAO::findAllAuthors,AuthorDAO.getFindAllAuthors());
+        return authorDAO.executeQuery(authorDAO::findAllAuthors,AuthorDAO.getFindAllAuthorsQuery());
     }
+
+    /**
+     * <p>Returns the list of all books</p>
+     * @return the list of books
+     */
 
     public List<Book> findAllBooks(){
         return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement),BookDAO.getFindAllBooksQuery());
     }
+
+    /**
+     * <p>Returns the list of books that were found as a result of the
+     * search by criterion </p>
+     * @param searchValue    value for search
+     * @param searchCriteria criteria for search
+     * @param userID         userID parameter
+     * @return               the list of books that were found in the search result
+     */
 
     public List<Book> findBooksByCriteria(String searchValue, String searchCriteria, String userID){
         if(searchValue == null || searchCriteria == null){

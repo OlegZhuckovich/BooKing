@@ -17,11 +17,11 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         function validation() {
-            var name = $('#nameRegister').val();
-            var surname = $('#surnameRegister').val();
-            var email = $('#emailRegister').val();
-            var password = $('#passwordRegister').val();
-            var repeatPassword = $('#repeatPasswordRegister').val();
+            var name = $('#nameUser').val();
+            var surname = $('#surnameUser').val();
+            var email = $('#emailUser').val();
+            var password = $('#passwordUser').val();
+            var repeatPassword = $('#repeatPasswordUser').val();
             var photo = $('#avatarUser').val();
             var expansion = photo.substring(photo.lastIndexOf('.')+1);
             //Регулярные выражения для проверки

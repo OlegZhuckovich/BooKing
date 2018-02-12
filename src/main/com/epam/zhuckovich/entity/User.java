@@ -3,6 +3,14 @@ package com.epam.zhuckovich.entity;
 import java.io.InputStream;
 import java.sql.Date;
 
+/**
+ * <p>Class that contains information about user.</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @see         Entity
+ * @since       1.0
+ */
+
 public class User extends Entity{
 
     private String name;
@@ -15,101 +23,209 @@ public class User extends Entity{
     private int booksOrdered;
     private Address address;
 
+    /**
+     * Private constructor
+     */
+
     private User(){}
+
+    /**
+     * <p>Returns name of user.</p>
+     * @return name of user
+     */
 
     public String getName(){
         return name;
     }
 
+    /**
+     * <p>Returns surname of user.</p>
+     * @return surname of user
+     */
+
     public String getSurname(){
         return surname;
     }
+
+    /**
+     * <p>Returns email of user.</p>
+     * @return email of user
+     */
 
     public String getEmail(){
         return email;
     }
 
+    /**
+     * <p>Returns password of user.</p>
+     * @return password of user
+     */
+
     public String getPassword(){
         return password;
     }
+
+    /**
+     * <p>Returns type of user.</p>
+     * @return type of user
+     */
 
     public UserType getUserType(){
         return userType;
     }
 
+    /**
+     * <p>Returns user registration date.</p>
+     * @return user registration date
+     */
+
     public Date getRegistrationDate(){
         return registrationDate;
     }
+
+    /**
+     * <p>Returns photo of user.</p>
+     * @return photo of user
+     */
 
     public InputStream getPhoto(){
         return photo;
     }
 
-    public int getBooksOrdered() {
-        return booksOrdered;
-    }
+    /**
+     * <p>Returns user address.</p>
+     * @return user address
+     */
 
     public Address getAddress() {
         return address;
     }
 
+    /**
+     * <p>Returns the builder to construct user</p>
+     * @return the user builder
+     */
+
+
     public static Builder newBuilder() {
         return new User().new Builder();
     }
 
+    /**
+     * Inner class to construct user object
+     */
+
     public class Builder {
 
+        /**
+         * Private constructor
+         */
+
         private Builder() {}
+
+        /**
+         * <p>Sets the id of the user</p>
+         * @param userId number value of author id
+         * @return the builder to construct user object
+         */
 
         public Builder setId(int userId) {
             User.this.id = userId;
             return this;
         }
 
+        /**
+         * <p>Sets the name of the user</p>
+         * @param name name of user
+         * @return the builder to construct user object
+         */
+
         public Builder setName(String name) {
             User.this.name = name;
             return this;
         }
+
+        /**
+         * <p>Sets the surname of the user</p>
+         * @param surname surname of user
+         * @return the builder to construct user object
+         */
 
         public Builder setSurname(String surname) {
             User.this.surname = surname;
             return this;
         }
 
+        /**
+         * <p>Sets the email of the user</p>
+         * @param email email of user
+         * @return the builder to construct user object
+         */
+
         public Builder setEmail(String email) {
             User.this.email = email;
             return this;
         }
+
+        /**
+         * <p>Sets the password of the user</p>
+         * @param password email of user
+         * @return the builder to construct user object
+         */
 
         public Builder setPassword(String password) {
             User.this.password = password;
             return this;
         }
 
+        /**
+         * <p>Sets the type of the user</p>
+         * @param userType type of user
+         * @return the builder to construct user object
+         */
+
         public Builder setUserType(UserType userType) {
             User.this.userType = userType;
             return this;
         }
+
+        /**
+         * <p>Sets the user registrationDate</p>
+         * @param registrationDate registrationDate of user
+         * @return the builder to construct user object
+         */
 
         public Builder setRegistrationDate(Date registrationDate){
             User.this.registrationDate = registrationDate;
             return this;
         }
 
+        /**
+         * <p>Sets the photo of the user</p>
+         * @param photo photo of user
+         * @return the builder to construct user object
+         */
+
         public Builder setPhoto(InputStream photo){
             User.this.photo = photo;
             return this;
         }
 
-        public Builder setBooksOrdered(Integer booksOrdered){
-            User.this.booksOrdered = booksOrdered;
-            return this;
-        }
+        /**
+         * <p>Sets the address of the user</p>
+         * @param address address of user
+         * @return the builder to construct user object
+         */
 
         public Builder setAddress(Address address){
             User.this.address = address;
             return this;
         }
+
+        /**
+         * <p>Build the user object</p>
+         * @return the user object
+         */
 
         public User build() {
             return User.this;

@@ -65,7 +65,7 @@
                 <c:if test="${user.userType eq 'MEMBER'}">
                     <div style="margin-left: 10px;" onClick="document.forms['orderBookHeaderForm'].submit();"><li><fmt:message key="orderBook" bundle="${booking}"/><form id="orderBookHeaderForm" action="/jsp/member/orderBook.jsp" class="hiddenForm"></form></li></div>
                     <div onClick="document.forms['viewOrderedBooksHeaderForm'].submit();"><li><fmt:message key="viewOrderedBooks" bundle="${booking}"/><form id="viewOrderedBooksHeaderForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_ordered_books"></form></li></div>
-                    <div onClick="document.forms['authorGalleryHeaderForm'].submit();"><li><fmt:message key="editAccount" bundle="${booking}"/><form id="authorGalleryHeaderForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_authors"></form></li></div>
+                    <div onClick="document.forms['authorGalleryHeaderForm'].submit();"><li><fmt:message key="authorGallery" bundle="${booking}"/><form id="authorGalleryHeaderForm" action="/controller" class="hiddenForm"><input type="hidden" name="command" value="view_authors"></form></li></div>
                     <div onClick="document.forms['trainingVideoHeaderForm'].submit();"><li><fmt:message key="trainingVideo" bundle="${booking}"/><form id="trainingVideoHeaderForm" action="/jsp/member/trainingVideo.jsp" class="hiddenForm"></form></li></div>
                     <div onClick="document.forms['deleteAccountHeaderForm'].submit();">
                         <li>

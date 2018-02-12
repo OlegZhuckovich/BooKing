@@ -682,13 +682,13 @@ form .question input:focus {
 }
 
 #authorGallery{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/authorGalleryMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 #trainingVideo{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/trainingVideoMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
@@ -759,3 +759,5 @@ form .question input:focus {
 .well {
     opacity:0.85
 }
+
+/*Styles for author gallery*/

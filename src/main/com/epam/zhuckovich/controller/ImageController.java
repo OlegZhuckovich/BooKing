@@ -14,19 +14,25 @@ import java.io.IOException;
 @WebServlet("/image/*")
 public class ImageController extends HttpServlet {
 
-    private static final String COMMAND_PARAMETER = "command";
+    private static final String AUTHOR = "author";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        byte[] content;
         String imageName = request.getPathInfo().substring(1);
-        UserDAO userDAO  = UserDAO.getInstance();
-        byte[] content = userDAO.loadImage(imageName);
-            if(content!=null){
-                response.setContentType(getServletContext().getMimeType(imageName));
-                response.setContentLength(content.length);
-                response.getOutputStream().write(content);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
+        if(imageName.contains(AUTHOR)){
+            String authorID = imageName.substring(6);
+            content = UserDAO.getInstance().loadImage(authorID, 0);
+        } else {
+            content = UserDAO.getInstance().loadImage(imageName, 1);
+        }
+
+        if (content != null) {
+            response.setContentType(getServletContext().getMimeType(imageName));
+            response.setContentLength(content.length);
+            response.getOutputStream().write(content);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
 }

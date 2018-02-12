@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * <p>The class contains methods for adding extraction and processing
+ * of data about authors from the database</p>
+ * @author      Oleg Zhuckovich
+ * @version     %I%, %G%
+ * @since       1.0
  */
 
 public class AuthorDAO extends AbstractDAO<Author>{
@@ -21,18 +25,14 @@ public class AuthorDAO extends AbstractDAO<Author>{
 
     private static AuthorDAO authorDAO;
 
-    private static final String FIND_ALL_AUTHORS_QUERY = "SELECT name, surname, email, password, role FROM LibraryDatabase.member WHERE email = ? AND password = ?";
     private static final String ADD_NEW_AUTHOR_QUERY = "INSERT INTO LibraryDatabase.author (name, surname, biography, photo) VALUES (?,?,?,?)";
-    private static final String FIND_AUTHORS_BY_NAME_SURNAME_QUERY = "SELECT authorID FROM LibraryDatabase.author WHERE name = ? AND surname = ?";
-
-    private static final String FIND_AUTHORS_BY_BOOK_ID = "SELECT author.authorID, author.name, author.surname " +
+    private static final String FIND_AUTHORS_BY_BOOK_ID_QUERY = "SELECT author.authorID, author.name, author.surname " +
                                                             "FROM author " +
                                                             "INNER JOIN book_author ON book_author.authorID = author.authorID " +
                                                             "INNER JOIN book ON book.bookID = book_author.bookID " +
                                                           "WHERE book.bookID = ?";
-    private static final String FIND_ALL_AUTHORS = "SELECT authorID, name, surname, biography FROM author ";
-
-    private static final String SQL_FIND = "SELECT photo FROM author WHERE name = ?";
+    private static final String FIND_ALL_AUTHORS_QUERY = "SELECT authorID, name, surname, biography FROM author ";
+    private static final String FIND_AUTHORS_BY_NAME_SURNAME_QUERY = "SELECT authorID FROM LibraryDatabase.author WHERE name = ? AND surname = ?";
 
     /**
      * Private constructor
@@ -54,11 +54,11 @@ public class AuthorDAO extends AbstractDAO<Author>{
     }
 
     /**
-     *
-     * @param statement
-     * @param name
-     * @param surname
-     * @return
+     * <p>The method finds authors by name and surname in the database</p>
+     * @param statement preparedStatement
+     * @param name      name of the author
+     * @param surname   surname of the author
+     * @return          list of authors
      */
 
     List<Author> findAuthorsByNameSurname(PreparedStatement statement, String name, String surname) {
@@ -75,9 +75,9 @@ public class AuthorDAO extends AbstractDAO<Author>{
     }
 
     /**
-     *
-     * @param newAuthor
-     * @return
+     * <p>The method adds a new author to the database</p>
+     * @param newAuthor author that will be added
+     * @return          the true if author was added to the database
      */
 
     public boolean addAuthor(Author newAuthor) {
@@ -86,10 +86,10 @@ public class AuthorDAO extends AbstractDAO<Author>{
     }
 
     /**
-     *
-     * @param statement
-     * @param bookID
-     * @return
+     * <p>The method finds the authors of the specific book</p>
+     * @param statement preparedStatement
+     * @param bookID    id of the book
+     * @return          list of authors of the specific book
      */
 
     List<Author> findAuthorsByBookID(PreparedStatement statement, int bookID){
@@ -115,9 +115,9 @@ public class AuthorDAO extends AbstractDAO<Author>{
     }
 
     /**
-     *
-     * @param statement
-     * @return
+     * <p>The method finds all authors who are located in the database</p>
+     * @param statement preparedStatement
+     * @return          list of authors
      */
 
     public List<Author> findAllAuthors(PreparedStatement statement){
@@ -142,24 +142,40 @@ public class AuthorDAO extends AbstractDAO<Author>{
         return authorList;
     }
 
-    public static String getFindAllAuthorsQuery(){
-        return FIND_ALL_AUTHORS_QUERY;
-    }
+    /**
+     * <p>Returns the FIND_AUTHORS_BY_NAME_SURNAME_QUERY query</p>
+     * @return    the FIND_AUTHORS_BY_NAME_SURNAME_QUERY query
+     */
 
     public static String getFindAuthorsByNameSurnameQuery(){
         return FIND_AUTHORS_BY_NAME_SURNAME_QUERY;
     }
 
+    /**
+     * <p>Returns the ADD_NEW_AUTHOR_QUERY query</p>
+     * @return    the ADD_NEW_AUTHOR_QUERY query
+     */
+
     public static String getAddNewAuthorQuery(){
         return ADD_NEW_AUTHOR_QUERY;
     }
 
-    public static String getFindAuthorsByBookId(){
-        return FIND_AUTHORS_BY_BOOK_ID;
+    /**
+     * <p>Returns the FIND_AUTHORS_BY_BOOK_ID_QUERY query</p>
+     * @return    the FIND_AUTHORS_BY_BOOK_ID_QUERY query
+     */
+
+    public static String getFindAuthorsByBookIdQuery(){
+        return FIND_AUTHORS_BY_BOOK_ID_QUERY;
     }
 
-    public static String getFindAllAuthors(){
-        return FIND_ALL_AUTHORS;
+    /**
+     * <p>Returns the FIND_ALL_AUTHORS_QUERY query</p>
+     * @return    the FIND_ALL_AUTHORS_QUERY query
+     */
+
+    public static String getFindAllAuthorsQuery(){
+        return FIND_ALL_AUTHORS_QUERY;
     }
 
 }

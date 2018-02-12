@@ -13,6 +13,10 @@ import java.util.List;
 
 public class Book extends Entity {
 
+    /**
+     * Enumeration of different book genres
+     */
+
     public enum BookType {
         Роман, Научная, Фантастика, Стихи, Поэма, Реализм
     }
@@ -31,8 +35,7 @@ public class Book extends Entity {
     private Book(){}
 
     /**
-     *
-     *
+     * Inner static class for book number information
      */
 
     public static class NumberInformation{
@@ -43,10 +46,23 @@ public class Book extends Entity {
 
         public NumberInformation(){}
 
+        /**
+         * Constructor with two parameters
+         * @param year  year of book publication
+         * @param pages quantity of pages
+         */
+
         public NumberInformation(int year, int pages){
             this.year=year;
             this.pages=pages;
         }
+
+        /**
+         * Constructor with three parameters
+         * @param year     year of book publication
+         * @param pages    quantity of pages
+         * @param quantity number of copies of a book
+         */
 
         public NumberInformation(int year, int pages, int quantity){
             this.year = year;
@@ -54,97 +70,217 @@ public class Book extends Entity {
             this.quantity = quantity;
         }
 
+        /**
+         * <p>Sets the year of book publication</p>
+         * @param year year of book publication
+         */
+
         public void setYear(int year){
             this.year = year;
         }
+
+        /**
+         * <p>Sets the quantity of book pages</p>
+         * @param pages quantity of book pages
+         */
 
         public void setPages(int pages){
             this.pages = pages;
         }
 
+        /**
+         * <p>Sets the quantity of book copies</p>
+         * @param quantity number of copies of a book
+         */
+
         public void setQuantity(int quantity){
             this.quantity = quantity;
         }
+
+        /**
+         * <p>Return the year of book publication</p>
+         * @return the year of book publication
+         */
 
         public int getYear(){
             return year;
         }
 
+        /**
+         * <p>Return the quantity of book pages</p>
+         * @return the quantity of book pages
+         */
+
         public int getPages(){
             return pages;
         }
+
+        /**
+         * <p>Return the quantity of book copies</p>
+         * @return the quantity of book copies
+         */
 
         public int getQuantity(){
             return quantity;
         }
     }
 
+    /**
+     * <p>Return the book title</p>
+     * @return the book title
+     */
+
     public String getTitle(){
         return title;
     }
+
+    /**
+     * <p>Return the book genre</p>
+     * @return the book genre
+     */
 
     public BookType getGenre(){
         return genre;
     }
 
+    /**
+     * <p>Return the publishing house</p>
+     * @return the publishing house
+     */
+
     public String getPublishingHouse(){
         return publishingHouse;
     }
+
+    /**
+     * <p>Return the number information about book</p>
+     * @return the number information about book
+     */
 
     public NumberInformation getNumberInformation(){
         return bookNumberInformation;
     }
 
+    /**
+     * <p>Return the list of book authors</p>
+     * @return the list of book authors
+     */
+
     public List<Author> getAuthors(){
         return bookAuthors;
     }
+
+    /**
+     * <p>Return the book content</p>
+     * @return the book content
+     */
 
     public InputStream getBookContent(){
         return bookContent;
     }
 
+    /**
+     * <p>Returns the builder to construct book</p>
+     * @return the book builder
+     */
+
     public static Builder newBuilder() {
         return new Book().new Builder();
     }
 
+    /**
+     * Inner class to construct book object
+     */
+
     public class Builder {
 
+        /**
+         * Private constructor
+         */
+
         private Builder() {}
+
+        /**
+         * <p>Sets the id of the book</p>
+         * @param bookId number value of book id
+         * @return the builder to construct book object
+         */
 
         public Builder setId(int bookId) {
             Book.this.id = bookId;
             return this;
         }
 
+        /**
+         * <p>Sets the title of the book</p>
+         * @param title book title
+         * @return the builder to construct book object
+         */
+
         public Builder setTitle(String title) {
             Book.this.title = title;
             return this;
         }
+
+        /**
+         * <p>Sets the genre of the book</p>
+         * @param genre book genre
+         * @return the builder to construct book object
+         */
 
         public Builder setGenre(BookType genre) {
             Book.this.genre = genre;
             return this;
         }
 
+        /**
+         * <p>Sets the publishingHouse of the book</p>
+         * @param publishingHouse book publishing house
+         * @return the builder to construct book object
+         */
+
         public Builder setPublishingHouse(String publishingHouse) {
             Book.this.publishingHouse = publishingHouse;
             return this;
         }
+
+        /**
+         * <p>Sets the book number information</p>
+         * @param bookNumberInformation number information about book
+         * @return the builder to construct book object
+         */
 
         public Builder setNumberInformation(NumberInformation bookNumberInformation) {
             Book.this.bookNumberInformation = bookNumberInformation;
             return this;
         }
 
+        /**
+         * <p>Sets the authors of the book</p>
+         * @param bookAuthors authors of the book
+         * @return the builder to construct book object
+         */
+
         public Builder setAuthors(List<Author> bookAuthors) {
             Book.this.bookAuthors = bookAuthors;
             return this;
         }
 
+        /**
+         * <p>Sets the bookContent of the book</p>
+         * @param bookContent the contents of the book
+         * @return the builder to construct book object
+         */
+
         public Builder setBookContent(InputStream bookContent){
             Book.this.bookContent = bookContent;
             return this;
         }
+
+        /**
+         * <p>Build the book object</p>
+         * @return the book object
+         */
 
         public Book build() {
             return Book.this;

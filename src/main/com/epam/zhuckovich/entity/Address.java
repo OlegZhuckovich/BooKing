@@ -15,7 +15,7 @@ public class Address extends Entity {
     private int telephoneNumber;
 
     /**
-     * Class constructor
+     * Private constructor
      */
 
     private Address() {}
@@ -142,12 +142,6 @@ public class Address extends Entity {
         }
 
     }
-
-    /**
-     * <p>Defines </p>
-     * @param object
-     * @return
-     */
 
     @Override
     public boolean equals(Object object){

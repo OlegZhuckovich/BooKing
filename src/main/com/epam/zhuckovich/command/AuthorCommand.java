@@ -14,10 +14,6 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
-//Only for classes and interfaces ::::::: @author (required), @version (required) @param, @see , @since
-//Only for methods @param, @return, @throws, @see, @serialData
-//Constructors @param
-
 /**
  * <p>A class that contains methods for various actions
  * with the authors of the books presented in the library's fund.</p>
