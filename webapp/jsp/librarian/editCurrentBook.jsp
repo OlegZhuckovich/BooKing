@@ -132,7 +132,7 @@
                                         <div class="form-group">
                                             <div class="inputGroup">
                                                 <input type="hidden" name="bookID" value="${book.id}">
-                                                <button type="submit" class="submitButton"><fmt:message key="addBook" bundle="${booking}"/></button>
+                                                <button type="submit" class="submitButton"><fmt:message key="saveChanges" bundle="${booking}"/></button>
                                                 <input type="hidden" name="command" value="edit_current_book">
                                             </div>
                                         </div>

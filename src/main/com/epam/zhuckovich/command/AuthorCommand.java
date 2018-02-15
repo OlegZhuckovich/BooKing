@@ -53,7 +53,7 @@ class AuthorCommand extends AbstractCommand{
                                 .setName(authorName)
                                 .setSurname(authorSurname)
                                 .setBiography(authorBiography);
-            if (authorPhotoPart != null) {
+            if (authorPhotoPart.getSize() != 0) {
                 InputStream authorPhoto = authorPhotoPart.getInputStream();
                 newAuthor.setPhoto(authorPhoto);
             }

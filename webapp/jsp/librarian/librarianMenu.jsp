@@ -83,14 +83,25 @@
 <c:if test="${not empty authorAddedResult}">
     <c:choose>
         <c:when test="${authorAddedResult eq 'success'}">
-            <script>swal('<fmt:message key="addBookSuccess" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookAdded" bundle="${booking}"/>', "success");</script>
+            <script>swal('<fmt:message key="addBookSuccess" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addAuthorAdded" bundle="${booking}"/>', "success");</script>
         </c:when>
         <c:otherwise>
-            <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+            <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="bookAuthor" bundle="${booking}"/> ' + '${author}' + ' <fmt:message key="addAuthorErrorAdded" bundle="${booking}"/>', "error");</script>
         </c:otherwise>
     </c:choose>
     <c:remove var="authorAddedResult" scope="session"/>
     <c:remove var="author" scope="session"/>
+</c:if>
+<c:if test="${not empty deleteAccount}">
+    <c:choose>
+        <c:when test="${deleteAccount == 'success'}">
+            <script>swal('','<fmt:message key="deleteAccountSuccessBody" bundle="${booking}"/>', "success");</script>
+        </c:when>
+        <c:otherwise>
+            <script>swal('','<fmt:message key="deleteAccountErrorBody" bundle="${booking}"/>', "error");</script>
+        </c:otherwise>
+    </c:choose>
+    <c:remove var="deleteAccount" scope="session"/>
 </c:if>
 <c:if test="${not empty emptyReadingRoomDelivery}">
     <script>swal('','<fmt:message key="readingRoomDeliveryEmptyBody" bundle="${booking}"/>', "success");</script>

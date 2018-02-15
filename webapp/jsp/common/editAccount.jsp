@@ -29,26 +29,26 @@
             var passwordRegex = new RegExp("[\\w]{5,40}");
             var cityStreetRegex = new RegExp("[A-ZА-Я][a-zа-я]{2,40}");
             if(!nameSurnameRegex.test(name)){
-                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianNameError" bundle="${booking}"/>', "error"); return false;
+                swal('', '<fmt:message key="registerLibrarianNameError" bundle="${booking}"/>', "error"); return false;
             } else if (!nameSurnameRegex.test(surname)){
-                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianSurnameError" bundle="${booking}"/>', "error"); return false;
+                swal('', '<fmt:message key="registerLibrarianSurnameError" bundle="${booking}"/>', "error"); return false;
             } else if (!emailRegex.test(email)){
-                swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianEmailError" bundle="${booking}"/>', "error"); return false;
+                swal('', '<fmt:message key="registerLibrarianEmailError" bundle="${booking}"/>', "error"); return false;
             } else if(password || repeatPassword){
                 if (!passwordRegex.test(password)){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianPasswordError" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="registerLibrarianPasswordError" bundle="${booking}"/>', "error"); return false;
                 } else if (password !== repeatPassword){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="registerLibrarianRepeatPasswordError" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="registerLibrarianRepeatPasswordError" bundle="${booking}"/>', "error"); return false;
                 }
             } else if(city || street || house || telephone){
                 if(!cityStreetRegex.test(city)){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="cityErrorValidation" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="cityErrorValidation" bundle="${booking}"/>', "error"); return false;
                 } else if (!cityStreetRegex.test(street)){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="streetErrorValidation" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="streetErrorValidation" bundle="${booking}"/>', "error"); return false;
                 } else if (house < 1 || house > 2000){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="houseErrorValidation" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="houseErrorValidation" bundle="${booking}"/>', "error"); return false;
                 } else if (!telephone){
-                    swal('<fmt:message key="registerLibrarianError" bundle="${booking}"/>', '<fmt:message key="telephoneErrorValidation" bundle="${booking}"/>', "error"); return false;
+                    swal('', '<fmt:message key="telephoneErrorValidation" bundle="${booking}"/>', "error"); return false;
                 }
             }
         }
@@ -58,7 +58,7 @@
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
 <div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/editAccountBackground.png'); background-size: 100% 100%;">
-    <div class="row firstEditRow"></div>
+    <div class="row-fluid firstEditRow"></div>
     <div class="row secondEditRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
         <div class="col-xs-12 col-sm-10 col-md-8" id="editAccountBlock">
@@ -209,7 +209,7 @@
             <script>swal('<fmt:message key="orderBookResultErrorTitle" bundle="${booking}"/>', '<fmt:message key="editAccountErrorBody" bundle="${booking}"/>', "error");</script>
         </c:when>
         <c:otherwise>
-            <script>swal('<fmt:message key="orderBookResultSuccessTitle" bundle="${booking}"/>', '<fmt:message key="editAccountSuccessBody" bundle="${booking}"/>', "error");</script>
+            <script>swal('<fmt:message key="orderBookResultSuccessTitle" bundle="${booking}"/>', '<fmt:message key="editAccountSuccessBody" bundle="${booking}"/>', "success");</script>
         </c:otherwise>
     </c:choose>
     <c:remove var="operationSuccess" scope="session"/>

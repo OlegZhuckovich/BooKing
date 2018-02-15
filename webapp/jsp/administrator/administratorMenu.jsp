@@ -81,7 +81,7 @@
     <c:remove var="emptyDeleteLibrarian" scope="session"/>
 </c:if>
 <c:if test="${not empty emptyDeleteMember}">
-    <script>swal('<fmt:message key="addBookErrorAddedTitle" bundle="${booking}"/>','<fmt:message key="addBookBook" bundle="${booking}"/> ' + '${bookTitle}' + ' <fmt:message key="addBookErrorAdded" bundle="${booking}"/>', "error");</script>
+    <script>swal('','<fmt:message key="deleteMemberEmptyBody" bundle="${booking}"/>', "success");</script>
     <c:remove var="emptyDeleteMember" scope="session"/>
 </c:if>
 </body>

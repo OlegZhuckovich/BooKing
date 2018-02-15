@@ -86,10 +86,10 @@
                                 <td><c:out value="${book.numberInformation.pages}"/></td>
                                 <td><c:out value="${book.numberInformation.quantity}"/></td>
                                 <td>
-                                    <form action="/controller" method="post" id="deleteBookForm">
+                                    <form action="/controller" method="post" id="editBookForm">
                                         <input type="hidden" name="bookID" value="${book.id}">
                                         <input type="hidden" name="command" value="edit_book">
-                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="deleteBook" bundle="${booking}"/>">
+                                        <input type="submit" name="deleteBookYesConfirmButton" class="googleButton" value="<fmt:message key="editBook" bundle="${booking}"/>">
                                     </form>
                                 </td>
                             </tr>

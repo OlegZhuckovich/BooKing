@@ -23,7 +23,7 @@
             var photo = $('#avatarUser').val();
             var expansion = photo.substring(photo.lastIndexOf('.')+1);
             //Регулярные выражения для проверки
-            var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?");
+            var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-яё]+-?[A-ZА-Я]?[a-zа-яё]+?");
             var emailRegex = new RegExp("[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}");
             var passwordRegex = new RegExp("[\\w]{5,40}");
             if(!nameSurnameRegex.test(name)){

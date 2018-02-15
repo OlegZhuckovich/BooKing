@@ -15,24 +15,16 @@
     <js:script/>
     <script>
         $(document).ready(function () {
-            $("#biographyAuthor").focusout(function(){ $(this).css("color", "white"); });
+            $("#authorBiography").focusout(function(){ $(this).css("color", "white"); });
         });
         function validation(){
-            var name = $('#nameAuthor').val();
-            var surname = $('#surnameAuthor').val();
-            var photo = $('#photoAuthor').val();
-            var expansion = photo.substring(photo.lastIndexOf('.')+1);
+            var name = $('#authorName').val();
+            var surname = $('#authorSurname').val();
             var nameSurnameRegex = new RegExp("[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?");
-            if(nameSurnameRegex.test(name)){
-                if(nameSurnameRegex.test(surname)){
-                    if(!photo || expansion !== 'jpg'){
-                        swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addAuthorPhotoError" bundle="${booking}"/>', "error"); return false;
-                    }
-                } else {
-                    swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addAuthorSurnameError" bundle="${booking}"/>', "error"); return false;
-                }
-            } else {
+            if(!nameSurnameRegex.test(name)){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addAuthorNameError" bundle="${booking}"/>', "error"); return false;
+            } else if(!nameSurnameRegex.test(surname)){
+                swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addAuthorSurnameError" bundle="${booking}"/>', "error"); return false;
             }
         }
     </script>

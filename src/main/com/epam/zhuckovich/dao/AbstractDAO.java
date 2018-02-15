@@ -99,6 +99,7 @@ public class AbstractDAO<T extends Entity> {
                 }
             }
             operationSuccess = preparedStatement.executeUpdate();
+            System.out.println("Результат операции" + operationSuccess);
             connection.commit();
         } catch (SQLTechnicalException e) {
             LOGGER.log(Level.ERROR,"SQLTechnicalException was occurred during executeUpdate");

@@ -118,7 +118,7 @@ class BookCommand extends AbstractCommand{
             Book.NumberInformation bookNumberInformation = new Book.NumberInformation(Integer.parseInt(request.getParameter(BOOK_YEAR)),Integer.parseInt(request.getParameter(BOOK_PAGES)),Integer.parseInt(request.getParameter(BOOK_QUANTITY)));
             Book.BookType bookGenre = Book.BookType.valueOf(request.getParameter(BOOK_GENRE));
             Part bookContentPart = request.getPart(BOOK_CONTENT);
-            if (bookContentPart != null) {
+            if (bookContentPart.getSize() != 0) {
                 InputStream bookContent = bookContentPart.getInputStream();
                 service.editCurrentBook(bookID,authorsList,bookTitle,bookPublishingHouse,bookNumberInformation,bookGenre,bookContent);
             } else {

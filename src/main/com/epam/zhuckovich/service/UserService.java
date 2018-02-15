@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private static final String ENCRYPTION_MECHANISM = "MD5";
-    private static final String NAME_SURNAME_REGEX = "[A-ZА-Я][a-zа-я]+-?[A-ZА-Я]?[a-zа-я]+?";
+    private static final String NAME_SURNAME_REGEX = "[A-ZА-Я][a-zа-яё]+-?[A-ZА-Я]?[a-zа-яё]+?";
     private static final String EMAIL_REGEX = "[\\w\\.]{2,40}@[a-z]{2,10}\\.[a-z]{2,10}";
     private static final String PASSWORD_REGEX = "[\\w]{5,40}";
     private static final String CITY_STREET_REGEX = "[A-ZА-Я][a-zа-я]{2,40}";
@@ -133,8 +133,12 @@ public class UserService {
         boolean nameMatch, surnameMatch;
         Matcher nameMatcher = nameSurnameRegex.matcher(editableUser.getName());
         Matcher surnameMatcher = nameSurnameRegex.matcher(editableUser.getSurname());
+        System.out.println(editableUser.getName());
+        System.out.println(editableUser.getSurname());
         nameMatch = nameMatcher.matches();
         surnameMatch = surnameMatcher.matches();
+        System.out.println(nameMatch);
+        System.out.println(surnameMatch);
         if(nameMatch && surnameMatch){
             if(userDAO.executeUpdate(UserDAO.getEditMainInformation(),editableUser.getName(),editableUser.getSurname(), editableUser.getId()) != 0){
                 operationResult++;

@@ -23,7 +23,7 @@
     <div class="row" id="firstRow"></div>
     <div class="row" id="secondRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
-        <div class="col-xs-12 col-sm-10 col-md-8" id="addBookBlock" style="background-color:#D50000; overflow: auto; height:100%;">
+        <div class="col-xs-12 col-sm-10 col-md-8" id="addBookBlock" style="background-color:#D50000; overflow: hidden; height:100%;">
             <div class="container-fluid">
                 <div>
                     <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo">

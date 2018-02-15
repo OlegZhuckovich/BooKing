@@ -31,7 +31,7 @@ public class AuthorDAO extends AbstractDAO<Author>{
                                                             "INNER JOIN book_author ON book_author.authorID = author.authorID " +
                                                             "INNER JOIN book ON book.bookID = book_author.bookID " +
                                                           "WHERE book.bookID = ?";
-    private static final String FIND_ALL_AUTHORS_QUERY = "SELECT authorID, name, surname, biography FROM author ";
+    private static final String FIND_ALL_AUTHORS_QUERY = "SELECT authorID, name, surname, biography FROM author ORDER BY surname, name";
     private static final String FIND_AUTHORS_BY_NAME_SURNAME_QUERY = "SELECT authorID FROM LibraryDatabase.author WHERE name = ? AND surname = ?";
 
     /**
@@ -81,8 +81,10 @@ public class AuthorDAO extends AbstractDAO<Author>{
      */
 
     public boolean addAuthor(Author newAuthor) {
-        return executeQuery(statement -> findAuthorsByNameSurname(statement, newAuthor.getName(), newAuthor.getSurname()), FIND_AUTHORS_BY_NAME_SURNAME_QUERY) == null
-            && executeUpdate(ADD_NEW_AUTHOR_QUERY, newAuthor.getName(), newAuthor.getSurname(), newAuthor.getBiography(), newAuthor.getPhoto()) != 0;
+        if(executeQuery(statement -> findAuthorsByNameSurname(statement, newAuthor.getName(), newAuthor.getSurname()), FIND_AUTHORS_BY_NAME_SURNAME_QUERY) == null){
+            return executeUpdate(ADD_NEW_AUTHOR_QUERY, newAuthor.getName(), newAuthor.getSurname(), newAuthor.getBiography(), newAuthor.getPhoto()) != 0;
+        }
+        return false;
     }
 
     /**
