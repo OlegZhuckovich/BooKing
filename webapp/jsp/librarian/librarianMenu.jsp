@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${ not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -10,10 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <js:script/>
     <script src="${pageContext.request.contextPath}/js/librarianMenu.js" type="text/javascript"></script>
     <script>
         function confirmDeleteAccount() {
@@ -36,7 +34,7 @@
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid">
+<div id="content" class="container-fluid" style="background: url('${pageContext.request.contextPath}/images/librarianMenuBackground.png'); background-size: 100% 100%;">
     <div class="row" id="firstRow"></div>
     <div class="row" id="menuRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>

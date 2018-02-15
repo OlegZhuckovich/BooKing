@@ -1,7 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="info" uri="infotag"%>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <c:set var="foo" value="${pageContext.request.contextPath}/image/foo.png"/>
 <c:set var = "user"  scope = "session"/>
@@ -15,11 +15,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
-    <info:info-name/>
+    <js:script/>
     <script>
         $(function(){
             $('.carousel').carousel({
-                interval: 10000
+                interval: 7000
             });
         });
     </script>
@@ -37,9 +37,9 @@
     <div id="background-carousel">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
-                <div class="item active" style="background-image:url('http://madlonsbigbear.com/wp-content/uploads/imgp/Modern-Library-Interiors-8-7088.jpg')"></div>
-                <div class="item" style="background-image:url('http://bcilibraries.com/wordpress/wp-content/uploads/Radius-Steel-Library-Shelving.jpg')"></div>
-                <div class="item" style="background-image:url('http://www.surroundyourself.com/wp-content/uploads/2015/10/101915_ModernLibrary_Cover.jpg')"></div>
+                <div class="item active" style="background-image:url('${pageContext.request.contextPath}/images/loginBackground1.jpg')"></div>
+                <div class="item" style="background-image:url('${pageContext.request.contextPath}/images/loginBackground2.jpg')"></div>
+                <div class="item" style="background-image:url('${pageContext.request.contextPath}/images/loginBackground3.jpg')"></div>
             </div>
         </div>
     </div>

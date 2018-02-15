@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -12,10 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/select.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <js:script/>
     <script src="${pageContext.request.contextPath}/js/select.js" type="text/javascript"></script>
     <script>
         function validation() {
@@ -24,8 +22,6 @@
             var quantity = $('#bookQuantity').val();
             var year = $('#bookYear').val();
             var pages = $('#bookPages').val();
-            var content = $('#bookContent').val();
-            var expansion = content.substring(content.lastIndexOf('.')+1);
             if(!title || title.length > 250){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookTitleError" bundle="${booking}"/>', "error"); return false;
             } else if (!publishingHouse || publishingHouse.length > 250){
@@ -36,8 +32,6 @@
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookYearError" bundle="${booking}"/>', "error"); return false;
             } else if(!pages || pages < 1 || pages > 10000){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookPagesError" bundle="${booking}"/>', "error"); return false;
-            } else if(!content || expansion !== 'pdf'){
-                swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookContentError" bundle="${booking}"/>', "error"); return false;
             }
         }
     </script>
@@ -130,15 +124,16 @@
                                 <div class="form-inline row">
                                     <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                         <div class="uploadButton">
-                                            <input type="file" accept="application/pdf" name="bookContent" id="bookContent" hidden required/>
+                                            <input type="file" accept="application/pdf" name="bookContent" id="bookContent" hidden />
                                         </div>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                         <!--кнопка submit-->
                                         <div class="form-group">
                                             <div class="inputGroup">
+                                                <input type="hidden" name="bookID" value="${book.id}">
                                                 <button type="submit" class="submitButton"><fmt:message key="addBook" bundle="${booking}"/></button>
-                                                <input type="hidden" name="command" value="add_book">
+                                                <input type="hidden" name="command" value="edit_current_book">
                                             </div>
                                         </div>
                                     </div>

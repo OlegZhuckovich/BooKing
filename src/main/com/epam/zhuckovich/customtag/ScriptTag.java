@@ -8,9 +8,9 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
-public class InfoTag extends TagSupport{
+public class ScriptTag extends TagSupport{
 
-    private static final Logger LOGGER = LogManager.getLogger(InfoTag.class);
+    private static final Logger LOGGER = LogManager.getLogger(ScriptTag.class);
 
     @Override
     public int doStartTag(){

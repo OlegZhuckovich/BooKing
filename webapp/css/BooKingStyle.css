@@ -36,6 +36,15 @@ footer{
 
 /*Styles for header menu*/
 
+.headerTitle{
+    margin-top: 25px;
+}
+
+.headerTitle:hover{
+    cursor: pointer;
+}
+
+
 #headerMenu{
     display: flex;
     cursor: pointer;
@@ -380,12 +389,11 @@ form .inputGroup textarea:valid ~ label {
 
 #content{
     margin-top: 85px;
-    background: url("Library.png") no-repeat;
     background-size: 100% 100%;
 }
 
 #addBookContent{
-    background: url("../images/addBookBackground.jpg") no-repeat;
+    background: url("../images/addBookBackground.png") no-repeat;
     background-size: 100% 100%;
 }
 
@@ -586,31 +594,31 @@ form .question input:focus {
 }
 
 #addBook{
-    background: url('https://www.thehagueuniversity.com/images/default-source/studievoorzieningen/zoeken-en-vinden.jpg?sfvrsn=275152ee_4&size=600') no-repeat;
+    background: url('../images/addBookMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%;
 }
 
 #addLibrarian{
-    background: url('Library.png') no-repeat;
+    background: url('../images/addLibrarianMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%;
 }
 
 #deleteBookMenu{
-    background: url('https://az616578.vo.msecnd.net/files/2016/05/19/635992798386672964-148953701_Stack-of-books-great-education.jpg') no-repeat;
+    background: url('../images/deleteBookMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 #deleteLibrarianMenu{
-    background: url('https://bloximages.newyork1.vip.townnews.com/collegian.psu.edu/content/tncms/assets/v3/editorial/2/0e/20e79ee0-9437-11e7-bcc3-67e65471482e/59b1f5c76ef4b.image.jpg?resize=1200%2C800') no-repeat;
+    background: url('../images/deleteLibrarianMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
 
 #deleteMemberMenu{
-    background: url('https://agescotland.files.wordpress.com/2012/06/two-men-in-library.jpg') no-repeat;
+    background: url('../images/deleteMemberMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }
@@ -624,6 +632,7 @@ form .question input:focus {
 
 #titleBlock label{
     display: none;
+    padding-top: 13px;
 }
 
 .titleBlockRow{
@@ -652,7 +661,7 @@ form .question input:focus {
 }
 
 #editBook{
-    background: url('../css/Library.png') no-repeat;
+    background: url('../images/editBookMenu.jpg') no-repeat;
     background-size: 100% 100%;
     height: 100%
 }

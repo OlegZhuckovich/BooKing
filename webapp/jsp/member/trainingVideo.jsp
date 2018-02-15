@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -12,10 +13,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/select.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <js:script/>
     <script src="${pageContext.request.contextPath}/js/select.js" type="text/javascript"></script>
     <title>BooKing</title>
 </head>
@@ -25,7 +23,7 @@
     <div class="row" id="firstRow"></div>
     <div class="row" id="secondRow">
         <div class="hidden-xs col-sm-1 col-md-2 sideColumn"></div>
-        <div class="col-xs-12 col-sm-10 col-md-8" id="addBookBlock" style="background-color:#D50000; height:100%">
+        <div class="col-xs-12 col-sm-10 col-md-8" id="addBookBlock" style="background-color:#D50000; overflow: auto; height:100%;">
             <div class="container-fluid">
                 <div>
                     <img src="${pageContext.request.contextPath}/images/BooKingLogo.svg" id="bookingLogo">

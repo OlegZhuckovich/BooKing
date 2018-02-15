@@ -42,7 +42,7 @@ public final class UserDAO extends AbstractDAO<User> {
     private static final String FIND_ALL_REMOVABLE_MEMBERS = "SELECT member.memberID, member.name, member.surname, member.email, member.registration_date FROM member WHERE role='member' AND delete_status = '1'";
     private static final String DELETE_USER_QUERY = "DELETE FROM member WHERE memberID = ?";
     private static final String DELETE_LIBRARIAN_ACCOUNT_QUERY = "UPDATE member SET delete_status = 1 WHERE memberID = ?";
-    private static final String DELETE_MEMBER_ACCOUNT_QUERY = "UPDATE member SET delete_status = 1 WHERE memberID = ? AND books_ordered = 0";
+    private static final String DELETE_MEMBER_ACCOUNT_QUERY = "UPDATE member SET delete_status = 1 WHERE memberID = ?";
     private static final String EDIT_ACCOUNT_QUERY = "UPDATE member SET avatar = ? WHERE memberID = ? ";
     private static final String EDIT_MAIN_INFORMATION = "UPDATE member SET name = ?, surname = ? WHERE memberID = ?";
     private static final String EDIT_PASSWORD = "UPDATE member SET password = ? WHERE memberID = ?";

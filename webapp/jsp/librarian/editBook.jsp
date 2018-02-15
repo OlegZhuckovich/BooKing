@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -14,12 +15,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <js:script/>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#example').DataTable( {"language": {
@@ -46,8 +44,8 @@
 </head>
 <body id="page">
 <c:import charEncoding="UTF-8"  url="${pageContext.request.contextPath}/jsp/common/header.jsp"/>
-<div id="content" class="container-fluid tableRow content">
-    <div class="row firstTableRow"></div>
+<div id="content" class="container-fluid tableRow content" style="background: url('${pageContext.request.contextPath}/images/editBookBackground.png'); background-size: 100% 100%;">
+    <div class="row-fluid firstTableRow"></div>
     <div class="row secondTableRow">
         <div class="hidden-xs hidden-sm col-md-1 sideColumn"></div>
         <div class="col-xs-12 col-sm-12 col-md-10 sideColumn">

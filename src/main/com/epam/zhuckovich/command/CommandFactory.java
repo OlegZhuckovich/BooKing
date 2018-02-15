@@ -48,10 +48,10 @@ public class CommandFactory {
                     command = httpRequest -> new UserCommand().deleteAccountRequest(request);
                     break;
                 case DELETE_LIBRARIAN_MENU:
-                    command = httpRequest -> new UserCommand().deleteLibrarianMenu(request);
+                    command = httpRequest -> new UserCommand().deleteUserMenu(request,UserType.LIBRARIAN);
                     break;
                 case DELETE_MEMBER_MENU:
-                    command = httpRequest -> new UserCommand().deleteMemberMenu(request);
+                    command = httpRequest -> new UserCommand().deleteUserMenu(request,UserType.MEMBER);
                     break;
                 case DELETE_USER:
                     command = httpRequest -> new UserCommand().deleteUser(request);
@@ -85,6 +85,9 @@ public class CommandFactory {
                     break;
                 case EDIT_BOOKS_MENU:
                     command = httpRequest -> new BookCommand().editBookMenu(request);
+                    break;
+                case EDIT_CURRENT_BOOK:
+                    command = httpRequest -> new BookCommand().editCurrentBook(request);
                     break;
                 case SEARCH:
                     command = httpRequest -> new BookCommand().searchBook(request);

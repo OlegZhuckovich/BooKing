@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -31,6 +32,10 @@ public class BookDAO extends AbstractDAO<Book>{
     private static final String ADD_BOOK_AUTHOR_QUERY = "INSERT INTO book_author VALUES (?,?)";
     private static final String ADD_BOOK_CONTENT_QUERY = "INSERT INTO book_content VALUES (?,?)";
     private static final String DELETE_BOOK_QUERY = "UPDATE book SET quantity = 0 WHERE bookID = ?";
+    private static final String EDIT_DELETE_AUTHORS_QUERY = "DELETE FROM book_author WHERE bookID = ?";
+    private static final String EDIT_BOOK_QUERY = "UPDATE book SET title = ?, genre = ?, publishing_house = ?, year = ?, pages = ?, quantity = ? WHERE bookID = ?";
+    private static final String EDIT_BOOK_CONTENT_QUERY = "UPDATE book_content SET book_content = ? WHERE bookID = ?";
+    private static final String EDIT_ADD_NEW_AUTHORS_QUERY = "INSERT INTO book_author VALUES (?,?)";
     private static final String FIND_ALL_BOOKS_QUERY = "SELECT book.bookID, book.title, book.genre, book.publishing_house, book.year, book.pages, book.quantity " +
                                                         "FROM book ";
     private static final String FIND_BOOK_CONTENT_QUERY = "SELECT book_content FROM book_content WHERE bookID = ?";
@@ -86,7 +91,6 @@ public class BookDAO extends AbstractDAO<Book>{
             }
             ResultSet bookResultSet = statement.executeQuery();
             if(!bookResultSet.isBeforeFirst()){
-
             } else {
                 while(bookResultSet.next()){
                     int bookID = bookResultSet.getInt(BOOK_ID);
@@ -205,6 +209,22 @@ public class BookDAO extends AbstractDAO<Book>{
 
     public static String getDeleteBookQuery(){
         return DELETE_BOOK_QUERY;
+    }
+
+    public static String getEditDeleteAuthorsQuery(){
+        return EDIT_DELETE_AUTHORS_QUERY;
+    }
+
+    public static String getEditBookQuery(){
+        return EDIT_BOOK_QUERY;
+    }
+
+    public static String getEditBookContentQuery(){
+        return EDIT_BOOK_CONTENT_QUERY;
+    }
+
+    public static String getEditAddNewAuthorsQuery(){
+        return EDIT_ADD_NEW_AUTHORS_QUERY;
     }
 
     /**

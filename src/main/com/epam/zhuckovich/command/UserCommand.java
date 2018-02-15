@@ -131,28 +131,9 @@ class UserCommand extends AbstractCommand{
         boolean operationSuccess = service.deleteUser(userID);
         request.setAttribute(OPERATION_PARAMETER,operationSuccess);
         if(page.equals(LIBRARIAN_PAGE)){
-            return deleteLibrarianMenu(request);
+            return deleteUserMenu(request,UserType.LIBRARIAN);
         } else {
-            return deleteMemberMenu(request);
-        }
-    }
-
-    /**
-     * <p>A method for searching all librarians who requested an account deletion</p>
-     * @param request sends a list of librarians to remove to the client
-     * @return        the Router object that forwards a user to the administrator menu page
-     *                if list of removable librarians is empty, otherwise forwards a user to
-     *                the delete librarian page
-     */
-
-    Router deleteLibrarianMenu(HttpServletRequest request) {
-        List<User> removableLibrarians = service.findAllRemovableUsers(UserType.LIBRARIAN);
-        if(removableLibrarians.isEmpty()){
-            request.getSession().setAttribute(EMPTY_DELETE_LIBRARIAN, SUCCESS);
-            return new Router(Router.RouterType.FORWARD, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
-        } else {
-            request.setAttribute(LIBRARIAN_LIST_PARAMETER,removableLibrarians);
-            return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
+            return deleteUserMenu(request,UserType.MEMBER);
         }
     }
 
@@ -164,14 +145,23 @@ class UserCommand extends AbstractCommand{
      *                the delete member page
      */
 
-    Router deleteMemberMenu(HttpServletRequest request) {
-        List<User> removableMembers = service.findAllRemovableUsers(UserType.MEMBER);
-        if(removableMembers.isEmpty()){
-            request.getSession().setAttribute(EMPTY_DELETE_MEMBER, SUCCESS);
+    Router deleteUserMenu(HttpServletRequest request, UserType userType){
+        List<User> removableUsers = service.findAllRemovableUsers(userType);
+        if(removableUsers.isEmpty()){
+            if(userType == UserType.LIBRARIAN){
+                request.getSession().setAttribute(EMPTY_DELETE_LIBRARIAN, SUCCESS);
+            } else {
+                request.getSession().setAttribute(EMPTY_DELETE_MEMBER, SUCCESS);
+            }
             return new Router(Router.RouterType.FORWARD, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
         } else {
-            request.setAttribute(MEMBER_LIST_PARAMETER,removableMembers);
-            return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_MEMBER_PAGE));
+            if(userType == UserType.LIBRARIAN){
+                request.setAttribute(LIBRARIAN_LIST_PARAMETER,removableUsers);
+                return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
+            } else {
+                request.setAttribute(MEMBER_LIST_PARAMETER,removableUsers);
+                return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_MEMBER_PAGE));
+            }
         }
     }
 
@@ -204,22 +194,22 @@ class UserCommand extends AbstractCommand{
             String street = request.getParameter(STREET_USER);
             String house = request.getParameter(HOUSE_USER);
             String telephone = request.getParameter(TELEPHONE_USER);
-            if(city.isEmpty() && street.isEmpty() && house.isEmpty() && telephone.isEmpty()){
+            if(user.getAddress()!= null && city.isEmpty() && street.isEmpty() && house.isEmpty() && telephone.isEmpty()){
                 if(service.deleteUserAddress(user.getAddress().getId())!=0){
                     operationResult++;
                 }
-            } else if (user.getAddress() == null){
+            } else if (user.getAddress() == null && !city.isEmpty() && !street.isEmpty() && !house.isEmpty() && !telephone.isEmpty()){
                 int addressID = service.updateAddress(user, city, street, house, telephone, 0);
                 if(service.addNewAddressToUser(addressID,user.getId())!=0){
                     operationResult++;
                 }
-            } else {
+            } else if (user.getAddress()!= null && !city.isEmpty() && !street.isEmpty() && !house.isEmpty() && !telephone.isEmpty()){
                 if(service.updateAddress(user,city, street, house, telephone, 1)!=0){
                     operationResult++;
                 }
             }
             Part photoPart = request.getPart(AVATAR_USER);
-            if(photoPart != null){
+            if(photoPart.getSize()!=0){
                 InputStream avatar = photoPart.getInputStream();
                 if(service.updateAvatar(avatar,user.getId())!=0){
                     operationResult++;

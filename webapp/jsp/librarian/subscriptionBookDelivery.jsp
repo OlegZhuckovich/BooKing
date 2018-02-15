@@ -1,6 +1,8 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="table" uri="tabletag" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -14,12 +16,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <js:script/>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#example').DataTable( {"language": {
@@ -72,37 +71,30 @@
                             <th><fmt:message key="nameUser" bundle="${booking}"/></th>
                             <th><fmt:message key="surnameUser" bundle="${booking}"/></th>
                             <th><fmt:message key="emailUser" bundle="${booking}"/></th>
-                            <th><fmt:message key="cityUser" bundle="${booking}"/></th>
-                            <th><fmt:message key="streetUser" bundle="${booking}"/></th>
-                            <th><fmt:message key="houseUser" bundle="${booking}"/></th>
-                            <th><fmt:message key="telephoneUser" bundle="${booking}"/></th>
                             <th><fmt:message key="bookTitle" bundle="${booking}"/></th>
                             <th><fmt:message key="bookGenre" bundle="${booking}"/></th>
                             <th><fmt:message key="bookPublishingHouse" bundle="${booking}"/></th>
                             <th><fmt:message key="bookYear" bundle="${booking}"/></th>
                             <th><fmt:message key="bookPages" bundle="${booking}"/></th>
+                            <th><fmt:message key="cityUser" bundle="${booking}"/></th>
+                            <th><fmt:message key="streetUser" bundle="${booking}"/></th>
+                            <th><fmt:message key="houseUser" bundle="${booking}"/></th>
+                            <th><fmt:message key="telephoneUser" bundle="${booking}"/></th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="subscriptionOrder" items="${subscriptionOrderList}">
+                        <c:forEach var="order" items="${subscriptionOrderList}">
                             <tr>
-                                <td><c:out value="${subscriptionOrder.user.name}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.surname}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.email}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.address.city}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.address.street}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.address.house}"/></td>
-                                <td><c:out value="${subscriptionOrder.user.address.telephoneNumber}"/></td>
-                                <td><c:out value="${subscriptionOrder.book.title}"/></td>
-                                <td><c:out value="${subscriptionOrder.book.genre}"/></td>
-                                <td><c:out value="${subscriptionOrder.book.publishingHouse}"/></td>
-                                <td><c:out value="${subscriptionOrder.book.numberInformation.year}"/></td>
-                                <td><c:out value="${subscriptionOrder.book.numberInformation.pages}"/></td>
+                                <table:tableInfo userName="${order.user.name}" userSurname="${order.user.surname}" userEmail="${order.user.email}" bookTitle="${order.book.title}" bookGenre="${order.book.genre}" bookPublishingHouse="${order.book.publishingHouse}" bookYear="${order.book.numberInformation.year}" bookPages="${order.book.numberInformation.pages}"/>
+                                <td><c:out value="${order.user.address.city}"/></td>
+                                <td><c:out value="${order.user.address.street}"/></td>
+                                <td><c:out value="${order.user.address.house}"/></td>
+                                <td><c:out value="${order.user.address.telephoneNumber}"/></td>
                                 <td>
                                     <form action="/controller" method="post" id="issueSubscriptionForm">
-                                        <input type="hidden" name="memberID" value="${subscriptionOrder.user.id}">
-                                        <input type="hidden" name="bookID" value="${subscriptionOrder.book.id}">
+                                        <input type="hidden" name="memberID" value="${order.user.id}">
+                                        <input type="hidden" name="bookID" value="${order.book.id}">
                                         <input type="hidden" name="command" value="subscription_issue">
                                         <input type="submit" class="googleButton" style="background-color: #9C27B0;" value="<fmt:message key="issueBook" bundle="${booking}"/>">
                                     </form>

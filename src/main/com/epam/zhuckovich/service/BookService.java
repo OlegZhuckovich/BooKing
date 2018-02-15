@@ -5,6 +5,7 @@ import com.epam.zhuckovich.dao.BookDAO;
 import com.epam.zhuckovich.entity.Author;
 import com.epam.zhuckovich.entity.Book;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -78,6 +79,26 @@ public class BookService {
     public boolean deleteBook(String bookID){
         Integer integerBookID = Integer.parseInt(bookID);
         return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), integerBookID) != 0;
+    }
+
+    public int editCurrentBook(int bookID, List<Integer> authorIDList, String bookTitle, String bookPublishingHouse, Book.NumberInformation bookNumberInformation, Book.BookType bookGenre, InputStream... bookContent){
+        int year = bookNumberInformation.getYear();
+        int pages = bookNumberInformation.getPages();
+        int quantity = bookNumberInformation.getQuantity();
+        if(bookID < 1 || quantity < 1 || quantity > 100 || year < 1500 || year > 2018 || pages < 1 || pages > 10000 || authorIDList.isEmpty() || bookTitle == null || bookPublishingHouse == null || bookGenre == null){
+            return 0;
+        } else {
+            if(bookDAO.executeUpdate(BookDAO.getEditDeleteAuthorsQuery(),bookID)!=0) {
+                for(Integer authorID: authorIDList){
+                    bookDAO.executeUpdate(BookDAO.getEditAddNewAuthorsQuery(),authorID,bookID);
+                }
+                if(bookContent.length != 0){
+                    bookDAO.executeUpdate(BookDAO.getEditBookContentQuery(),bookContent,bookID);
+                }
+                bookDAO.executeUpdate(BookDAO.getEditBookQuery(),bookTitle,String.valueOf(bookGenre),bookPublishingHouse,year, pages, quantity, bookID);
+            }
+            return 0;
+        }
     }
 
     /**

@@ -82,6 +82,10 @@ class BookCommand extends AbstractCommand{
      */
 
     Router editCurrentBookMenu(HttpServletRequest request){
+        List<Author> authorList = service.findAllAuthors();
+        List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
+        request.getSession().setAttribute(AUTHOR_LIST,authorList);
+        request.getSession().setAttribute(GENRE_LIST_PARAMETER,genreList);
         Book book = null;
         String bookID = request.getParameter(BOOK_ID);
         int numberBookID = Integer.parseInt(bookID);
@@ -91,8 +95,42 @@ class BookCommand extends AbstractCommand{
                 book = tempBook;
             }
         }
-        request.setAttribute(BOOK,book);
-        return new Router(Router.RouterType.FORWARD,PageManager.getPage(EDIT_CURRENT_BOOK_PAGE));
+        request.getSession().setAttribute(BOOK,book);
+        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_CURRENT_BOOK_PAGE));
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+
+    Router editCurrentBook(HttpServletRequest request){
+        int bookID = Integer.parseInt(request.getParameter(BOOK_ID));
+        String[] authors = request.getParameterValues(BOOK_AUTHOR);
+        List<Integer> authorsList = new ArrayList<>();
+        for(String authorID:authors){
+            authorsList.add(Integer.parseInt(authorID));
+        }
+        try {
+            String bookTitle = request.getParameter(BOOK_TITLE);
+            String bookPublishingHouse = request.getParameter(BOOK_PUBLISHING_HOUSE);
+            Book.NumberInformation bookNumberInformation = new Book.NumberInformation(Integer.parseInt(request.getParameter(BOOK_YEAR)),Integer.parseInt(request.getParameter(BOOK_PAGES)),Integer.parseInt(request.getParameter(BOOK_QUANTITY)));
+            Book.BookType bookGenre = Book.BookType.valueOf(request.getParameter(BOOK_GENRE));
+            Part bookContentPart = request.getPart(BOOK_CONTENT);
+            if (bookContentPart != null) {
+                InputStream bookContent = bookContentPart.getInputStream();
+                service.editCurrentBook(bookID,authorsList,bookTitle,bookPublishingHouse,bookNumberInformation,bookGenre,bookContent);
+            } else {
+                service.editCurrentBook(bookID,authorsList,bookTitle,bookPublishingHouse,bookNumberInformation,bookGenre);
+            }
+            return editBookMenu(request);
+        } catch (IOException e){
+            LOGGER.log(Level.ERROR, "IOException was occurred during getting the book content from the client");
+        } catch (ServletException e){
+            LOGGER.log(Level.ERROR, "ServletException was occurred during getting the book content from the client");
+        }
+        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_BOOK_PAGE));
     }
 
     /**

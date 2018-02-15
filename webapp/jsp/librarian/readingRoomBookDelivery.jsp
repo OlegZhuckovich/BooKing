@@ -1,6 +1,8 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="table" uri="tabletag" %>
+<%@ taglib prefix="js" uri="script" %>
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale }" scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="booking" var="booking"/>
@@ -14,12 +16,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/BooKingStyle.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
+    <js:script/>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.material.min.js" type="text/javascript"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
         $(document).ready(function () {
             $('#example').DataTable( {"language": {
@@ -81,20 +80,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="readingRoomOrder" items="${readingRoomOrderList}">
+                        <c:forEach var="order" items="${readingRoomOrderList}">
                             <tr>
-                                <td><c:out value="${readingRoomOrder.user.name}"/></td>
-                                <td><c:out value="${readingRoomOrder.user.surname}"/></td>
-                                <td><c:out value="${readingRoomOrder.user.email}"/></td>
-                                <td><c:out value="${readingRoomOrder.book.title}"/></td>
-                                <td><c:out value="${readingRoomOrder.book.genre}"/></td>
-                                <td><c:out value="${readingRoomOrder.book.publishingHouse}"/></td>
-                                <td><c:out value="${readingRoomOrder.book.numberInformation.year}"/></td>
-                                <td><c:out value="${readingRoomOrder.book.numberInformation.pages}"/></td>
+                                <table:tableInfo userName="${order.user.name}" userSurname="${order.user.surname}" userEmail="${order.user.email}" bookTitle="${order.book.title}" bookGenre="${order.book.genre}" bookPublishingHouse="${order.book.publishingHouse}" bookYear="${order.book.numberInformation.year}" bookPages="${order.book.numberInformation.pages}"/>
                                 <td>
                                     <form action="/controller" method="post" id="readingRoomDeliveryForm">
-                                        <input type="hidden" name="memberID" value="${readingRoomOrder.user.id}">
-                                        <input type="hidden" name="bookID" value="${readingRoomOrder.book.id}">
+                                        <input type="hidden" name="memberID" value="${order.user.id}">
+                                        <input type="hidden" name="bookID" value="${order.book.id}">
                                         <input type="hidden" name="command" value="reading_room_issue">
                                         <input type="submit" class="googleButton" style="background-color: #FF5722;" value="<fmt:message key="issueBook" bundle="${booking}"/>">
                                     </form>

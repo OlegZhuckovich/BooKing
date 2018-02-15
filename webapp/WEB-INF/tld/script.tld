@@ -4,13 +4,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
         version="2.0">
-    <description>Info Tag</description>
+    <description>Script Tag</description>
     <tlib-version>2.1</tlib-version>
-    <short-name>infotag</short-name>
-    <uri>infotag</uri>
+    <short-name>script</short-name>
+    <uri>script</uri>
     <tag>
-        <name>info-name</name>
-        <tag-class>com.epam.zhuckovich.customtag.InfoTag</tag-class>
+        <name>script</name>
+        <tag-class>com.epam.zhuckovich.customtag.ScriptTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>

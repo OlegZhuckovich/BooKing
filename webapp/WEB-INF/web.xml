@@ -7,8 +7,12 @@
     <display-name>Archetype Created Web Application</display-name>
     <jsp-config>
         <taglib>
-            <taglib-uri>infotag</taglib-uri>
-            <taglib-location>/WEB-INF/tld/infotag.tld</taglib-location>
+            <taglib-uri>script</taglib-uri>
+            <taglib-location>/WEB-INF/tld/script.tld</taglib-location>
+        </taglib>
+        <taglib>
+            <taglib-uri>tabletag</taglib-uri>
+            <taglib-location>/WEB-INF/tld/tabletag.tld</taglib-location>
         </taglib>
     </jsp-config>
     <filter>
