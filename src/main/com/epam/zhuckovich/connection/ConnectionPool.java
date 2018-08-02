@@ -29,7 +29,7 @@ public final class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
     private static ConnectionPool connectionPool;
-    private static final int POOL_SIZE = 15;
+    private static final int POOL_SIZE = 20;
     private static ReentrantLock lock = new ReentrantLock();
     private static AtomicBoolean connectionPoolCreated = new AtomicBoolean(false);
     private BlockingQueue<ProxyConnection> connectionQueue;

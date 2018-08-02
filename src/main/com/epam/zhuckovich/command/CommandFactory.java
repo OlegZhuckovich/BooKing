@@ -1,6 +1,7 @@
 package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
+import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import org.apache.logging.log4j.Level;
@@ -99,7 +100,7 @@ public class CommandFactory {
                     command = httpRequest -> new OrderCommand().issueBookInReadingRoom(request);
                     break;
                 case READING_ROOM_MENU:
-                    command = httpRequest -> new OrderCommand().openReadingRoomMenu(request);
+                    command = httpRequest -> new OrderCommand().openOrderMenu(request, Order.OrderType.READING_ROOM);
                     break;
                 case RETURN_BOOK:
                     command = httpRequest -> new OrderCommand().returnBook(request);
@@ -108,7 +109,7 @@ public class CommandFactory {
                     command = httpRequest -> new OrderCommand().issueBookOnSubscription(request);
                     break;
                 case SUBSCRIPTION_MENU:
-                    command = httpRequest -> new OrderCommand().openSubscriptionMenu(request);
+                    command = httpRequest -> new OrderCommand().openOrderMenu(request, Order.OrderType.SUBSCRIPTION);
                     break;
                 case VIEW_ORDERED_BOOKS:
                     command = httpRequest -> new OrderCommand().viewOrderedBooks(request);

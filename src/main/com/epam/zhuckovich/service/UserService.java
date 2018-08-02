@@ -3,6 +3,9 @@ package com.epam.zhuckovich.service;
 import com.epam.zhuckovich.entity.User;
 import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.dao.UserDAO;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -22,6 +25,8 @@ import java.util.regex.Pattern;
  */
 
 public class UserService {
+
+    private static final Logger LOGGER = LogManager.getLogger(UserService.class);
 
     private static final String ENCRYPTION_MECHANISM = "MD5";
     private static final String NAME_SURNAME_REGEX = "[A-ZА-Я][a-zа-яё]+-?[A-ZА-Я]?[a-zа-яё]+?";
@@ -133,12 +138,8 @@ public class UserService {
         boolean nameMatch, surnameMatch;
         Matcher nameMatcher = nameSurnameRegex.matcher(editableUser.getName());
         Matcher surnameMatcher = nameSurnameRegex.matcher(editableUser.getSurname());
-        System.out.println(editableUser.getName());
-        System.out.println(editableUser.getSurname());
         nameMatch = nameMatcher.matches();
         surnameMatch = surnameMatcher.matches();
-        System.out.println(nameMatch);
-        System.out.println(surnameMatch);
         if(nameMatch && surnameMatch){
             if(userDAO.executeUpdate(UserDAO.getEditMainInformation(),editableUser.getName(),editableUser.getSurname(), editableUser.getId()) != 0){
                 operationResult++;
@@ -280,9 +281,8 @@ public class UserService {
                 passwordStringBuilder.append(Integer.toString((aPasswordByteData & 0xff) + 0x100, 16).substring(1));
             }
         } catch(NoSuchAlgorithmException e){
-            e.printStackTrace();
+           LOGGER.log(Level.ERROR,"NoSuchAlgorithmException occurred during encryption operation");
         }
-        System.out.println(passwordStringBuilder.toString());
         return passwordStringBuilder.toString();
     }
 

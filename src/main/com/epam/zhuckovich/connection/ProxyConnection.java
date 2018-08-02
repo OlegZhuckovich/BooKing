@@ -80,12 +80,9 @@ public class ProxyConnection {
     }
 
     /**
-     * Returns ProxyConnection to the ConnectionPool
+     * Close the connection to the database
+     * @throws SQLTechnicalException if connection cannot be closed
      */
-
-    public void releaseConnection() {
-        ConnectionPool.getInstance().releaseConnection(this);
-    }
 
     void closeConnection() throws SQLTechnicalException {
         try {

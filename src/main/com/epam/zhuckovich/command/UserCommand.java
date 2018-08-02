@@ -97,7 +97,6 @@ class UserCommand extends AbstractCommand{
         String surname = request.getParameter(SURNAME_USER);
         String email = request.getParameter(EMAIL_USER);
         String password = request.getParameter(PASSWORD_USER);
-        String repeatPassword = request.getParameter(REPEAT_PASSWORD_USER);
         Part photoPart;
         InputStream photo = null;
         try {

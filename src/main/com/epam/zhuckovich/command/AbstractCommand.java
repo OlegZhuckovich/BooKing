@@ -64,6 +64,7 @@ abstract class AbstractCommand {
     static final String SUBSCRIPTION_BOOK_DELIVERY_PAGE = "subscriptionBookDelivery";
     static final String SUBSCRIPTION_ORDER_LIST_PARAMETER = "subscriptionOrderList";
     static final String VIEW_ORDERED_BOOKS_PAGE = "viewOrderedBooks";
+    static final String VIEW_ORDERED_BOOKS_PAGE1 = "viewOrderedBooks";
 
     /**
      * UserCommand final variables

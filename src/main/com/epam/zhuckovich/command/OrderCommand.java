@@ -3,6 +3,7 @@ package com.epam.zhuckovich.command;
 import com.epam.zhuckovich.controller.Router;
 import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.User;
+import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.service.OrderService;
 
@@ -45,7 +46,7 @@ class OrderCommand extends AbstractCommand{
             request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
             return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
-            return openReadingRoomMenu(request);
+            return openOrderMenu(request, Order.OrderType.READING_ROOM);
         }
     }
 
@@ -64,46 +65,42 @@ class OrderCommand extends AbstractCommand{
             request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
             return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
-            return openSubscriptionMenu(request);
+            return openOrderMenu(request, Order.OrderType.SUBSCRIPTION);
         }
     }
 
     /**
-     * <p>Finds all book orders in the reading room</p>
-     * @param request used to send a list of orders to the reading room to client
+     * <p>Finds all book orders</p>
+     * @param request used to send a list of orders  to client
      * @return        router that redirects user to the librarian menu page if the
-     *                order list is empty, otherwise forwards user to the reading room
-     *                book delivery page
+     *                order list is empty, otherwise forwards user to the book
+     *                delivery page
      */
 
-    Router openReadingRoomMenu(HttpServletRequest request){
-        List<Order> readingRoomList = service.findAllReadingRoomOrders();
-        if(readingRoomList.isEmpty()){
-            request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
+    Router openOrderMenu(HttpServletRequest request, Order.OrderType orderType){
+        List<Order> orderList;
+        if(orderType == Order.OrderType.READING_ROOM){
+            orderList = service.findAllReadingRoomOrders();
+        } else {
+            orderList = service.findAllSubscriptionOrders();
+        }
+        if(orderList.isEmpty()){
+            if(orderType == Order.OrderType.READING_ROOM){
+                request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
+            } else {
+                request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
+            }
             return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
-            request.setAttribute(READING_ROOM_ORDER_LIST_PARAMETER,readingRoomList);
-            return new Router(Router.RouterType.FORWARD, PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
+            if(orderType == Order.OrderType.READING_ROOM){
+                request.setAttribute(READING_ROOM_ORDER_LIST_PARAMETER,orderList);
+                return new Router(Router.RouterType.FORWARD, PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
+            } else {
+                request.setAttribute(SUBSCRIPTION_ORDER_LIST_PARAMETER,orderList);
+                return new Router(Router.RouterType.FORWARD, PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
+            }
         }
-    }
 
-    /**
-     * <p>Finds all book orders on subscription</p>
-     * @param request used to send a list of orders on subscription to client
-     * @return        router that redirects user to the librarian menu page if the
-     *                order list is empty, otherwise forwards user to the subscription
-     *                book delivery page
-     */
-
-    Router openSubscriptionMenu(HttpServletRequest request){
-        List<Order> subscriptionList = service.findAllSubscriptionOrders();
-        if(subscriptionList.isEmpty()){
-            request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
-        } else {
-            request.setAttribute(SUBSCRIPTION_ORDER_LIST_PARAMETER,subscriptionList);
-            return new Router(Router.RouterType.FORWARD, PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
-        }
     }
 
     /**
@@ -118,14 +115,8 @@ class OrderCommand extends AbstractCommand{
         String stringBookID = request.getParameter(BOOK_ID);
         int userID = user.getId();
         int bookID = Integer.parseInt(stringBookID);
-        Order.OrderType orderType = Order.OrderType.valueOf(stringOrderType.toUpperCase());
-        int orderBookResult = 0;
-        switch (orderType){
-            case READING_ROOM:
-                orderBookResult = service.orderBook(userID,bookID, stringOrderType); break;
-            case SUBSCRIPTION:
-                orderBookResult = service.orderBook(userID,bookID, stringOrderType); break;
-        }
+        int orderBookResult;
+        orderBookResult = service.orderBook(userID,bookID, stringOrderType);
         if(orderBookResult == 0){
             request.getSession().setAttribute(ORDER_RESULT,ERROR);
         } else {

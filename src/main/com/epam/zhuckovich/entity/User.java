@@ -20,7 +20,6 @@ public class User extends Entity{
     private UserType userType;
     private Date registrationDate;
     private InputStream photo;
-    private int booksOrdered;
     private Address address;
 
     /**
@@ -297,9 +296,6 @@ public class User extends Entity{
         } else if(!photo.equals(user.photo)){
             return false;
         }
-        if(booksOrdered != user.booksOrdered){
-            return false;
-        }
         if(address == null){
             if(user.address != null){
                 return false;
@@ -315,7 +311,7 @@ public class User extends Entity{
         return 31*id + ((name == null) ? 0 : name.hashCode()) + ((surname == null) ? 0 : surname.hashCode()) +
                 ((email == null) ? 0 : email.hashCode()) + ((password == null) ? 0 : password.hashCode()) +
                 ((userType == null) ? 0 : userType.hashCode()) + ((registrationDate == null) ? 0 : registrationDate.hashCode()) +
-                ((photo == null) ? 0 : photo.hashCode()) + booksOrdered + ((address == null) ? 0 : address.hashCode());
+                ((photo == null) ? 0 : photo.hashCode()) + ((address == null) ? 0 : address.hashCode());
     }
 
     @Override
@@ -327,7 +323,6 @@ public class User extends Entity{
                 "Password: " + password + "\n" +
                 "UserType: " + userType + "\n" +
                 "RegistrationDate: " + registrationDate + "\n" +
-                "BooksOrdered: " + booksOrdered + "\n" +
                 "Address: " + address.toString() + "\n";
     }
 }

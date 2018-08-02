@@ -100,9 +100,9 @@ class BookCommand extends AbstractCommand{
     }
 
     /**
-     *
-     * @param request
-     * @return
+     * <p>Function for editing current book</p>
+     * @param request sends information about book to server
+     * @return        the Router that redirects user to edit book page
      */
 
     Router editCurrentBook(HttpServletRequest request){
@@ -201,7 +201,7 @@ class BookCommand extends AbstractCommand{
                     .setGenre(Book.BookType.valueOf(request.getParameter(BOOK_GENRE)))
                     .setAuthors(authorsList);
             Part bookContentPart = request.getPart(BOOK_CONTENT);
-            if (bookContentPart != null) {
+            if (bookContentPart.getSize() != 0) {
                 InputStream bookContent = bookContentPart.getInputStream();
                 newBookBuilder.setBookContent(bookContent);
             }

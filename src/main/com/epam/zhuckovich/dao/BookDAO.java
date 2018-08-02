@@ -90,8 +90,7 @@ public class BookDAO extends AbstractDAO<Book>{
                 }
             }
             ResultSet bookResultSet = statement.executeQuery();
-            if(!bookResultSet.isBeforeFirst()){
-            } else {
+            if(bookResultSet.isBeforeFirst()){
                 while(bookResultSet.next()){
                     int bookID = bookResultSet.getInt(BOOK_ID);
                     AuthorDAO authorDAO = AuthorDAO.getInstance();

@@ -99,9 +99,7 @@ public class AuthorDAO extends AbstractDAO<Author>{
         try{
             statement.setInt(1,bookID);
             ResultSet authorResultSet = statement.executeQuery();
-            if(!authorResultSet.isBeforeFirst()){
-
-            } else {
+            if(authorResultSet.isBeforeFirst()){
                 while (authorResultSet.next()) {
                     authorList.add(Author.newBuilder()
                             .setId(authorResultSet.getInt(AUTHOR_ID))
@@ -126,9 +124,7 @@ public class AuthorDAO extends AbstractDAO<Author>{
         List<Author> authorList = new ArrayList<>();
         try{
             ResultSet authorResultSet = statement.executeQuery();
-            if(!authorResultSet.isBeforeFirst()){
-
-            } else {
+            if(authorResultSet.isBeforeFirst()){
                 while (authorResultSet.next()) {
                     authorList.add(Author.newBuilder()
                             .setId(authorResultSet.getInt(AUTHOR_ID))

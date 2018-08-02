@@ -1,5 +1,6 @@
 package com.epam.zhuckovich.controller;
 
+import com.epam.zhuckovich.connection.ProxyConnection;
 import com.epam.zhuckovich.dao.BookDAO;
 
 import javax.servlet.ServletException;
