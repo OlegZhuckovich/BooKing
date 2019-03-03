@@ -1,9 +1,9 @@
 package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
-import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.entity.User;
+import com.epam.zhuckovich.entity.User.Role;
 import com.epam.zhuckovich.service.UserService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -11,10 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * <p>The class contains methods for performing various actions with users,
@@ -48,30 +46,30 @@ class UserCommand extends AbstractCommand{
      */
 
     Router login(HttpServletRequest request) {
-        String email = request.getParameter(EMAIL_USER);
-        String password = request.getParameter(PASSWORD_USER);
+        var email = request.getParameter(EMAIL_USER);
+        var password = request.getParameter(PASSWORD_USER);
         if(email == null || password == null){
-            return new Router(Router.RouterType.FORWARD,PageManager.getPage(LOGIN_PAGE));
+            return new Router(Router.RouterType.FORWARD, PageManager.getPage(LOGIN_PAGE));
         }
-        User user = service.findUserByEmailPassword(email, password);
-        UserType member = user.getUserType();
+        var user = service.findUserByEmailPassword(email, password);
+        var member = user.getRole();
         if(member == null){
             request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LOGIN_PAGE));
         }
             switch (member) {
                 case ADMINISTRATOR:
                     request.getSession().setAttribute(USER, user);
-                    return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
+                    return new Router(Router.RouterType.REDIRECT, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
                 case LIBRARIAN:
                     request.getSession().setAttribute(USER, user);
-                    return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+                    return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU_PAGE));
                 case MEMBER:
                     request.getSession().setAttribute(USER, user);
-                    return new Router(Router.RouterType.REDIRECT,PageManager.getPage(MEMBER_MENU_PAGE));
+                    return new Router(Router.RouterType.REDIRECT, PageManager.getPage(MEMBER_MENU_PAGE));
                 default:
                     request.getSession().setAttribute(ERROR_LOGIN_MESSAGE, ERROR_LOGIN_MESSAGE);
-                    return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+                    return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LOGIN_PAGE));
             }
     }
 
@@ -92,29 +90,26 @@ class UserCommand extends AbstractCommand{
      * @return        the Router object that redirects a user to a login page
      */
 
-    Router registration(HttpServletRequest request, UserType registrationType) {
-        String name = request.getParameter(NAME_USER);
-        String surname = request.getParameter(SURNAME_USER);
-        String email = request.getParameter(EMAIL_USER);
-        String password = request.getParameter(PASSWORD_USER);
-        Part photoPart;
+    Router registration(HttpServletRequest request, Role registrationType) {
+        var name = request.getParameter(NAME_USER);
+        var surname = request.getParameter(SURNAME_USER);
+        var email = request.getParameter(EMAIL_USER);
+        var password = request.getParameter(PASSWORD_USER);
         InputStream photo = null;
         try {
-            photoPart = request.getPart(AVATAR_USER);
-            photo = photoPart.getInputStream();
+            photo = request.getPart(AVATAR_USER).getInputStream();
         } catch (IOException e) {
             LOGGER.log(Level.ERROR,"IOException was occurred during user registration");
         } catch (ServletException e) {
             LOGGER.log(Level.ERROR,"ServletException was occurred during user registration");
         }
-        int isUserAdded = service.registerUser(name, surname, email, password, photo, registrationType);
-        if(isUserAdded == 0){
-            request.getSession().setAttribute(REGISTRATION_RESULT,ERROR);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(REGISTRATION_PAGE));
+        if(service.registerUser(name, surname, email, password, photo, registrationType) == 0){
+            request.getSession().setAttribute(REGISTRATION_RESULT, ERROR);
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(REGISTRATION_PAGE));
         } else {
             request.getSession().setAttribute(USER_REGISTRATION,name + SPACE + surname);
-            request.getSession().setAttribute(REGISTRATION_RESULT,SUCCESS);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+            request.getSession().setAttribute(REGISTRATION_RESULT, SUCCESS);
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LOGIN_PAGE));
         }
     }
 
@@ -125,14 +120,11 @@ class UserCommand extends AbstractCommand{
      */
 
     Router deleteUser(HttpServletRequest request) {
-        String page = request.getParameter(PAGE_PARAMETER);
-        String userID = request.getParameter(USER_ID);
-        boolean operationSuccess = service.deleteUser(userID);
-        request.setAttribute(OPERATION_PARAMETER,operationSuccess);
-        if(page.equals(LIBRARIAN_PAGE)){
-            return deleteUserMenu(request,UserType.LIBRARIAN);
+        request.setAttribute(OPERATION_SUCCESS, service.deleteUser(request.getParameter(USER_ID)));
+        if(request.getParameter(PAGE).equals(LIBRARIAN_PAGE)){
+            return deleteUserMenu(request, Role.LIBRARIAN);
         } else {
-            return deleteUserMenu(request,UserType.MEMBER);
+            return deleteUserMenu(request, Role.MEMBER);
         }
     }
 
@@ -144,21 +136,21 @@ class UserCommand extends AbstractCommand{
      *                the delete member page
      */
 
-    Router deleteUserMenu(HttpServletRequest request, UserType userType){
-        List<User> removableUsers = service.findAllRemovableUsers(userType);
+    Router deleteUserMenu(HttpServletRequest request, Role role){
+        var removableUsers = service.findAllRemovableUsers(role);
         if(removableUsers.isEmpty()){
-            if(userType == UserType.LIBRARIAN){
+            if(role == Role.LIBRARIAN){
                 request.getSession().setAttribute(EMPTY_DELETE_LIBRARIAN, SUCCESS);
             } else {
                 request.getSession().setAttribute(EMPTY_DELETE_MEMBER, SUCCESS);
             }
             return new Router(Router.RouterType.FORWARD, PageManager.getPage(ADMINISTRATOR_MENU_PAGE));
         } else {
-            if(userType == UserType.LIBRARIAN){
-                request.setAttribute(LIBRARIAN_LIST_PARAMETER,removableUsers);
+            if(role == Role.LIBRARIAN){
+                request.setAttribute(LIBRARIAN_LIST, removableUsers);
                 return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_LIBRARIAN_PAGE));
             } else {
-                request.setAttribute(MEMBER_LIST_PARAMETER,removableUsers);
+                request.setAttribute(MEMBER_LIST, removableUsers);
                 return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_MEMBER_PAGE));
             }
         }
@@ -172,52 +164,51 @@ class UserCommand extends AbstractCommand{
 
     Router editAccount(HttpServletRequest request){
         try {
-            int operationResult = 0;
-            User user = (User) request.getSession().getAttribute(USER);
-            User.Builder editableUserBuilder = User.newBuilder()
+            var operationResult = 0;
+            var user = (User) request.getSession().getAttribute(USER);
+            var userBuilder = User.newBuilder()
                     .setId(user.getId())
                     .setName(request.getParameter(NAME_USER))
                     .setSurname(request.getParameter(SURNAME_USER));
-            String password = request.getParameter(PASSWORD_USER);
-            String repeatPassword = request.getParameter(REPEAT_PASSWORD_USER);
+            var password = request.getParameter(PASSWORD_USER);
+            var repeatPassword = request.getParameter(REPEAT_PASSWORD_USER);
             if(password != null && repeatPassword != null){
                 if(password.equals(repeatPassword) && password.length() >= 5 && password.length() <= 40){
-                    editableUserBuilder.setPassword(password);
+                    userBuilder.setPassword(password);
                 }
             }
-            User editableUser = editableUserBuilder.build();
-            if(service.editAccountMainInformation(editableUser)!=0){
+            var editableUser = userBuilder.build();
+            if(service.editAccountMainInformation(editableUser) != 0){
                 operationResult++;
             }
-            String city = request.getParameter(CITY_USER);
-            String street = request.getParameter(STREET_USER);
-            String house = request.getParameter(HOUSE_USER);
-            String telephone = request.getParameter(TELEPHONE_USER);
+            var city = request.getParameter(CITY_USER);
+            var street = request.getParameter(STREET_USER);
+            var house = request.getParameter(HOUSE_USER);
+            var telephone = request.getParameter(TELEPHONE_USER);
             if(user.getAddress()!= null && city.isEmpty() && street.isEmpty() && house.isEmpty() && telephone.isEmpty()){
-                if(service.deleteUserAddress(user.getAddress().getId())!=0){
+                if(service.deleteUserAddress(user.getAddress().getId()) != 0){
                     operationResult++;
                 }
             } else if (user.getAddress() == null && !city.isEmpty() && !street.isEmpty() && !house.isEmpty() && !telephone.isEmpty()){
                 int addressID = service.updateAddress(user, city, street, house, telephone, 0);
-                if(service.addNewAddressToUser(addressID,user.getId())!=0){
+                if(service.addNewAddressToUser(addressID,user.getId()) != 0){
                     operationResult++;
                 }
             } else if (user.getAddress()!= null && !city.isEmpty() && !street.isEmpty() && !house.isEmpty() && !telephone.isEmpty()){
-                if(service.updateAddress(user,city, street, house, telephone, 1)!=0){
+                if(service.updateAddress(user,city, street, house, telephone, 1) != 0){
                     operationResult++;
                 }
             }
-            Part photoPart = request.getPart(AVATAR_USER);
-            if(photoPart.getSize()!=0){
-                InputStream avatar = photoPart.getInputStream();
-                if(service.updateAvatar(avatar,user.getId())!=0){
+            var photoPart = request.getPart(AVATAR_USER);
+            if(photoPart.getSize() != 0){
+                if(service.updateAvatar(photoPart.getInputStream(),user.getId())!=0){
                     operationResult++;
                 }
             }
-            if(operationResult==0){
-                request.getSession().setAttribute(OPERATION_PARAMETER,ERROR);
+            if(operationResult == 0){
+                request.getSession().setAttribute(OPERATION_SUCCESS, ERROR);
             } else {
-                request.getSession().setAttribute(OPERATION_PARAMETER,SUCCESS);
+                request.getSession().setAttribute(OPERATION_SUCCESS, SUCCESS);
             }
             request.getSession().setAttribute(USER,service.findMemberById(user.getId()));
         } catch(IOException e){
@@ -225,7 +216,7 @@ class UserCommand extends AbstractCommand{
         } catch(ServletException e){
             LOGGER.log(Level.ERROR, "ServletException was occurred during getting the photo from the client while user editing account");
         }
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_ACCOUNT_PAGE));
+        return new Router(Router.RouterType.REDIRECT, PageManager.getPage(EDIT_ACCOUNT_PAGE));
     }
 
     /**
@@ -235,22 +226,20 @@ class UserCommand extends AbstractCommand{
      */
 
     Router deleteAccountRequest(HttpServletRequest request){
-        User user = (User) request.getSession().getAttribute(USER);
-        Integer userID = user.getId();
-        UserType userType = user.getUserType();
-        int operationResult = service.deleteAccount(userID, userType);
-        if(operationResult == 0){
-            request.getSession().setAttribute(DELETE_ACCOUNT_PARAMETER,ERROR);
+        var user = (User) request.getSession().getAttribute(USER);
+        var role = user.getRole();
+        if(service.deleteAccount(user.getId(), role) == 0){
+            request.getSession().setAttribute(DELETE_ACCOUNT, ERROR);
         } else {
-            request.getSession().setAttribute(DELETE_ACCOUNT_PARAMETER,SUCCESS);
+            request.getSession().setAttribute(DELETE_ACCOUNT, SUCCESS);
         }
-        switch (userType){
+        switch (role){
             case MEMBER:
-                return new Router(Router.RouterType.REDIRECT,PageManager.getPage(MEMBER_MENU_PAGE));
+                return new Router(Router.RouterType.REDIRECT, PageManager.getPage(MEMBER_MENU_PAGE));
             case LIBRARIAN:
-                return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+                return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU_PAGE));
             default:
-                return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LOGIN_PAGE));
+                return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LOGIN_PAGE));
         }
     }
 }

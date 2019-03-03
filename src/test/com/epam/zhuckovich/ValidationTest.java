@@ -1,8 +1,7 @@
 package com.epam.zhuckovich;
 
-
 import com.epam.zhuckovich.entity.User;
-import com.epam.zhuckovich.entity.UserType;
+import com.epam.zhuckovich.entity.User.Role;
 import com.epam.zhuckovich.service.UserService;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -30,7 +29,7 @@ public class ValidationTest {
                 .setEmail(USER_TEST_EMAIL)
                 .setPassword(USER_TEST_PASSWORD)
                 .setPhoto(new ByteArrayInputStream( USER_TEST_PHOTO.getBytes() ))
-                .setUserType(UserType.MEMBER)
+                .setUserType(Role.MEMBER)
                 .build();
     }
 
@@ -38,7 +37,7 @@ public class ValidationTest {
     public void validationTest(){
         UserService userService = new UserService();
         int expected = 0;
-        int actual = userService.registerUser(user.getName(),user.getSurname(), user.getEmail(), user.getPassword(), user.getPhoto(), user.getUserType());
+        int actual = userService.registerUser(user.getName(),user.getSurname(), user.getEmail(), user.getPassword(), user.getPhoto(), user.getRole());
         assertEquals(expected,actual);
     }
 

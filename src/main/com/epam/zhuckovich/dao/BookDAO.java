@@ -2,7 +2,6 @@ package com.epam.zhuckovich.dao;
 
 import com.epam.zhuckovich.connection.ConnectionPool;
 import com.epam.zhuckovich.connection.ProxyConnection;
-import com.epam.zhuckovich.entity.Author;
 import com.epam.zhuckovich.entity.Book;
 import com.epam.zhuckovich.exception.SQLTechnicalException;
 import org.apache.logging.log4j.Level;
@@ -11,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -79,7 +77,7 @@ public class BookDAO extends AbstractDAO<Book>{
      */
 
     public List<Book> findAllBooks(PreparedStatement statement, String...parameters) {
-        List<Book> bookList = new ArrayList<>();
+        var bookList = new ArrayList<Book>();
         try {
             if(parameters.length != 0) {
                 if (parameters[0].charAt(0) == '%') {
@@ -89,19 +87,21 @@ public class BookDAO extends AbstractDAO<Book>{
                     statement.setInt(1, Integer.parseInt(parameters[0]));
                 }
             }
-            ResultSet bookResultSet = statement.executeQuery();
+            var bookResultSet = statement.executeQuery();
             if(bookResultSet.isBeforeFirst()){
                 while(bookResultSet.next()){
-                    int bookID = bookResultSet.getInt(BOOK_ID);
-                    AuthorDAO authorDAO = AuthorDAO.getInstance();
-                    List<Author> bookAuthorList = authorDAO.executeQuery(preparedStatement -> authorDAO.findAuthorsByBookID(preparedStatement,bookID),AuthorDAO.getFindAuthorsByBookIdQuery());
-                    Book book = Book.newBuilder()
+                    var bookID = bookResultSet.getInt(BOOK_ID);
+                    var authorDAO = AuthorDAO.getInstance();
+                    var authors = authorDAO.executeQuery(preparedStatement -> authorDAO.findAuthorsByBookID(preparedStatement,bookID),AuthorDAO.getFindAuthorsByBookIdQuery());
+                    var book = Book.newBuilder()
                             .setId(bookResultSet.getInt(BOOK_ID))
                             .setTitle(bookResultSet.getString(TITLE))
-                            .setGenre(Book.BookType.valueOf(bookResultSet.getString(GENRE)))
+                            .setGenre(Book.Genre.valueOf(bookResultSet.getString(GENRE)))
                             .setPublishingHouse(bookResultSet.getString(PUBLISHING_HOUSE))
-                            .setNumberInformation(new Book.NumberInformation(bookResultSet.getInt(YEAR), bookResultSet.getInt(PAGES), bookResultSet.getInt(QUANTITY)))
-                            .setAuthors(bookAuthorList)
+                            .setNumberInformation(new Book.Metadata(bookResultSet.getInt(YEAR),
+                                    bookResultSet.getInt(PAGES),
+                                    bookResultSet.getInt(QUANTITY)))
+                            .setAuthors(authors)
                             .build();
                     bookList.add(book);
                 }
@@ -121,7 +121,7 @@ public class BookDAO extends AbstractDAO<Book>{
     public int addBook(Object...parameters){
         ProxyConnection connection = null;
         PreparedStatement preparedStatement = null;
-        int bookID = 0;
+        var bookID = 0;
         try{
             connection = ConnectionPool.getInstance().getConnection();
             connection.setAutoCommit(false);
@@ -133,7 +133,7 @@ public class BookDAO extends AbstractDAO<Book>{
             }
             preparedStatement.executeUpdate();
             connection.commit();
-            ResultSet bookIdResultSet = preparedStatement.getGeneratedKeys();
+            var bookIdResultSet = preparedStatement.getGeneratedKeys();
             if(bookIdResultSet.next()) {
                 bookID = bookIdResultSet.getInt(1);
             }
@@ -165,7 +165,7 @@ public class BookDAO extends AbstractDAO<Book>{
             connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement(FIND_BOOK_CONTENT_QUERY);
             preparedStatement.setInt(1,bookID);
-            ResultSet bookResultSet = preparedStatement.executeQuery();
+            var bookResultSet = preparedStatement.executeQuery();
             if(bookResultSet.next()){
                 bookFile = bookResultSet.getBlob(BOOK_CONTENT);
                 book = bookFile.getBytes(1, (int) bookFile.length());

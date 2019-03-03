@@ -33,22 +33,6 @@ public class Router {
     }
 
     /**
-     * <p>Sets the type of the transition</p>
-     * @param routerType contains type of the transition
-     */
-
-    public void setRouterType(RouterType routerType){ this.routerType = routerType; }
-
-    /**
-     * <p>Sets the page to which the transition will be made </p>
-     * @param page the page to which the transition will be made
-     */
-
-    public void setPagePath(String page){
-        this.page = page;
-    }
-
-    /**
      * <p>Return the type of the Router transition</p>
      * @return the type of the Router transition
      */

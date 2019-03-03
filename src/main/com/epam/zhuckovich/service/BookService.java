@@ -41,18 +41,18 @@ public class BookService {
         if(book.getTitle()==null || book.getPublishingHouse()==null || book.getNumberInformation()==null || book.getGenre()==null || book.getAuthors()==null || book.getAuthors().isEmpty()){
             return false;
         }
-        int quantity = book.getNumberInformation().getQuantity();
-        int year = book.getNumberInformation().getYear();
-        int pages = book.getNumberInformation().getPages();
-        if(quantity < 1 || quantity > 100 || year < 1500 || year > 2018 || pages < 1 || pages > 10000){
+        var quantity = book.getNumberInformation().getQuantity();
+        var year = book.getNumberInformation().getYear();
+        var pages = book.getNumberInformation().getPages();
+        if(quantity < 1 || quantity > 100 || year < 1500 || year > 2019 || pages < 1 || pages > 10000){
             return false;
         }
-        int bookID = bookDAO.addBook(book.getTitle(),String.valueOf(book.getGenre()),book.getPublishingHouse(),book.getNumberInformation().getYear(), book.getNumberInformation().getPages(), book.getNumberInformation().getQuantity());
+        var bookID = bookDAO.addBook(book.getTitle(),String.valueOf(book.getGenre()),book.getPublishingHouse(),book.getNumberInformation().getYear(), book.getNumberInformation().getPages(), book.getNumberInformation().getQuantity());
         if(bookID == 0){
             return false;
         } else {
-            for(Author bookAuthor:book.getAuthors()){
-                int operationSuccess = bookDAO.executeUpdate(BookDAO.getAddBookAuthorQuery(),bookAuthor.getId(),bookID);
+            for(Author authors: book.getAuthors()){
+                var operationSuccess = bookDAO.executeUpdate(BookDAO.getAddBookAuthorQuery(),authors.getId(),bookID);
                 if(operationSuccess == 0){
                     return false;
                 }
@@ -77,23 +77,20 @@ public class BookService {
      */
 
     public boolean deleteBook(String bookID){
-        Integer integerBookID = Integer.parseInt(bookID);
-        return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), integerBookID) != 0;
+        return bookDAO.executeUpdate(BookDAO.getDeleteBookQuery(), Integer.parseInt(bookID)) != 0;
     }
 
-    public int editCurrentBook(int bookID, List<Integer> authorIDList, String bookTitle, String bookPublishingHouse, Book.NumberInformation bookNumberInformation, Book.BookType bookGenre, InputStream... bookContent){
-        int year = bookNumberInformation.getYear();
-        int pages = bookNumberInformation.getPages();
-        int quantity = bookNumberInformation.getQuantity();
-        if(bookID < 1 || quantity < 1 || quantity > 100 || year < 1500 || year > 2018 || pages < 1 || pages > 10000 || authorIDList.isEmpty() || bookTitle == null || bookPublishingHouse == null || bookGenre == null){
+    public int editCurrentBook(int bookID, List<Integer> authorIds, String bookTitle, String bookPublishingHouse, Book.Metadata bookMetadata, Book.Genre bookGenre, InputStream... bookContent){
+        var year = bookMetadata.getYear();
+        var pages = bookMetadata.getPages();
+        var quantity = bookMetadata.getQuantity();
+        if(bookID < 1 || quantity < 1 || quantity > 100 || year < 1500 || year > 2019 || pages < 1 || pages > 10000 || authorIds.isEmpty() || bookTitle == null || bookPublishingHouse == null || bookGenre == null){
             return 0;
         } else {
             if(bookDAO.executeUpdate(BookDAO.getEditDeleteAuthorsQuery(),bookID)!=0) {
-                for(Integer authorID: authorIDList){
-                    bookDAO.executeUpdate(BookDAO.getEditAddNewAuthorsQuery(),authorID,bookID);
-                }
+                authorIds.forEach(authorId -> bookDAO.executeUpdate(BookDAO.getEditAddNewAuthorsQuery(), authorId, bookID));
                 if(bookContent.length != 0){
-                    bookDAO.executeUpdate(BookDAO.getEditBookContentQuery(),bookContent,bookID);
+                    bookDAO.executeUpdate(BookDAO.getEditBookContentQuery(), bookContent, bookID);
                 }
                 bookDAO.executeUpdate(BookDAO.getEditBookQuery(),bookTitle,String.valueOf(bookGenre),bookPublishingHouse,year, pages, quantity, bookID);
             }
@@ -107,7 +104,7 @@ public class BookService {
      */
 
     public List<Author> findAllAuthors(){
-        AuthorDAO authorDAO = AuthorDAO.getInstance();
+        var authorDAO = AuthorDAO.getInstance();
         return authorDAO.executeQuery(authorDAO::findAllAuthors,AuthorDAO.getFindAllAuthorsQuery());
     }
 
@@ -117,7 +114,7 @@ public class BookService {
      */
 
     public List<Book> findAllBooks(){
-        return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement),BookDAO.getFindAllBooksQuery());
+        return bookDAO.executeQuery(statement -> bookDAO.findAllBooks(statement), BookDAO.getFindAllBooksQuery());
     }
 
     /**

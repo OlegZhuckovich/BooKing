@@ -1,6 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="war" name="BooKing:war">
     <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>BooKing</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
     <root id="archive" name="BooKing.war">
       <element id="artifact" artifact-name="BooKing:war exploded" />
     </root>

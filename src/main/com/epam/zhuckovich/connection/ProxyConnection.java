@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * <p>Proxy class that contains a single connection to the database
@@ -32,20 +31,6 @@ public class ProxyConnection {
 
     ProxyConnection(Connection connection){
         this.connection = connection;
-    }
-
-    /**
-     * <p>Create statement on connection</p>
-     * @return                       statement that method created
-     * @throws SQLTechnicalException if method cannot create statement
-     */
-
-    public Statement createStatement() throws SQLTechnicalException {
-        try {
-            return connection.createStatement();
-        } catch (SQLException e) {
-            throw new SQLTechnicalException(e);
-        }
     }
 
     /**

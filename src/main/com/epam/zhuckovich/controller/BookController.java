@@ -1,9 +1,7 @@
 package com.epam.zhuckovich.controller;
 
-import com.epam.zhuckovich.connection.ProxyConnection;
 import com.epam.zhuckovich.dao.BookDAO;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,10 +20,10 @@ public class BookController extends HttpServlet {
     private static final String FILE_NOT_FOUND = "File not found";
     private static final String INLINE = "inline";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String bookID = request.getParameter(BOOK_ID);
-        byte[] bookFile = BookDAO.getInstance().loadBook(Integer.parseInt(bookID));
-        if(bookFile!=null){
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        var bookID = request.getParameter(BOOK_ID);
+        var bookFile = BookDAO.getInstance().loadBook(Integer.parseInt(bookID));
+        if(bookFile != null){
             response.setContentType(APPLICATION_PDF);
             response.setHeader(CONTENT_DISPOSITION,INLINE);
             response.setContentLength(bookFile.length);

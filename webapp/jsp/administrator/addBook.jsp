@@ -30,7 +30,7 @@
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookPublishingHouseError" bundle="${booking}"/>', "error"); return false;
             } else if (!quantity || quantity > 100 || quantity < 1){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookQuantityError" bundle="${booking}"/>', "error"); return false;
-            } else if(!year || year < 1500 || year > 2018){
+            } else if(!year || year < 1500 || year > 2019){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookYearError" bundle="${booking}"/>', "error"); return false;
             } else if(!pages || pages < 1 || pages > 10000){
                 swal('<fmt:message key="addBookError" bundle="${booking}"/>', '<fmt:message key="addBookPagesError" bundle="${booking}"/>', "error"); return false;

@@ -78,9 +78,9 @@ public class OrderDAO extends AbstractDAO<Order>{
      */
 
     public List<Order> findAllReadingRoomOrders(PreparedStatement statement){
-        List<Order> readingRoomOrderList = new ArrayList<>();
+        var readingRoomOrderList = new ArrayList<Order>();
         try{
-            ResultSet readingRoomOrderResultSet = statement.executeQuery();
+            var readingRoomOrderResultSet = statement.executeQuery();
                 if (!readingRoomOrderResultSet.isBeforeFirst()) {
                     return readingRoomOrderList;
                 } else {
@@ -98,9 +98,9 @@ public class OrderDAO extends AbstractDAO<Order>{
                                                 Book.newBuilder()
                                                         .setId(readingRoomOrderResultSet.getInt(BOOK_ID))
                                                         .setTitle(readingRoomOrderResultSet.getString(TITLE))
-                                                        .setGenre(Book.BookType.valueOf(readingRoomOrderResultSet.getString(GENRE)))
+                                                        .setGenre(Book.Genre.valueOf(readingRoomOrderResultSet.getString(GENRE)))
                                                         .setPublishingHouse(readingRoomOrderResultSet.getString(PUBLISHING_HOUSE))
-                                                        .setNumberInformation(new Book.NumberInformation(readingRoomOrderResultSet.getInt(YEAR),readingRoomOrderResultSet.getInt(PAGES)))
+                                                        .setNumberInformation(new Book.Metadata(readingRoomOrderResultSet.getInt(YEAR),readingRoomOrderResultSet.getInt(PAGES)))
                                                         .build())
                                         .build()
                         );
@@ -119,9 +119,9 @@ public class OrderDAO extends AbstractDAO<Order>{
      */
 
     public List<Order> findAllSubscriptionOrders(PreparedStatement statement){
-        List<Order> subscriptionOrderList = new ArrayList<>();
+        var subscriptionOrderList = new ArrayList<Order>();
         try{
-            ResultSet subscriptionOrderResultSet = statement.executeQuery();
+            var subscriptionOrderResultSet = statement.executeQuery();
             if (!subscriptionOrderResultSet.isBeforeFirst()) {
                 return subscriptionOrderList;
             } else {
@@ -145,9 +145,9 @@ public class OrderDAO extends AbstractDAO<Order>{
                                             Book.newBuilder()
                                                     .setId(subscriptionOrderResultSet.getInt(BOOK_ID))
                                                     .setTitle(subscriptionOrderResultSet.getString(TITLE))
-                                                    .setGenre(Book.BookType.valueOf(subscriptionOrderResultSet.getString(GENRE)))
+                                                    .setGenre(Book.Genre.valueOf(subscriptionOrderResultSet.getString(GENRE)))
                                                     .setPublishingHouse(subscriptionOrderResultSet.getString(PUBLISHING_HOUSE))
-                                                    .setNumberInformation(new Book.NumberInformation(subscriptionOrderResultSet.getInt(YEAR),subscriptionOrderResultSet.getInt(PAGES)))
+                                                    .setNumberInformation(new Book.Metadata(subscriptionOrderResultSet.getInt(YEAR),subscriptionOrderResultSet.getInt(PAGES)))
                                                     .build())
                                     .build()
                     );
@@ -167,10 +167,10 @@ public class OrderDAO extends AbstractDAO<Order>{
      */
 
     public List<Order> findAllMemberOrders(PreparedStatement statement, int userID){
-        List<Order> memberOrderList = new ArrayList<>();
+        var memberOrderList = new ArrayList<Order>();
         try {
             statement.setInt(1, userID);
-            ResultSet memberOrderResultSet = statement.executeQuery();
+            var memberOrderResultSet = statement.executeQuery();
             if (!memberOrderResultSet.isBeforeFirst()) {
                 return memberOrderList;
             } else {
@@ -181,9 +181,9 @@ public class OrderDAO extends AbstractDAO<Order>{
                                             Book.newBuilder()
                                                     .setId(memberOrderResultSet.getInt(BOOK_ID))
                                                     .setTitle(memberOrderResultSet.getString(TITLE))
-                                                    .setGenre(Book.BookType.valueOf(memberOrderResultSet.getString(GENRE)))
+                                                    .setGenre(Book.Genre.valueOf(memberOrderResultSet.getString(GENRE)))
                                                     .setPublishingHouse(memberOrderResultSet.getString(PUBLISHING_HOUSE))
-                                                    .setNumberInformation(new Book.NumberInformation(memberOrderResultSet.getInt(YEAR), memberOrderResultSet.getInt(PAGES)))
+                                                    .setNumberInformation(new Book.Metadata(memberOrderResultSet.getInt(YEAR), memberOrderResultSet.getInt(PAGES)))
                                                     .build())
                                     .setOrderDate(memberOrderResultSet.getDate(ORDER_DATE))
                                     .setReturnDate(memberOrderResultSet.getDate(RETURN_DATE))

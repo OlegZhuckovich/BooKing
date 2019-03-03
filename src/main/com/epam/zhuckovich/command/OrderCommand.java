@@ -3,7 +3,6 @@ package com.epam.zhuckovich.command;
 import com.epam.zhuckovich.controller.Router;
 import com.epam.zhuckovich.entity.Order;
 import com.epam.zhuckovich.entity.User;
-import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.manager.PageManager;
 import com.epam.zhuckovich.service.OrderService;
 
@@ -40,11 +39,9 @@ class OrderCommand extends AbstractCommand{
      */
 
     Router issueBookInReadingRoom(HttpServletRequest request){
-        String memberID = request.getParameter(MEMBER_ID_PARAMETER);
-        String bookID = request.getParameter(BOOK_ID);
-        if(service.issueBookInReadingRoom(memberID,bookID).isEmpty()){
+        if(service.issueBookInReadingRoom(request.getParameter(MEMBER_ID), request.getParameter(BOOK_ID)).isEmpty()){
             request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
             return openOrderMenu(request, Order.OrderType.READING_ROOM);
         }
@@ -59,11 +56,9 @@ class OrderCommand extends AbstractCommand{
      */
 
     Router issueBookOnSubscription(HttpServletRequest request){
-        String memberID = request.getParameter(MEMBER_ID_PARAMETER);
-        String bookID = request.getParameter(BOOK_ID);
-        if(service.issueBookOnSubscription(memberID,bookID).isEmpty()){
-            request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+        if(service.issueBookOnSubscription(request.getParameter(MEMBER_ID), request.getParameter(BOOK_ID)).isEmpty()){
+            request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY, SUCCESS);
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
             return openOrderMenu(request, Order.OrderType.SUBSCRIPTION);
         }
@@ -86,21 +81,20 @@ class OrderCommand extends AbstractCommand{
         }
         if(orderList.isEmpty()){
             if(orderType == Order.OrderType.READING_ROOM){
-                request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY,SUCCESS);
+                request.getSession().setAttribute(EMPTY_READING_ROOM_DELIVERY, SUCCESS);
             } else {
-                request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY,SUCCESS);
+                request.getSession().setAttribute(EMPTY_SUBSCRIPTION_DELIVERY, SUCCESS);
             }
-            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(LIBRARIAN_MENU_PAGE));
+            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(LIBRARIAN_MENU_PAGE));
         } else {
             if(orderType == Order.OrderType.READING_ROOM){
-                request.setAttribute(READING_ROOM_ORDER_LIST_PARAMETER,orderList);
+                request.setAttribute(READING_ROOM_ORDER_LIST, orderList);
                 return new Router(Router.RouterType.FORWARD, PageManager.getPage(READING_ROOM_BOOK_DELIVERY_PAGE));
             } else {
-                request.setAttribute(SUBSCRIPTION_ORDER_LIST_PARAMETER,orderList);
+                request.setAttribute(SUBSCRIPTION_ORDER_LIST, orderList);
                 return new Router(Router.RouterType.FORWARD, PageManager.getPage(SUBSCRIPTION_BOOK_DELIVERY_PAGE));
             }
         }
-
     }
 
     /**
@@ -110,14 +104,9 @@ class OrderCommand extends AbstractCommand{
      */
 
     Router orderBook(HttpServletRequest request) {
-        User user = (User)request.getSession().getAttribute(USER);
-        String stringOrderType = request.getParameter(ACTION);
-        String stringBookID = request.getParameter(BOOK_ID);
-        int userID = user.getId();
-        int bookID = Integer.parseInt(stringBookID);
-        int orderBookResult;
-        orderBookResult = service.orderBook(userID,bookID, stringOrderType);
-        if(orderBookResult == 0){
+        var user = (User)request.getSession().getAttribute(USER);
+        if(service.orderBook(user.getId(), Integer.parseInt(request.getParameter(BOOK_ID)),
+                request.getParameter(ACTION)) == 0){
             request.getSession().setAttribute(ORDER_RESULT,ERROR);
         } else {
             request.getSession().setAttribute(ORDER_RESULT,SUCCESS);
@@ -132,16 +121,14 @@ class OrderCommand extends AbstractCommand{
      */
 
     Router returnBook(HttpServletRequest request){
-        User user = (User) request.getSession().getAttribute(USER);
-        String bookID = request.getParameter(BOOK_ID);
-        int memberID = user.getId();
-        if(service.returnBook(memberID,Integer.parseInt(bookID))!= 0){
-            request.getSession().setAttribute(RETURN_OPERATION_RESULT,SUCCESS);
-            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+        var user = (User) request.getSession().getAttribute(USER);
+        var bookID = request.getParameter(BOOK_ID);
+        if(service.returnBook(user.getId(), Integer.parseInt(bookID))!= 0){
+            request.getSession().setAttribute(RETURN_OPERATION_RESULT, SUCCESS);
         } else {
-            request.getSession().setAttribute(RETURN_OPERATION_RESULT,ERROR);
-            return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
+            request.getSession().setAttribute(RETURN_OPERATION_RESULT, ERROR);
         }
+        return new Router(Router.RouterType.REDIRECT, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
     }
 
     /**
@@ -153,13 +140,13 @@ class OrderCommand extends AbstractCommand{
      */
 
     Router viewOrderedBooks(HttpServletRequest request){
-        User user = (User) request.getSession().getAttribute(USER);
-        List<Order> orderList = service.findAllMemberOrders(user.getId());
-        if(orderList.isEmpty()){
+        var user = (User) request.getSession().getAttribute(USER);
+        var orders = service.findAllMemberOrders(user.getId());
+        if(orders.isEmpty()){
             request.setAttribute(ORDER_OPERATION_RESULT, SUCCESS);
             return new Router(Router.RouterType.FORWARD, PageManager.getPage(MEMBER_MENU_PAGE));
         } else {
-            request.setAttribute(ORDER_LIST_PARAMETER,service.findAllMemberOrders(user.getId()));
+            request.setAttribute(ORDER_LIST, service.findAllMemberOrders(user.getId()));
             return new Router(Router.RouterType.FORWARD, PageManager.getPage(VIEW_ORDERED_BOOKS_PAGE));
         }
     }

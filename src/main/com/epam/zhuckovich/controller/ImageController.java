@@ -2,7 +2,6 @@ package com.epam.zhuckovich.controller;
 
 import com.epam.zhuckovich.dao.UserDAO;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,11 +15,11 @@ public class ImageController extends HttpServlet {
 
     private static final String AUTHOR = "author";
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        var imageName = request.getPathInfo().substring(1);
         byte[] content;
-        String imageName = request.getPathInfo().substring(1);
         if(imageName.contains(AUTHOR)){
-            String authorID = imageName.substring(6);
+            var authorID = imageName.substring(6);
             content = UserDAO.getInstance().loadImage(authorID, 0);
         } else {
             content = UserDAO.getInstance().loadImage(imageName, 1);

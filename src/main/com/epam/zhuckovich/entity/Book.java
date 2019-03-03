@@ -17,15 +17,15 @@ public class Book extends Entity {
      * Enumeration of different book genres
      */
 
-    public enum BookType {
+    public enum Genre {
         Античная, Историческая, Классика, Комедия, Комикс, Научная, Поэзия, Поэма,
         Приключения, Реализм, Религиозная, Роман, Сатира, Стихи, Справочник, Фантастика
     }
 
     private String title;
-    private BookType genre;
+    private Genre genre;
     private String publishingHouse;
-    private NumberInformation bookNumberInformation;
+    private Metadata bookMetadata;
     private List<Author> bookAuthors;
     private InputStream bookContent;
 
@@ -39,13 +39,13 @@ public class Book extends Entity {
      * Inner static class for book number information
      */
 
-    public static class NumberInformation{
+    public static class Metadata {
 
         private int year;
         private int pages;
         private int quantity;
 
-        public NumberInformation(){}
+        public Metadata(){}
 
         /**
          * Constructor with two parameters
@@ -53,7 +53,7 @@ public class Book extends Entity {
          * @param pages quantity of pages
          */
 
-        public NumberInformation(int year, int pages){
+        public Metadata(int year, int pages){
             this.year=year;
             this.pages=pages;
         }
@@ -65,7 +65,7 @@ public class Book extends Entity {
          * @param quantity number of copies of a book
          */
 
-        public NumberInformation(int year, int pages, int quantity){
+        public Metadata(int year, int pages, int quantity){
             this.year = year;
             this.pages = pages;
             this.quantity = quantity;
@@ -140,7 +140,7 @@ public class Book extends Entity {
      * @return the book genre
      */
 
-    public BookType getGenre(){
+    public Genre getGenre(){
         return genre;
     }
 
@@ -158,8 +158,8 @@ public class Book extends Entity {
      * @return the number information about book
      */
 
-    public NumberInformation getNumberInformation(){
-        return bookNumberInformation;
+    public Metadata getNumberInformation(){
+        return bookMetadata;
     }
 
     /**
@@ -229,7 +229,7 @@ public class Book extends Entity {
          * @return the builder to construct book object
          */
 
-        public Builder setGenre(BookType genre) {
+        public Builder setGenre(Genre genre) {
             Book.this.genre = genre;
             return this;
         }
@@ -247,12 +247,12 @@ public class Book extends Entity {
 
         /**
          * <p>Sets the book number information</p>
-         * @param bookNumberInformation number information about book
+         * @param bookMetadata number information about book
          * @return the builder to construct book object
          */
 
-        public Builder setNumberInformation(NumberInformation bookNumberInformation) {
-            Book.this.bookNumberInformation = bookNumberInformation;
+        public Builder setNumberInformation(Metadata bookMetadata) {
+            Book.this.bookMetadata = bookMetadata;
             return this;
         }
 
@@ -325,13 +325,13 @@ public class Book extends Entity {
         } else if(!publishingHouse.equals(book.publishingHouse)){
             return false;
         }
-        if(bookNumberInformation.year != book.bookNumberInformation.year){
+        if(bookMetadata.year != book.bookMetadata.year){
             return false;
         }
-        if(bookNumberInformation.pages != book.bookNumberInformation.pages){
+        if(bookMetadata.pages != book.bookMetadata.pages){
             return false;
         }
-        if(bookNumberInformation.quantity != book.bookNumberInformation.quantity){
+        if(bookMetadata.quantity != book.bookMetadata.quantity){
             return false;
         }
         return true;
@@ -344,8 +344,8 @@ public class Book extends Entity {
             authorHashCode += author.hashCode();
         }
         return 31*id + ((title == null) ? 0 : title.hashCode()) + ((genre == null) ? 0 : genre.hashCode()) +
-                ((publishingHouse == null) ? 0 : publishingHouse.hashCode()) + bookNumberInformation.year +
-                bookNumberInformation.pages + bookNumberInformation.quantity + authorHashCode;
+                ((publishingHouse == null) ? 0 : publishingHouse.hashCode()) + bookMetadata.year +
+                bookMetadata.pages + bookMetadata.quantity + authorHashCode;
     }
 
     @Override
@@ -358,9 +358,9 @@ public class Book extends Entity {
                 "Title: " + title + "\n" +
                 "Genre: " + genre + "\n" +
                 "PublishingHouse: " + publishingHouse + "\n" +
-                "Year: " + bookNumberInformation.year + "\n" +
-                "Pages: " + bookNumberInformation.pages + "\n" +
-                "Quantity: " + bookNumberInformation.quantity + "\n" +
+                "Year: " + bookMetadata.year + "\n" +
+                "Pages: " + bookMetadata.pages + "\n" +
+                "Quantity: " + bookMetadata.quantity + "\n" +
                 "Authors: " + authors + "\n";
     }
 

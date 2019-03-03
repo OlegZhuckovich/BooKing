@@ -13,11 +13,19 @@ import java.sql.Date;
 
 public class User extends Entity{
 
+    /**
+     * Enumeration of user roles
+     */
+
+    public enum Role {
+        ADMINISTRATOR, LIBRARIAN, MEMBER
+    }
+
     private String name;
     private String surname;
     private String email;
     private String password;
-    private UserType userType;
+    private Role role;
     private Date registrationDate;
     private InputStream photo;
     private Address address;
@@ -69,8 +77,8 @@ public class User extends Entity{
      * @return type of user
      */
 
-    public UserType getUserType(){
-        return userType;
+    public Role getRole(){
+        return role;
     }
 
     /**
@@ -179,12 +187,12 @@ public class User extends Entity{
 
         /**
          * <p>Sets the type of the user</p>
-         * @param userType type of user
+         * @param role type of user
          * @return the builder to construct user object
          */
 
-        public Builder setUserType(UserType userType) {
-            User.this.userType = userType;
+        public Builder setUserType(Role role) {
+            User.this.role = role;
             return this;
         }
 
@@ -275,11 +283,11 @@ public class User extends Entity{
         } else if(!password.equals(user.password)){
             return false;
         }
-        if(userType == null){
-            if(user.userType != null){
+        if(role == null){
+            if(user.role != null){
                 return false;
             }
-        } else if(userType != user.userType){
+        } else if(role != user.role){
             return false;
         }
         if(registrationDate == null){
@@ -310,7 +318,7 @@ public class User extends Entity{
     public int hashCode(){
         return 31*id + ((name == null) ? 0 : name.hashCode()) + ((surname == null) ? 0 : surname.hashCode()) +
                 ((email == null) ? 0 : email.hashCode()) + ((password == null) ? 0 : password.hashCode()) +
-                ((userType == null) ? 0 : userType.hashCode()) + ((registrationDate == null) ? 0 : registrationDate.hashCode()) +
+                ((role == null) ? 0 : role.hashCode()) + ((registrationDate == null) ? 0 : registrationDate.hashCode()) +
                 ((photo == null) ? 0 : photo.hashCode()) + ((address == null) ? 0 : address.hashCode());
     }
 
@@ -321,7 +329,7 @@ public class User extends Entity{
                 "Surname: " + surname + "\n" +
                 "Email: " + email + "\n" +
                 "Password: " + password + "\n" +
-                "UserType: " + userType + "\n" +
+                "Role: " + role + "\n" +
                 "RegistrationDate: " + registrationDate + "\n" +
                 "Address: " + address.toString() + "\n";
     }

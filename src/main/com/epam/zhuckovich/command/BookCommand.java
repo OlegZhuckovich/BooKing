@@ -12,9 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +52,7 @@ class BookCommand extends AbstractCommand{
      */
 
     Router deleteBookMenu(HttpServletRequest request) {
-        request.setAttribute(BOOK_LIST_PARAMETER,service.findAllBooks());
+        request.setAttribute(BOOK_LIST, service.findAllBooks());
         return new Router(Router.RouterType.FORWARD, PageManager.getPage(DELETE_BOOK_PAGE));
     }
 
@@ -66,11 +64,11 @@ class BookCommand extends AbstractCommand{
      */
 
     Router editBookMenu(HttpServletRequest request){
-        List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
-        List<Author> authorList = service.findAllAuthors();
-        request.setAttribute(GENRE_LIST_PARAMETER,genreList);
-        request.setAttribute(AUTHOR_LIST,authorList);
-        request.setAttribute(BOOK_LIST_PARAMETER,service.findAllBooks());
+        var authors = service.findAllAuthors();
+        var genres = Arrays.asList(Book.Genre.values());
+        request.setAttribute(AUTHOR_LIST, authors);
+        request.setAttribute(GENRE_LIST, genres);
+        request.setAttribute(BOOK_LIST, service.findAllBooks());
         return new Router(Router.RouterType.FORWARD, PageManager.getPage(EDIT_BOOK_PAGE));
     }
 
@@ -82,21 +80,18 @@ class BookCommand extends AbstractCommand{
      */
 
     Router editCurrentBookMenu(HttpServletRequest request){
-        List<Author> authorList = service.findAllAuthors();
-        List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
-        request.getSession().setAttribute(AUTHOR_LIST,authorList);
-        request.getSession().setAttribute(GENRE_LIST_PARAMETER,genreList);
-        Book book = null;
-        String bookID = request.getParameter(BOOK_ID);
-        int numberBookID = Integer.parseInt(bookID);
-        List<Book> bookList = service.findAllBooks();
-        for(Book tempBook: bookList){
-            if(tempBook.getId() == numberBookID){
-                book = tempBook;
+        var authors = service.findAllAuthors();
+        var books = service.findAllBooks();
+        var genres = Arrays.asList(Book.Genre.values());
+        var bookID = Integer.parseInt(request.getParameter(BOOK_ID));
+        books.forEach(book -> {
+            if(book.getId() == bookID){
+                request.getSession().setAttribute(BOOK, book);
             }
-        }
-        request.getSession().setAttribute(BOOK,book);
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_CURRENT_BOOK_PAGE));
+        });
+        request.getSession().setAttribute(AUTHOR_LIST, authors);
+        request.getSession().setAttribute(GENRE_LIST, genres);
+        return new Router(Router.RouterType.REDIRECT, PageManager.getPage(EDIT_CURRENT_BOOK_PAGE));
     }
 
     /**
@@ -106,23 +101,22 @@ class BookCommand extends AbstractCommand{
      */
 
     Router editCurrentBook(HttpServletRequest request){
-        int bookID = Integer.parseInt(request.getParameter(BOOK_ID));
-        String[] authors = request.getParameterValues(BOOK_AUTHOR);
+        var authorIds = Arrays.asList(request.getParameterValues(BOOK_AUTHOR));
+        var bookID = Integer.parseInt(request.getParameter(BOOK_ID));
         List<Integer> authorsList = new ArrayList<>();
-        for(String authorID:authors){
-            authorsList.add(Integer.parseInt(authorID));
-        }
+        authorIds.forEach(authorId -> authorsList.add(Integer.parseInt(authorId)));
         try {
-            String bookTitle = request.getParameter(BOOK_TITLE);
-            String bookPublishingHouse = request.getParameter(BOOK_PUBLISHING_HOUSE);
-            Book.NumberInformation bookNumberInformation = new Book.NumberInformation(Integer.parseInt(request.getParameter(BOOK_YEAR)),Integer.parseInt(request.getParameter(BOOK_PAGES)),Integer.parseInt(request.getParameter(BOOK_QUANTITY)));
-            Book.BookType bookGenre = Book.BookType.valueOf(request.getParameter(BOOK_GENRE));
-            Part bookContentPart = request.getPart(BOOK_CONTENT);
-            if (bookContentPart.getSize() != 0) {
-                InputStream bookContent = bookContentPart.getInputStream();
-                service.editCurrentBook(bookID,authorsList,bookTitle,bookPublishingHouse,bookNumberInformation,bookGenre,bookContent);
+            var title = request.getParameter(BOOK_TITLE);
+            var publishingHouse = request.getParameter(BOOK_PUBLISHING_HOUSE);
+            var metadata = new Book.Metadata(Integer.parseInt(request.getParameter(BOOK_YEAR)),
+                                             Integer.parseInt(request.getParameter(BOOK_PAGES)),
+                                             Integer.parseInt(request.getParameter(BOOK_QUANTITY)));
+            var genre = Book.Genre.valueOf(request.getParameter(BOOK_GENRE));
+            var contentPart = request.getPart(BOOK_CONTENT);
+            if (contentPart.getSize() != 0) {
+                service.editCurrentBook(bookID, authorsList, title, publishingHouse, metadata, genre, contentPart.getInputStream());
             } else {
-                service.editCurrentBook(bookID,authorsList,bookTitle,bookPublishingHouse,bookNumberInformation,bookGenre);
+                service.editCurrentBook(bookID, authorsList, title, publishingHouse, metadata, genre);
             }
             return editBookMenu(request);
         } catch (IOException e){
@@ -130,7 +124,7 @@ class BookCommand extends AbstractCommand{
         } catch (ServletException e){
             LOGGER.log(Level.ERROR, "ServletException was occurred during getting the book content from the client");
         }
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(EDIT_BOOK_PAGE));
+        return new Router(Router.RouterType.REDIRECT, PageManager.getPage(EDIT_BOOK_PAGE));
     }
 
     /**
@@ -140,8 +134,7 @@ class BookCommand extends AbstractCommand{
      */
 
     Router deleteBook(HttpServletRequest request) {
-        String bookID = request.getParameter(BOOK_ID);
-        service.deleteBook(bookID);
+        service.deleteBook(request.getParameter(BOOK_ID));
         return deleteBookMenu(request);
     }
 
@@ -152,16 +145,16 @@ class BookCommand extends AbstractCommand{
      */
 
     Router searchBook(HttpServletRequest request) {
-        String searchValue = request.getParameter(SEARCH_VALUE);
-        String searchCriteria = request.getParameter(CRITERIA_PARAMETER);
-        User user = (User) request.getSession().getAttribute(USER);
-        List<Book> findBooks = service.findBooksByCriteria(searchValue, searchCriteria, String.valueOf(user.getId()));
-        if(findBooks.isEmpty()){
+        var searchValue = request.getParameter(SEARCH_VALUE);
+        var searchCriteria = request.getParameter(CRITERIA);
+        var user = (User) request.getSession().getAttribute(USER);
+        var foundBooks = service.findBooksByCriteria(searchValue, searchCriteria, String.valueOf(user.getId()));
+        if(foundBooks.isEmpty()){
             request.setAttribute(SEARCH_RESULT, EMPTY_LIST);
         } else {
-            request.setAttribute(BOOK_LIST_PARAMETER,findBooks);
+            request.setAttribute(BOOK_LIST, foundBooks);
         }
-        return new Router(Router.RouterType.FORWARD,PageManager.getPage(ORDER_BOOK_PAGE));
+        return new Router(Router.RouterType.FORWARD, PageManager.getPage(ORDER_BOOK_PAGE));
     }
 
     /**
@@ -172,10 +165,10 @@ class BookCommand extends AbstractCommand{
      */
 
     Router openAddBookMenu(HttpServletRequest request){
-        List<Author> authorList = service.findAllAuthors();
-        List<Book.BookType> genreList = Arrays.asList(Book.BookType.values());
-        request.setAttribute(AUTHOR_LIST,authorList);
-        request.setAttribute(GENRE_LIST_PARAMETER,genreList);
+        var authors = service.findAllAuthors();
+        var genres = Arrays.asList(Book.Genre.values());
+        request.setAttribute(AUTHOR_LIST, authors);
+        request.setAttribute(GENRE_LIST, genres);
         return new Router(Router.RouterType.FORWARD,PageManager.getPage(ADD_BOOK_PAGE));
     }
 
@@ -188,39 +181,38 @@ class BookCommand extends AbstractCommand{
      */
 
     Router addBook(HttpServletRequest request){
-        String[] authors = request.getParameterValues(BOOK_AUTHOR);
-        List<Author> authorsList = new ArrayList<>();
-        for(String authorID:authors){
-            authorsList.add(Author.newBuilder().setId(Integer.parseInt(authorID)).build());
-        }
+        var authorIds = Arrays.asList(request.getParameterValues(BOOK_AUTHOR));
+        var authors = new ArrayList<Author>();
+        authorIds.forEach(authorId -> authors.add(Author.newBuilder()
+                .setId(Integer.parseInt(authorId))
+                .build()));
         try {
-            Book.Builder newBookBuilder = Book.newBuilder()
+            var bookBuilder = Book.newBuilder()
                     .setTitle(request.getParameter(BOOK_TITLE))
                     .setPublishingHouse(request.getParameter(BOOK_PUBLISHING_HOUSE))
-                    .setNumberInformation(new Book.NumberInformation(Integer.parseInt(request.getParameter(BOOK_YEAR)),Integer.parseInt(request.getParameter(BOOK_PAGES)),Integer.parseInt(request.getParameter(BOOK_QUANTITY))))
-                    .setGenre(Book.BookType.valueOf(request.getParameter(BOOK_GENRE)))
-                    .setAuthors(authorsList);
-            Part bookContentPart = request.getPart(BOOK_CONTENT);
-            if (bookContentPart.getSize() != 0) {
-                InputStream bookContent = bookContentPart.getInputStream();
-                newBookBuilder.setBookContent(bookContent);
+                    .setNumberInformation(new Book.Metadata(Integer.parseInt(request.getParameter(BOOK_YEAR)),
+                            Integer.parseInt(request.getParameter(BOOK_PAGES)),
+                            Integer.parseInt(request.getParameter(BOOK_QUANTITY))))
+                    .setGenre(Book.Genre.valueOf(request.getParameter(BOOK_GENRE)))
+                    .setAuthors(authors);
+            var contentPart = request.getPart(BOOK_CONTENT);
+            if (contentPart.getSize() != 0) {
+                bookBuilder.setBookContent(contentPart.getInputStream());
             }
-            Book newBook = newBookBuilder.build();
-            if(service.addBook(newBook)){
+            var book = bookBuilder.build();
+            if(service.addBook(book)){
                 request.getSession().setAttribute(BOOK_ADDED_RESULT,SUCCESS);
-                request.getSession().setAttribute(BOOK_TITLE,newBook.getTitle());
-                return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
             } else {
                 request.getSession().setAttribute(BOOK_ADDED_RESULT,ERROR);
-                request.getSession().setAttribute(BOOK_TITLE,newBook.getTitle());
-                return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
             }
+            request.getSession().setAttribute(BOOK_TITLE, book.getTitle());
         } catch (IOException e){
             LOGGER.log(Level.ERROR, "IOException was occurred during getting the book content from the client");
         } catch (ServletException e){
             LOGGER.log(Level.ERROR, "ServletException was occurred during getting the book content from the client");
+        } finally {
+            return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
         }
-        return new Router(Router.RouterType.REDIRECT,PageManager.getPage(ADMINISTRATOR_MENU));
     }
 
 }

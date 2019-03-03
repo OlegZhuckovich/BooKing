@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +61,11 @@ public class AuthorDAO extends AbstractDAO<Author>{
      */
 
     List<Author> findAuthorsByNameSurname(PreparedStatement statement, String name, String surname) {
-        boolean isResultSetEmpty = true;
+        var isResultSetEmpty = true;
         try {
             statement.setString(1, name);
             statement.setString(2, surname);
-            ResultSet authorResultSet = statement.executeQuery();
+            var authorResultSet = statement.executeQuery();
             isResultSetEmpty = !authorResultSet.isBeforeFirst();
         } catch (SQLException e){
             LOGGER.log(Level.ERROR,"SQLException was occurred during findAuthorsByNameSurname operation");
@@ -95,10 +94,10 @@ public class AuthorDAO extends AbstractDAO<Author>{
      */
 
     List<Author> findAuthorsByBookID(PreparedStatement statement, int bookID){
-        List<Author> authorList = new ArrayList<>();
+        var authorList = new ArrayList<Author>();
         try{
             statement.setInt(1,bookID);
-            ResultSet authorResultSet = statement.executeQuery();
+            var authorResultSet = statement.executeQuery();
             if(authorResultSet.isBeforeFirst()){
                 while (authorResultSet.next()) {
                     authorList.add(Author.newBuilder()
@@ -121,9 +120,9 @@ public class AuthorDAO extends AbstractDAO<Author>{
      */
 
     public List<Author> findAllAuthors(PreparedStatement statement){
-        List<Author> authorList = new ArrayList<>();
+        var authorList = new ArrayList<Author>();
         try{
-            ResultSet authorResultSet = statement.executeQuery();
+            var authorResultSet = statement.executeQuery();
             if(authorResultSet.isBeforeFirst()){
                 while (authorResultSet.next()) {
                     authorList.add(Author.newBuilder()
@@ -138,24 +137,6 @@ public class AuthorDAO extends AbstractDAO<Author>{
             LOGGER.log(Level.ERROR,"SQLException was occurred during findAllAuthors operation");
         }
         return authorList;
-    }
-
-    /**
-     * <p>Returns the FIND_AUTHORS_BY_NAME_SURNAME_QUERY query</p>
-     * @return    the FIND_AUTHORS_BY_NAME_SURNAME_QUERY query
-     */
-
-    public static String getFindAuthorsByNameSurnameQuery(){
-        return FIND_AUTHORS_BY_NAME_SURNAME_QUERY;
-    }
-
-    /**
-     * <p>Returns the ADD_NEW_AUTHOR_QUERY query</p>
-     * @return    the ADD_NEW_AUTHOR_QUERY query
-     */
-
-    public static String getAddNewAuthorQuery(){
-        return ADD_NEW_AUTHOR_QUERY;
     }
 
     /**

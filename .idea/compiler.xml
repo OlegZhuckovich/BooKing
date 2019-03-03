@@ -9,8 +9,8 @@
         <module name="BooKing" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="BooKing" target="1.8" />
+    <bytecodeTargetLevel target="11">
+      <module name="BooKing" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

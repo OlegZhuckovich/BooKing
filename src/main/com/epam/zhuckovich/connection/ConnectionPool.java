@@ -155,7 +155,7 @@ public final class ConnectionPool {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        if(connectionPool!=null){
+        if(connectionPool != null){
             throw new CloneNotSupportedException();
         }
         return super.clone();

@@ -1,8 +1,8 @@
 package com.epam.zhuckovich.service;
 
 import com.epam.zhuckovich.entity.User;
-import com.epam.zhuckovich.entity.UserType;
 import com.epam.zhuckovich.dao.UserDAO;
+import com.epam.zhuckovich.entity.User.Role;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +12,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -66,9 +65,9 @@ public class UserService {
      */
 
     public User findUserByEmailPassword(String email, String password){
-        String finalPassword = encryption(password);
-        List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,email, finalPassword),UserDAO.getFindUserQuery());
-        return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
+        var finalPassword = encryption(password);
+        var users = userDAO.executeQuery(statement -> userDAO.findUser(statement,email, finalPassword),UserDAO.getFindUserQuery());
+        return users.isEmpty() ? User.newBuilder().build() : users.get(0);
     }
 
     /**
@@ -78,8 +77,8 @@ public class UserService {
      */
 
     public User findMemberById(int userID){
-        List<User> userList = userDAO.executeQuery(statement -> userDAO.findUser(statement,userID),UserDAO.getFindUserByIdQuery());
-        return userList.isEmpty() ? User.newBuilder().build() : userList.get(0);
+        var users = userDAO.executeQuery(statement -> userDAO.findUser(statement,userID),UserDAO.getFindUserByIdQuery());
+        return users.isEmpty() ? User.newBuilder().build() : users.get(0);
     }
 
     /**
@@ -93,36 +92,29 @@ public class UserService {
      * @return                 returns a number other than 0 if the user was successfully registered
      */
 
-    public int registerUser(String name, String surname, String email, String password, InputStream photo, UserType registrationType){
+    public int registerUser(String name, String surname, String email, String password, InputStream photo, User.Role registrationType){
         int operationResult = 0;
         if(name==null || surname==null || email==null || password==null || photo==null){
             return operationResult;
         }
-        boolean nameMatch, surnameMatch, emailMatch, passwordMatch;
-        Matcher nameMatcher = nameSurnameRegex.matcher(name);
-        Matcher surnameMatcher = nameSurnameRegex.matcher(surname);
-        Matcher emailMatcher = emailRegex.matcher(email);
-        Matcher passwordMatcher = passwordRegex.matcher(password);
-        nameMatch = nameMatcher.matches();
-        surnameMatch = surnameMatcher.matches();
-        emailMatch = emailMatcher.matches();
-        passwordMatch = passwordMatcher.matches();
-
-        if(nameMatch && surnameMatch && emailMatch && passwordMatch){
-            String finalPassword = encryption(password);
-            User.Builder newUserBuilder= User.newBuilder()
+        if(nameSurnameRegex.matcher(name).matches() &&
+                nameSurnameRegex.matcher(surname).matches() &&
+                emailRegex.matcher(email).matches() &&
+                passwordRegex.matcher(password).matches()){
+            var finalPassword = encryption(password);
+            var userBuilder = User.newBuilder()
                     .setName(name)
                     .setSurname(surname)
                     .setEmail(email)
                     .setPassword(finalPassword)
                     .setPhoto(photo);
-            if(registrationType == UserType.MEMBER){
-                newUserBuilder.setUserType(UserType.MEMBER);
+            if(registrationType == Role.MEMBER){
+                userBuilder .setUserType(Role.MEMBER);
             } else {
-                newUserBuilder.setUserType(UserType.LIBRARIAN);
+                userBuilder .setUserType(Role.LIBRARIAN);
             }
-            User newUser = newUserBuilder.build();
-            operationResult = userDAO.executeUpdate(UserDAO.getAddUserQuery(), newUser.getName(), newUser.getSurname(), newUser.getEmail(), newUser.getPassword(), newUser.getUserType().toString(), newUser.getPhoto());
+            var user = userBuilder .build();
+            operationResult = userDAO.executeUpdate(UserDAO.getAddUserQuery(), user.getName(), user.getSurname(), user.getEmail(), user.getPassword(), user.getRole().toString(), user.getPhoto());
         }
         return operationResult;
     }
@@ -135,12 +127,8 @@ public class UserService {
 
     public int editAccountMainInformation(User editableUser){
         int operationResult = 0;
-        boolean nameMatch, surnameMatch;
-        Matcher nameMatcher = nameSurnameRegex.matcher(editableUser.getName());
-        Matcher surnameMatcher = nameSurnameRegex.matcher(editableUser.getSurname());
-        nameMatch = nameMatcher.matches();
-        surnameMatch = surnameMatcher.matches();
-        if(nameMatch && surnameMatch){
+        if(nameSurnameRegex.matcher(editableUser.getName()).matches() &&
+                nameSurnameRegex.matcher(editableUser.getSurname()).matches()){
             if(userDAO.executeUpdate(UserDAO.getEditMainInformation(),editableUser.getName(),editableUser.getSurname(), editableUser.getId()) != 0){
                 operationResult++;
             }
@@ -176,16 +164,10 @@ public class UserService {
      */
 
     public int updateAddress(User user, String city, String street, String house, String telephone, int updateType){
-        boolean cityMatch, streetMatch, houseMatch, telephoneMatch;
-        Matcher cityMatcher = cityStreetRegex.matcher(city);
-        Matcher streetMatcher = cityStreetRegex.matcher(street);
-        Matcher houseMatcher = houseRegex.matcher(house);
-        Matcher telephoneMatcher = telephoneRegex.matcher(telephone);
-        cityMatch = cityMatcher.matches();
-        streetMatch = streetMatcher.matches();
-        houseMatch = houseMatcher.matches();
-        telephoneMatch = telephoneMatcher.matches();
-        if(cityMatch && streetMatch && houseMatch && telephoneMatch){
+        if(cityStreetRegex.matcher(city).matches() &&
+                cityStreetRegex.matcher(street).matches() &&
+                houseRegex.matcher(house).matches() &&
+                telephoneRegex.matcher(telephone).matches()){
             if(updateType == 0){
                 return userDAO.addNewAddress(city, street,Integer.parseInt(house), Integer.parseInt(telephone));
             } else {
@@ -220,13 +202,13 @@ public class UserService {
 
     /**
      * <p>Returns the list of all removable users</p>
-     * @param userType type of user
+     * @param role type of user
      * @return         the list of all removable users
      */
 
-    public List<User> findAllRemovableUsers(UserType userType){
+    public List<User> findAllRemovableUsers(User.Role role){
         List<User> userList = new ArrayList<>();
-        switch (userType) {
+        switch (role) {
             case MEMBER:
                 userList = userDAO.executeQuery(statement -> userDAO.findAllRemovableUsers(statement), UserDAO.getFindAllRemovableMembers());break;
             case LIBRARIAN:
@@ -242,21 +224,20 @@ public class UserService {
      */
 
     public boolean deleteUser(String userID){
-        Integer numberUserID = Integer.parseInt(userID);
-        return userDAO.executeUpdate(UserDAO.getDeleteUserQuery(), numberUserID) != 0;
+        return userDAO.executeUpdate(UserDAO.getDeleteUserQuery(), Integer.parseInt(userID)) != 0;
     }
 
     /**
      * <p>The method for filing a request for the removal of
      * an account by the reader or librarian</p>
      * @param userID   userID parameter
-     * @param userType type of user
+     * @param role type of user
      * @return         returns a number other than 0 if the application for account deletion was successfully sent
      */
 
-    public int deleteAccount(Integer userID, UserType userType){
+    public int deleteAccount(Integer userID, User.Role role){
         int operationSuccess = 0;
-        switch(userType){
+        switch(role){
             case MEMBER:
                 operationSuccess = userDAO.executeUpdate(UserDAO.getDeleteMemberAccountQuery(),userID);break;
             case LIBRARIAN:
@@ -274,7 +255,7 @@ public class UserService {
     String encryption(String realPassword){
         StringBuilder passwordStringBuilder = new StringBuilder();
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance(ENCRYPTION_MECHANISM);
+            var messageDigest = MessageDigest.getInstance(ENCRYPTION_MECHANISM);
             messageDigest.update(realPassword.getBytes());
             byte passwordByteData[] = messageDigest.digest();
             for (byte aPasswordByteData : passwordByteData) {

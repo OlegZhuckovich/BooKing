@@ -2,7 +2,7 @@ package com.epam.zhuckovich.dao;
 
 import com.epam.zhuckovich.entity.Address;
 import com.epam.zhuckovich.entity.User;
-import com.epam.zhuckovich.entity.UserType;
+import com.epam.zhuckovich.entity.User.Role;
 import com.epam.zhuckovich.connection.ConnectionPool;
 import com.epam.zhuckovich.connection.ProxyConnection;
 import com.epam.zhuckovich.exception.SQLTechnicalException;
@@ -81,19 +81,19 @@ public final class UserDAO extends AbstractDAO<User> {
      */
 
     public List<User> findUser(PreparedStatement statement, Object... parameters) {
-        List<User> userList = new ArrayList<>();
+        var userList = new ArrayList<User>();
         try{
             if(parameters.length != 0){
                 for(int i=0; i<parameters.length; i++){
                     statement.setObject(i+1,parameters[i]);
                 }
             }
-            ResultSet userResultSet = statement.executeQuery();
+            var userResultSet = statement.executeQuery();
             if(!userResultSet.isBeforeFirst()){
                 return userList;
             } else {
                 userResultSet.next();
-                int addressID = userResultSet.getInt(ADRESS_ID);
+                var addressID = userResultSet.getInt(ADRESS_ID);
                 Address userAddress = null;
                 if (!userResultSet.wasNull()) {
                     userAddress = Address.newBuilder()
@@ -109,11 +109,11 @@ public final class UserDAO extends AbstractDAO<User> {
                             .setName(userResultSet.getString(NAME))
                             .setSurname(userResultSet.getString(SURNAME))
                             .setEmail(userResultSet.getString(EMAIL))
-                            .setUserType(UserType.valueOf(userResultSet.getString(ROLE).toUpperCase()))
+                            .setUserType(Role.valueOf(userResultSet.getString(ROLE).toUpperCase()))
                             .setRegistrationDate(userResultSet.getDate(REGISTRATION_DATE))
                             .setAddress(userAddress)
                             .build());
-                if(userList.get(0).getUserType() == UserType.ADMINISTRATOR || userList.get(0).getUserType() == UserType.LIBRARIAN){
+                if(userList.get(0).getRole() == Role.ADMINISTRATOR || userList.get(0).getRole() == Role.LIBRARIAN){
                     OrderDAO.getInstance().executeUpdate(OrderDAO.getCheckOldOrdersQuery());
                 }
             }
@@ -130,15 +130,15 @@ public final class UserDAO extends AbstractDAO<User> {
      */
 
     public List<User> findAllRemovableUsers(PreparedStatement statement){
-        List<User> userList = new ArrayList<>();
+        var userList = new ArrayList<User>();
         try{
-            ResultSet userResultSet = statement.executeQuery();
+            var userResultSet = statement.executeQuery();
             if(userResultSet != null) {
                 if (!userResultSet.isBeforeFirst()) {
                     return userList;
                 } else {
                     while (userResultSet.next()) {
-                        User currentLibrarian = User.newBuilder()
+                        var currentLibrarian = User.newBuilder()
                                 .setId(userResultSet.getInt(MEMBER_ID))
                                 .setName(userResultSet.getString(NAME))
                                 .setSurname(userResultSet.getString(SURNAME))
@@ -164,7 +164,7 @@ public final class UserDAO extends AbstractDAO<User> {
     public int addNewAddress(Object...parameters){
         ProxyConnection connection = null;
         PreparedStatement preparedStatement = null;
-        int addressID = 0;
+        var addressID = 0;
         try{
             connection = ConnectionPool.getInstance().getConnection();
             connection.setAutoCommit(false);
@@ -176,7 +176,7 @@ public final class UserDAO extends AbstractDAO<User> {
             }
             preparedStatement.executeUpdate();
             connection.commit();
-            ResultSet bookIdResultSet = preparedStatement.getGeneratedKeys();
+            var bookIdResultSet = preparedStatement.getGeneratedKeys();
             if(bookIdResultSet.next()) {
                 addressID = bookIdResultSet.getInt(1);
             }
@@ -202,7 +202,7 @@ public final class UserDAO extends AbstractDAO<User> {
     public int updateAvatar(InputStream photo, int userID){
         ProxyConnection connection = null;
         PreparedStatement statement = null;
-        int operationResult = 0;
+        var operationResult = 0;
         try{
             connection = ConnectionPool.getInstance().getConnection();
             connection.setAutoCommit(false);
@@ -242,7 +242,7 @@ public final class UserDAO extends AbstractDAO<User> {
                 statement = connection.prepareStatement(FIND_USER_AVATAR);
             }
             statement.setString(1, imageName);
-            ResultSet resultSet = statement.executeQuery();
+            var resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 if(loadType == 0){
                     content = resultSet.getBytes(PHOTO);

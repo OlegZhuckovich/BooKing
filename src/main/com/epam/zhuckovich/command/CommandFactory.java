@@ -2,7 +2,7 @@ package com.epam.zhuckovich.command;
 
 import com.epam.zhuckovich.controller.Router;
 import com.epam.zhuckovich.entity.Order;
-import com.epam.zhuckovich.entity.UserType;
+import com.epam.zhuckovich.entity.User.Role;
 import com.epam.zhuckovich.manager.PageManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -43,16 +43,16 @@ public class CommandFactory {
         if (commandType != null) {
             switch (commandType) {
                 case ADD_LIBRARIAN:
-                    command = httpRequest -> new UserCommand().registration(request,UserType.LIBRARIAN);
+                    command = httpRequest -> new UserCommand().registration(request, Role.LIBRARIAN);
                     break;
                 case DELETE_ACCOUNT:
                     command = httpRequest -> new UserCommand().deleteAccountRequest(request);
                     break;
                 case DELETE_LIBRARIAN_MENU:
-                    command = httpRequest -> new UserCommand().deleteUserMenu(request,UserType.LIBRARIAN);
+                    command = httpRequest -> new UserCommand().deleteUserMenu(request, Role.LIBRARIAN);
                     break;
                 case DELETE_MEMBER_MENU:
-                    command = httpRequest -> new UserCommand().deleteUserMenu(request,UserType.MEMBER);
+                    command = httpRequest -> new UserCommand().deleteUserMenu(request, Role.MEMBER);
                     break;
                 case DELETE_USER:
                     command = httpRequest -> new UserCommand().deleteUser(request);
@@ -67,7 +67,7 @@ public class CommandFactory {
                     command = httpRequest -> new UserCommand().logout(request);
                     break;
                 case REGISTER:
-                    command = httpRequest -> new UserCommand().registration(request, UserType.MEMBER);
+                    command = httpRequest -> new UserCommand().registration(request, Role.MEMBER);
                     break;
                 case ADD_BOOK:
                     command = httpRequest -> new BookCommand().addBook(request);

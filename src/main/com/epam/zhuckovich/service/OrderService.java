@@ -79,8 +79,8 @@ public class OrderService {
      */
 
     public List<Order> issueBookInReadingRoom(String memberID, String bookID) {
-        int numberMemberID = Integer.parseInt(memberID);
-        int numberBookID = Integer.parseInt(bookID);
+        var numberMemberID = Integer.parseInt(memberID);
+        var numberBookID = Integer.parseInt(bookID);
         List<Order> readingRoomOrderList = new ArrayList<>();
         if(orderDAO.executeUpdate(OrderDAO.getIssueReadingRoomQuery(), numberMemberID, numberBookID)!=0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID)!=0){
             readingRoomOrderList = findAllReadingRoomOrders();
@@ -97,8 +97,8 @@ public class OrderService {
      */
 
     public List<Order> issueBookOnSubscription(String memberID, String bookID){
-        int numberMemberID = Integer.parseInt(memberID);
-        int numberBookID = Integer.parseInt(bookID);
+        var numberMemberID = Integer.parseInt(memberID);
+        var numberBookID = Integer.parseInt(bookID);
         List<Order> subscriptionOrderList = new ArrayList<>();
         if(orderDAO.executeUpdate(OrderDAO.getIssueSubscriptionQuery(), numberMemberID, numberBookID) != 0 && orderDAO.executeUpdate(OrderDAO.getDecrementBookQuantityQuery(), numberBookID) != 0){
             subscriptionOrderList = findAllSubscriptionOrders();
@@ -114,7 +114,7 @@ public class OrderService {
      */
 
     public int returnBook(int memberID, int bookID){
-        int operationResult = 0;
+        var operationResult = 0;
         if(orderDAO.executeUpdate(OrderDAO.getReturnBookQuery(),memberID,bookID)!=0){
             operationResult++;
         }

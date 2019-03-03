@@ -10,9 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * <p>A class that contains methods for various actions
@@ -45,19 +43,15 @@ class AuthorCommand extends AbstractCommand{
 
     Router addAuthor(HttpServletRequest request) {
         try {
-            String authorName = request.getParameter(AUTHOR_NAME);
-            String authorSurname = request.getParameter(AUTHOR_SURNAME);
-            String authorBiography = request.getParameter(AUTHOR_BIOGRAPHY);
-            Part authorPhotoPart = request.getPart(AUTHOR_PHOTO);
-            Author.Builder newAuthor = Author.newBuilder()
-                                .setName(authorName)
-                                .setSurname(authorSurname)
-                                .setBiography(authorBiography);
-            if (authorPhotoPart.getSize() != 0) {
-                InputStream authorPhoto = authorPhotoPart.getInputStream();
-                newAuthor.setPhoto(authorPhoto);
+            var authorBuilder = Author.newBuilder()
+                                .setName(request.getParameter(AUTHOR_NAME))
+                                .setSurname(request.getParameter(AUTHOR_SURNAME))
+                                .setBiography(request.getParameter(AUTHOR_BIOGRAPHY));
+            var photoPart = request.getPart(AUTHOR_PHOTO);
+            if (photoPart.getSize() != 0) {
+                authorBuilder.setPhoto(photoPart.getInputStream());
             }
-            Author author = newAuthor.build();
+            var author = authorBuilder.build();
             if(service.addAuthor(author)){
                 request.getSession().setAttribute(AUTHOR_ADDED_RESULT,SUCCESS);
             } else {
@@ -81,7 +75,7 @@ class AuthorCommand extends AbstractCommand{
      */
 
     Router viewAuthors(HttpServletRequest request){
-        request.setAttribute(AUTHOR_LIST,service.viewAuthors());
+        request.setAttribute(AUTHOR_LIST, service.viewAuthors());
         return new Router(Router.RouterType.FORWARD, PageManager.getPage(AUTHOR_GALLERY));
     }
 

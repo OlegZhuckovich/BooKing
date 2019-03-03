@@ -1,13 +1,12 @@
 package com.epam.zhuckovich.filter;
 
 import com.epam.zhuckovich.entity.User;
-import com.epam.zhuckovich.entity.UserType;
+import com.epam.zhuckovich.entity.User.Role;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter
@@ -28,7 +27,7 @@ public class PageSecurityFilter implements Filter {
     private String memberMenu;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         loginPage = filterConfig.getInitParameter(LOGIN_PAGE);
         administratorMenu = filterConfig.getInitParameter(ADMINISTRATOR_MENU);
         librarianMenu = filterConfig.getInitParameter(LIBRARIAN_MENU);
@@ -37,23 +36,22 @@ public class PageSecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
-        HttpSession session = httpRequest.getSession();
-        String currentPage  = httpRequest.getRequestURI();
-        Object user =  session.getAttribute(USER);
+        var httpRequest = (HttpServletRequest) servletRequest;
+        var httpResponse = (HttpServletResponse) servletResponse;
+        var currentPage  = httpRequest.getRequestURI();
+        Object user =  httpRequest.getSession().getAttribute(USER);
         if(user instanceof String){
             if(((String) user).isEmpty()) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + loginPage);
             }
         } else {
             User currentUser = (User) user;
-            UserType userType = currentUser.getUserType();
-            if(userType == UserType.ADMINISTRATOR && !currentPage.contains(ADMINISTRATOR_URI) && !currentPage.contains(COMMON_URI)){
+            Role role = currentUser.getRole();
+            if(role == Role.ADMINISTRATOR && !currentPage.contains(ADMINISTRATOR_URI) && !currentPage.contains(COMMON_URI)){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + administratorMenu);
-            } else if(userType == UserType.LIBRARIAN && !currentPage.contains(LIBRARIAN_URI) && !currentPage.contains(COMMON_URI)){
+            } else if(role == Role.LIBRARIAN && !currentPage.contains(LIBRARIAN_URI) && !currentPage.contains(COMMON_URI)){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + librarianMenu);
-            } else if(userType == UserType.MEMBER && !currentPage.contains(MEMBER_URI) && !currentPage.contains(COMMON_URI)){
+            } else if(role == Role.MEMBER && !currentPage.contains(MEMBER_URI) && !currentPage.contains(COMMON_URI)){
                 httpResponse.sendRedirect(httpRequest.getContextPath() + memberMenu);
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);

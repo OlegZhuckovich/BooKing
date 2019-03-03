@@ -29,7 +29,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Router page = CommandFactory.defineCommand(request.getParameter(COMMAND_PARAMETER).toUpperCase(),request).execute(request);
+        var page = CommandFactory.defineCommand(request.getParameter(COMMAND_PARAMETER).toUpperCase(),request).execute(request);
         switch(page.getRouterType()){
             case FORWARD:
                 RequestDispatcher dispatcher = request.getRequestDispatcher(page.getPage());
